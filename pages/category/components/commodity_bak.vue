@@ -9,24 +9,47 @@
     <mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ use: false }" :up="upOption" :bottombar="false" @up="upCallback">
 
       <view class="cate-content">
+
+        <!-- 子分类 -->
+        <view v-if="subCateList.length" class="sub-cate-list clearfix" :class="{ 'display-fold': !showSubCate }" @touchmove.stop.prevent>
+          <view class="nav-icon" @click="handleShowSubCate">
+            <text class="iconfont" :class="[ showSubCate ? 'icon-arrow-up' : 'icon-arrow-down' ]"></text>
+          </view>
+          <view class="sub-cate-item" :class="{ selected: curIndex2 == -1 }" @click="handleSelectSubCate(-1)">
+            <text>全部</text>
+          </view>
+          <view class="sub-cate-item" v-for="(item, index) in subCateList" :key="index" :class="{ selected: curIndex2 == index }" @click="handleSelectSubCate(index)">
+            <text>{{ item.name }}</text>
+          </view>
+        </view>
+
         <!-- 商品列表 -->
-			<scroll-view class="cate-right" :scroll-top="scrollTop" :scroll-y="true"
-				:style="{ height: `${scrollHeight}px` }">
-				<view v-if="list[curIndex]" class="cate-right-cont">
-					<view class="cate-two-box">
-						<view class="cate-cont-box">
-							<view class="flex-three" v-for="(item, idx) in list[curIndex].children" :key="idx">
-								<view class="cate-img-padding">
-									<view v-if="item.image" class="cate-img">
-										<image class="image" mode="scaleToFill" :src="item.image.preview_url"></image>
-									</view>
-								</view>
-								<text class="name oneline-hide">{{ item.name }}</text>
-							</view>
-						</view>
-					</view>
-				</view>
-			</scroll-view>
+        <view class="goods-list">
+          <view class="goods-item--container" v-for="(item, index) in goodsList.data" :key="index">
+            <view class="goods-item" @click="onTargetGoods(item.goods_id)">
+              <!-- 商品图片 -->
+              <view class="goods-item_left">
+                <image class="image" :src="item.goods_image"></image>
+              </view>
+              <view class="goods-item_right">
+                <!-- 商品标题 -->
+                <view class="goods-name">
+                  <text class="twoline-hide">{{ item.goods_name }}</text>
+                </view>
+                <!-- 商品信息 -->
+                <view class="goods-item_desc">
+                  <view class="desc_footer">
+                    <view class="item-prices oneline-hide">
+                      <text class="price_x">¥{{ item.goods_price_min }}</text>
+                      <text v-if="item.line_price_min > 0" class="price_y">¥{{ item.line_price_min }}</text>
+                    </view>
+                    <add-cart-btn v-if="setting.showAddCart" :btnStyle="setting.cartStyle" @click="handleAddCart(item)" />
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
         <!-- 遮罩层 -->
         <view class="mask" v-show="showSubCate" @touchmove.stop.prevent @click="handleShowSubCate"></view>
         <!-- 加入购物车组件 -->
@@ -46,7 +69,7 @@
   import AddCartBtn from '@/components/add-cart-btn'
   import AddCartPopup from '@/components/add-cart-popup'
   import { rpx2px } from '@/utils/util'
-  import * as ProductApi from '@/api/product'
+  import * as GoodsApi from '@/api/goods'
 
   const pageSize = 15
 
@@ -82,8 +105,8 @@
         showSubCate: false,
         // 二级分类：指针
         curIndex2: -1,
-        // 权益商品列表
-        productList: getEmptyPaginateObj(),
+        // 商品列表
+        goodsList: getEmptyPaginateObj(),
         // 上拉加载配置
         upOption: {
           // 首次自动执行
@@ -94,9 +117,7 @@
           noMoreSize: 3,
           // 返回顶部
           toTop: { right: 30, bottom: 48, zIndex: 9 }
-        },
-		// 内容区竖向滚动条位置
-		scrollTop: 0,
+        }
       }
     },
     created() {
@@ -122,9 +143,8 @@
       upCallback(page) {
         const app = this
         // 设置列表数据
-        app.getProductList(page.num)
+        app.getGoodsList(page.num)
           .then(list => {
-			  console.log(11);
             const curPageLen = list.data.length
             const totalSize = list.data.total
             app.mescroll.endBySize(curPageLen, totalSize)
@@ -133,20 +153,18 @@
       },
 
       /**
-       * 获取权益商品列表
+       * 获取商品列表
        * @param {Number} pageNo 页码
        */
-      getProductList(pageNo = 1) {
+      getGoodsList(pageNo = 1) {
         const app = this
         const categoryId = app.getCategoryId()
-		console.log(categoryId);
         return new Promise((resolve, reject) => {
-          ProductApi.list({ categoryId, page: pageNo }, { load: false })
+          GoodsApi.list({ categoryId, page: pageNo }, { load: false })
             .then(result => {
-				console.log(result);
               const newList = result.data.list
-              app.productList.data = getMoreListData(newList, app.productList, pageNo)
-              app.productList.last_page = newList.last_page
+              app.goodsList.data = getMoreListData(newList, app.goodsList, pageNo)
+              app.goodsList.last_page = newList.last_page
               resolve(newList)
             })
             .catch(reject)
@@ -174,7 +192,6 @@
         this.onRefreshList()
         this.showSubCate = false
         this.curIndex2 = -1
-		this.scrollTop = 0
       },
 
       // 二级分类：选中分类
@@ -186,7 +203,7 @@
 
       // 刷新列表数据
       onRefreshList() {
-        this.productList = getEmptyPaginateObj()
+        this.goodsList = getEmptyPaginateObj()
         setTimeout(() => this.mescroll.resetUpScroll(), 120)
       },
 
@@ -370,64 +387,6 @@
       }
     }
   }
-  
-  // 右侧二级分类
-  .cate-cont-box {
-  	margin-bottom: 30rpx;
-  	padding-bottom: 10rpx;
-  	background: #fff;
-  	overflow: hidden;
-  
-  	.name {
-  		display: block;
-  		padding-bottom: 30rpx;
-  		text-align: center;
-  		font-size: 26rpx;
-  		color: #444444;
-  	}
-  
-  	.cate-img-padding {
-  		padding: 16rpx 16rpx 4rpx 16rpx;
-  	}
-  
-  	.cate-img {
-  		position: relative;
-  		width: 100%;
-  		padding-top: 100%;
-  
-  		.image {
-  			width: 100%;
-  			height: 100%;
-  			position: absolute;
-  			top: 0;
-  			left: 0;
-  			border-radius: 10rpx;
-  		}
-  	}
-  
-  }
-  
-  .cate-right {
-  	display: flex;
-  	flex-direction: column;
-  	height: 100%;
-  	overflow: hidden;
-  
-  	.cate-right-cont {
-  		width: 100%;
-  		display: flex;
-  		flex-flow: row wrap;
-  		align-content: flex-start;
-  		padding-top: 15rpx;
-  
-  		.cate-two-box {
-  			width: 100%;
-  			padding: 0 10px;
-  		}
-  	}
-  }
-  
-  
 
   // 子分类遮罩层
   .mask {
