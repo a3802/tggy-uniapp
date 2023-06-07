@@ -114,7 +114,6 @@
 			 * @param {Object} result
 			 */
 			initSetting(setting) {
-				console.log(SettingKeyEnum.PAGE_CATEGORY_TEMPLATE.value);
 				this.setting = setting[SettingKeyEnum.PAGE_CATEGORY_TEMPLATE.value]
 			},
 
@@ -123,7 +122,6 @@
 			 * @param {Object} result
 			 */
 			initCategory(result) {
-				console.log(result.data.list)
 				this.list = result.data.list
 			},
 

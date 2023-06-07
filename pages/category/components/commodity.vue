@@ -12,16 +12,17 @@
         <!-- 商品列表 -->
 			<scroll-view class="cate-right" :scroll-top="scrollTop" :scroll-y="true"
 				:style="{ height: `${scrollHeight}px` }">
-				<view v-if="list[curIndex]" class="cate-right-cont">
+				<view v-if="productList.data" class="cate-right-cont">
 					<view class="cate-two-box">
 						<view class="cate-cont-box">
-							<view class="flex-three" v-for="(item, idx) in list[curIndex].children" :key="idx">
+							<view class="flex-three" v-for="(item, index) in productList.data" :key="index" @click="onTargetProduct(item.product_id)">
 								<view class="cate-img-padding">
-									<view v-if="item.image" class="cate-img">
-										<image class="image" mode="scaleToFill" :src="item.image.preview_url"></image>
+									<view v-if="item.product_image" class="cate-img">
+										<image class="image" mode="scaleToFill" :src="item.product_image"></image>
 									</view>
+									<text class="name oneline-hide">{{ item.short_name }}</text>
+									<text class="name_desc oneline-hide">{{ item.short_desc }}</text>									
 								</view>
-								<text class="name oneline-hide">{{ item.name }}</text>
 							</view>
 						</view>
 					</view>
@@ -30,8 +31,6 @@
         <!-- 遮罩层 -->
         <view class="mask" v-show="showSubCate" @touchmove.stop.prevent @click="handleShowSubCate"></view>
         <!-- 加入购物车组件 -->
-        <AddCartPopup ref="AddCartPopup" @addCart="onUpdateCartTabBadge" />
-
       </view>
     </mescroll-body>
   </view>
@@ -43,8 +42,6 @@
   import { getEmptyPaginateObj, getMoreListData, setCartTabBadge } from '@/core/app'
   import { PageCategoryStyleEnum } from '@/common/enum/store/page/category'
   import Empty from '@/components/empty'
-  import AddCartBtn from '@/components/add-cart-btn'
-  import AddCartPopup from '@/components/add-cart-popup'
   import { rpx2px } from '@/utils/util'
   import * as ProductApi from '@/api/product'
 
@@ -54,8 +51,6 @@
     components: {
       MescrollBody,
       Empty,
-      AddCartBtn,
-      AddCartPopup
     },
     mixins: [MescrollMixin],
     props: {
@@ -124,7 +119,6 @@
         // 设置列表数据
         app.getProductList(page.num)
           .then(list => {
-			  console.log(11);
             const curPageLen = list.data.length
             const totalSize = list.data.total
             app.mescroll.endBySize(curPageLen, totalSize)
@@ -139,11 +133,9 @@
       getProductList(pageNo = 1) {
         const app = this
         const categoryId = app.getCategoryId()
-		console.log(categoryId);
         return new Promise((resolve, reject) => {
           ProductApi.list({ categoryId, page: pageNo }, { load: false })
             .then(result => {
-				console.log(result);
               const newList = result.data.list
               app.productList.data = getMoreListData(newList, app.productList, pageNo)
               app.productList.last_page = newList.last_page
@@ -177,33 +169,15 @@
 		this.scrollTop = 0
       },
 
-      // 二级分类：选中分类
-      handleSelectSubCate(index) {
-        this.curIndex2 = index
-        this.showSubCate = false
-        this.onRefreshList()
-      },
-
       // 刷新列表数据
       onRefreshList() {
         this.productList = getEmptyPaginateObj()
         setTimeout(() => this.mescroll.resetUpScroll(), 120)
       },
 
-      // 跳转至商品列表页
-      onTargetGoods(goodsId) {
-        this.$navTo('pages/goods/detail', { goodsId })
-      },
-
-      // 点击加入购物车
-      handleAddCart(item) {
-        this.$refs.AddCartPopup.handle(item)
-      },
-
-      // 更新购物车角标
-      onUpdateCartTabBadge() {
-        console.log('onUpdateCartTabBadge')
-        setCartTabBadge()
+      // 跳转至权益商品列表页
+      onTargetProduct(productIds) {
+        this.$navTo('pages/product/detail', { productIds })
       },
 
       // 切换子分类显示状态
@@ -259,117 +233,6 @@
     }
   }
 
-  // 商品列表
-  .goods-list {
-    background: #fff;
-    position: relative;
-  }
-
-  .goods-item {
-    padding: 28rpx 22rpx;
-    display: flex;
-  }
-
-  .goods-item_left {
-    position: relative;
-    background: #fff;
-    margin-right: 20rpx;
-
-    .image {
-      display: block;
-      width: 180rpx;
-      height: 180rpx;
-    }
-  }
-
-  .goods-item_right {
-    position: relative;
-    flex: 1;
-
-    .goods-name {
-      display: block;
-      width: 100%;
-      min-height: 68rpx;
-      font-size: 28rpx;
-      line-height: 1.3;
-      color: #333;
-    }
-  }
-
-  .goods-item_desc {
-    margin-top: 20rpx;
-
-    .people {
-      margin-right: 14rpx;
-    }
-
-    .desc_footer {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: absolute;
-      right: 0rpx;
-      bottom: 0rpx;
-      min-height: 44rpx;
-
-      .item-prices {
-        padding-right: 6rpx;
-
-        .price_x {
-          margin-right: 14rpx;
-          color: rgb(240, 60, 60);
-          font-size: 28rpx;
-        }
-
-        .price_y {
-          color: #999;
-          text-decoration: line-through;
-          font-size: 24rpx;
-        }
-      }
-
-    }
-  }
-
-
-  // 子分类
-  .sub-cate-list {
-    background-color: #fff;
-    width: 100%;
-    z-index: 9;
-    padding: 8rpx 40rpx 0 14rpx;
-    overflow: hidden;
-    position: sticky;
-    top: calc(88rpx + var(--window-top));
-
-    &.display-fold {
-      height: 86rpx;
-    }
-
-    .nav-icon {
-      position: absolute;
-      right: 16rpx;
-      top: 12rpx;
-      font-size: 32rpx;
-    }
-
-    .sub-cate-item {
-      float: left;
-      background: #f8f8f8;
-      padding: 10rpx 30rpx;
-      margin-right: 22rpx;
-      margin-bottom: 24rpx;
-      font-size: 26rpx;
-      border-radius: 14rpx;
-      border: 1rpx solid #f8f8f8;
-
-      &.selected {
-        color: #fa2209;
-        border: 1rpx solid #fa2209;
-      }
-    }
-  }
   
   // 右侧二级分类
   .cate-cont-box {
@@ -380,14 +243,21 @@
   
   	.name {
   		display: block;
-  		padding-bottom: 30rpx;
+  		padding-bottom: 10rpx;
   		text-align: center;
-  		font-size: 26rpx;
+  		font-size: 22rpx;
   		color: #444444;
   	}
+	.name_desc {
+  		display: block;
+  		padding-bottom: 10rpx;
+  		text-align: center;
+  		font-size: 22rpx;
+  		color: #a39d9d;		
+	}
   
   	.cate-img-padding {
-  		padding: 16rpx 16rpx 4rpx 16rpx;
+  		padding: 16rpx 16rpx 0rpx 16rpx;
   	}
   
   	.cate-img {
@@ -396,12 +266,15 @@
   		padding-top: 100%;
   
   		.image {
-  			width: 100%;
-  			height: 100%;
+  			width: 114rpx;
+  			height: 114rpx;
   			position: absolute;
   			top: 0;
   			left: 0;
-  			border-radius: 10rpx;
+  			border-radius: 100%;
+			border:0.5px solid #ddd;
+			overflow: hidden;
+			margin: 20rpx 20rpx;
   		}
   	}
   

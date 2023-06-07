@@ -121,6 +121,12 @@
       }
     },
     {
+      "path": "pages/product/detail",
+      "style": {
+        "navigationBarTitleText": "权益充值"
+      }
+    },	
+    {
       "path": "pages/comment/index",
       "style": {
         "navigationBarTitleText": "商品评价页"
@@ -237,8 +243,16 @@
       "style": {
         "navigationBarTitleText": "申请售后"
       }
+    },
+    {
+		"path" : "pages/product/index/index",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
     }
-  ],
+    ],
   "globalStyle": {
     // #ifdef H5
     // "navigationStyle": "custom",
