@@ -243,14 +243,6 @@
       "style": {
         "navigationBarTitleText": "申请售后"
       }
-    },
-    {
-		"path" : "pages/product/index/index",
-		"style" :                                                                                    
-		{
-			"navigationBarTitleText": "",
-			"enablePullDownRefresh": false
-		}
     }
     ],
   "globalStyle": {
