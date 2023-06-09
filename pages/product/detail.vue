@@ -41,25 +41,29 @@
 	<!-- 权益产品选项 -->
 	<view class="product-info">
 		<!-- 权益产品大分类 -->
-		<view class="product-master">
-			<text class="product-master-name">会员</text>
+		<view class="product-category">
+			<view class="product-master">
+				<text class="product-master-name">会员</text>
+			</view>
 		</view>
 		<!-- 权益产品介绍标题 -->
 		<view class="product-title">
 			<text class="product-master-name">会员面额</text>
 		</view>
 		<!-- 权益产品详情 -->
-		<view class="product-sub">
-			<view class="sub-cate">
-				<text>年卡</text>
+		<view class="product-detail">
+			<view class="product-sub">
+				<view class="sub-cate">
+					<text>年卡</text>
+				</view>
+				<view class="discout-price">
+					<text>$107.46</text>
+				</view>
+				<view class="market-price">
+					<text>$200.46</text>
+				</view>
 			</view>
-			<view class="discout-price">
-				<text>$107.46</text>
-			</view>
-			<view class="market-price">
-				<text>$200.46</text>
-			</view>
-		</view>		
+		</view>
 	</view>
 	
 	
@@ -337,8 +341,56 @@ import * as ProductApi from '@/api/product'
  	margin: 0 auto 20rpx auto;
  
 	.product-master {
+		width: 160rpx;
+		height: 80rpx;
+		display: flex;
+		text-align: center;
+		align-items: center;
+		justify-content: space-evenly;
+		border: solid 1rpx #ddd;
 		border-radius: 20rpx;
+		font-size: 29rpx;
+		font-weight: bold;
+		flex-wrap: wrap;
+		margin:20rpx 0rpx;
 	}
+	
+	.product-title {
+		font-size: 30rpx;
+		margin:20rpx 0rpx;
+		color: #a59b9b;
+	}
+	
+	.product-sub {
+		width: 160rpx;
+		height: 240rpx;
+		display: flex;
+		text-align: center;
+		align-items: center;
+		justify-content: space-evenly;
+		border: solid 1rpx #ddd;
+		border-radius: 20rpx;
+		font-size: 32rpx;
+		flex-wrap: wrap;
+		margin:20rpx 0rpx;
+		padding: 30rpx 0rpx;
+		
+		.sub-cate {
+			font-size: 29rpx;
+		}
+		
+		.discout-price {
+			font-size: 32rpx;
+			font-weight: bold;
+		}
+		
+		.market-price {
+			font-size: 24rpx;
+			text-decoration: line-through;
+			color: #a59b9b;
+			
+		}
+	}	
  
    .s-item {
      float: left;
