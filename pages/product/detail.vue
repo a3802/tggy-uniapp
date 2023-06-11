@@ -42,7 +42,7 @@
 	<view class="product-info">
 		<!-- 权益产品大分类 -->
 		<view class="product-category">
-			<view class="product-master">
+			<view class="product-master" :class="{ active: selectedTab === 1 }" @click="selectedTab = 1">
 				<text class="product-master-name">会员</text>
 			</view>
 		</view>
@@ -65,6 +65,19 @@
 			</view>
 		</view>
 	</view>
+	
+	<!-- 权益产品备注 -->
+	<view class="product-note">
+		<h3>温馨提示</h3>
+		<view>
+			<h4>使用说明:</h4>
+			<p>1.本商品仅限填写号码充值，请确保充值账号填写无误;</p>
+			<p>2.因虚拟商品特性，官方平台明确售出后不得退换，一经充值成功将不支持退换;</p>
+			<p>3.如对订单有疑问，请联系客服;</p>
+		</view>
+		
+	</view>
+	
 	
 	
 	
@@ -111,6 +124,7 @@ import * as ProductApi from '@/api/product'
         showPopup: false,
         // 模式 1:都显示 2:只显示购物车 3:只显示立即购买
         // skuMode: 1
+		selectedTab: 0,
       }
     },
 
@@ -280,7 +294,7 @@ import * as ProductApi from '@/api/product'
 
       .item-val {
         margin-left: 12rpx;
-		font-size:32rpx;
+		font-size:30rpx;
 		font-weight: bold;
       }
     }
@@ -354,6 +368,10 @@ import * as ProductApi from '@/api/product'
 		flex-wrap: wrap;
 		margin:20rpx 0rpx;
 	}
+	.product-master.active {
+		border: solid 1rpx red;
+		color: red;
+	}
 	
 	.product-title {
 		font-size: 30rpx;
@@ -409,31 +427,24 @@ import * as ProductApi from '@/api/product'
    }
 } 
   
-  
-  // 收货地址
-  .delivery-address {
-    margin-top: -50rpx;
-
-    .link-man {
-      line-height: 46rpx;
-      color: #333;
-
-      .name {
-        margin-right: 10rpx;
-      }
-    }
-
-    .address {
-      margin-top: 12rpx;
-      color: #999;
-      font-size: 24rpx;
-
-      .detail {
-        margin-left: 6rpx;
-      }
-    }
-
-  }  
+// 权益商品提醒
+.product-note {
+    padding: 24rpx 30rpx;
+    align-items: center;
+ 	background: #fff;
+ 	width: 94%;
+ 	box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
+ 	border-radius: 20rpx;
+ 	margin: 0 auto 20rpx auto;
+	
+	h3 {
+		margin-bottom: 20rpx;
+	}
+	h4,p {
+		color:#ddd;
+		font-size: 22rpx;
+	}
+}
   // 输入框元素
   .form-item {
     display: flex;

@@ -12,14 +12,13 @@
         <view v-if="list[curIndex]" class="cate-right-cont">
           <view class="cate-two-box">
             <view class="cate-cont-box">
-              <view class="flex-three" v-for="(item, idx) in list[curIndex].children" :key="idx" @click="onTargetProductList(item.category_id)">
+              <view class="flex-three" v-for="(item, idx) in list[curIndex].children" :key="idx" @click="onTargetGoodsList(item.category_id)">
                 <view class="cate-img-padding">
                   <view v-if="item.image" class="cate-img">
                     <image class="image" mode="scaleToFill" :src="item.image.preview_url"></image>
                   </view>
                 </view>
                 <text class="name oneline-hide">{{ item.name }}</text>
-				<text class="name_desc oneline-hide">{{ item.short_desc }}</text>
               </view>
             </view>
           </view>
@@ -77,8 +76,8 @@
       },
 
       // 跳转至商品列表页
-      onTargetProductList(categoryId) {
-        this.$navTo('pages/product/detail', { categoryId })
+      onTargetGoodsList(categoryId) {
+        this.$navTo('pages/goods/list', { categoryId })
       }
 
     }
@@ -152,18 +151,11 @@
 
     .name {
       display: block;
+      padding-bottom: 30rpx;
       text-align: center;
       font-size: 26rpx;
       color: #444444;
     }
-	
-	.name_desc {
-  		display: block;
-  		padding-bottom: 10rpx;
-  		text-align: center;
-  		font-size: 22rpx;
-  		color: #a39d9d;		
-	}	
 
     .cate-img-padding {
       padding: 16rpx 16rpx 4rpx 16rpx;
@@ -174,17 +166,14 @@
       width: 100%;
       padding-top: 100%;
 
-  		.image {
-  			width: 114rpx;
-  			height: 114rpx;
-  			position: absolute;
-  			top: 0;
-  			left: 0;
-  			border-radius: 100%;
-			border:0.5px solid #ddd;
-			overflow: hidden;
-			margin: 20rpx 20rpx;
-  		}
+      .image {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 10rpx;
+      }
     }
 
   }
