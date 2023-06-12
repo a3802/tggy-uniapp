@@ -12,6 +12,6 @@ export const list = param => {
 }
 
 // 商品详情
-export const detail = productIds => {
-  return request.get(api.detail, { productIds })
+export const detail = categoryId => {
+  return request.get(api.detail, { categoryId })
 }

@@ -8,10 +8,10 @@
 		<view class="order-status">
 			<view class="status-icon">
 			  <!-- 商品图标-->
-				<image class="image" :src="product.product_image" mode="aspectFit"></image>
+				<image class="image" :src="product.category.image.preview_url" mode="aspectFit" />
 			</view>
 			<view class="status-text">
-			  <text>{{ product.short_name }}</text>
+			  <text>{{ product.category.name }}</text>
 			</view>
 		</view>
     </view>
@@ -42,8 +42,8 @@
 	<view class="product-info">
 		<!-- 权益产品大分类 -->
 		<view class="product-category">
-			<view class="product-master" :class="{ active: selectedTab === 1 }" @click="selectedTab = 1">
-				<text class="product-master-name">会员</text>
+			<view class="product-master" :class="{ active: selectedTab === item.category_id }" @click="selectedTab = item.category_id" v-for="(item, index) in product.sub_cate" :key="index" >
+				<text class="product-master-name">{{item.name}}</text>
 			</view>
 		</view>
 		<!-- 权益产品介绍标题 -->
@@ -52,15 +52,21 @@
 		</view>
 		<!-- 权益产品详情 -->
 		<view class="product-detail">
-			<view class="product-sub">
+			<view class="product-sub" 
+			v-for="(item, index) in product.detail" 
+			:key="index" 
+			v-show="item.category_id==selectedTab" 
+			:class="{ active: selectetProductTab === item.product_id }" 
+			@click="handleSelectNav(item)" 
+			:data-setr="item.product_id">
 				<view class="sub-cate">
 					<text>年卡</text>
 				</view>
 				<view class="discout-price">
-					<text>$107.46</text>
+					<text>¥{{item.purchase_price}}</text>
 				</view>
 				<view class="market-price">
-					<text>$200.46</text>
+					<text>¥{{item.face_value}}</text>
 				</view>
 			</view>
 		</view>
@@ -77,7 +83,43 @@
 		</view>
 		
 	</view>
-	
+
+    <!-- 底部选项卡 -->
+    <view class="footer-fixed">
+      <view class="footer-container">
+        <!-- 导航图标 -->
+        <view class="foo-item-fast">
+          <!-- 首页 -->
+          <view class="fast-item fast-item--home" @click="onTargetHome">
+            <view class="fast-icon">
+              <text class="iconfont icon-shouye"></text>
+            </view>
+            <view class="fast-text">
+              <text>首页</text>
+            </view>
+          </view>
+          <!-- 客服 -->
+          <view class="fast-item fast-item--cart" @click="onTargetCart">
+            <view v-if="cartTotal > 0" class="fast-badge fast-badge--fixed">{{ cartTotal > 99 ? '99+' : cartTotal }}
+            </view>
+            <view class="fast-icon">
+              <text class="iconfont icon-gouwuche"></text>
+            </view>
+            <view class="fast-text">
+              <text>客服</text>
+            </view>
+          </view>
+        </view>
+        <!-- 操作按钮 -->
+        <view class="foo-item-btn">
+          <view class="btn-wrapper">
+            <view class="btn-item btn-item-main" @click="onShowSkuPopup(3)">
+              <text>立即充值</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
 	
 	
 	
@@ -112,8 +154,8 @@ import * as ProductApi from '@/api/product'
       return {
         // 正在加载
         isLoading: true,
-        // 当前商品ID
-        productIds: null,
+        // 当前分类商品ID
+        categoryId: null,
         // 商品详情
         product: {},
 		// 手机号
@@ -124,7 +166,10 @@ import * as ProductApi from '@/api/product'
         showPopup: false,
         // 模式 1:都显示 2:只显示购物车 3:只显示立即购买
         // skuMode: 1
+		//上级分类项目
 		selectedTab: 0,
+		//商品选项卡
+		selectetProductTab: 0,
       }
     },
 
@@ -134,7 +179,7 @@ import * as ProductApi from '@/api/product'
     onLoad(options) {
       // 记录商品ID
 	  console.log(options);
-      this.productIds = parseInt(options.productIds)
+      this.categoryId = parseInt(options.categoryId)
 	  
 	  this.getProductDetail()
       // 加载页面数据
@@ -155,9 +200,11 @@ import * as ProductApi from '@/api/product'
       getProductDetail() {
         const app = this
         return new Promise((resolve, reject) => {
-          ProductApi.detail(app.productIds)
+          ProductApi.detail(app.categoryId)
             .then(result => {
               app.product = result.data.productInfo
+			  app.selectedTab = result.data.productInfo.sub_cate[0].category_id
+			  console.log(app.product)
               resolve(result)
             })
             .catch(reject)
@@ -169,6 +216,20 @@ import * as ProductApi from '@/api/product'
         this.$navTo('pages/index/index')
       },
 	  
+	  //默认选项
+	  handleSelectNav(data) {
+		  
+		  // this.selectetProductTab = data.findIndex(item => {
+			 //  return item.category_id == this.selectedTab
+		  // })
+			  if(data.category_id == this.selectedTab){
+					this.selectetProductTab = data.product_id;
+					return true;
+			  }
+
+		  
+		  console.log(this.selectetProductTab)
+	  },
 	  // 显示弹窗
 	  handlePopup() {
 	    this.showPopup = !this.showPopup
@@ -357,7 +418,7 @@ import * as ProductApi from '@/api/product'
 	.product-master {
 		width: 160rpx;
 		height: 80rpx;
-		display: flex;
+		display: inline-flex;
 		text-align: center;
 		align-items: center;
 		justify-content: space-evenly;
@@ -366,10 +427,10 @@ import * as ProductApi from '@/api/product'
 		font-size: 29rpx;
 		font-weight: bold;
 		flex-wrap: wrap;
-		margin:20rpx 0rpx;
+		margin:20rpx 40rpx 0 0;
 	}
-	.product-master.active {
-		border: solid 1rpx red;
+	.product-sub.active, .product-master.active {
+		border: solid 0.1rpx red;
 		color: red;
 	}
 	
@@ -382,7 +443,7 @@ import * as ProductApi from '@/api/product'
 	.product-sub {
 		width: 160rpx;
 		height: 240rpx;
-		display: flex;
+		display: inline-grid;
 		text-align: center;
 		align-items: center;
 		justify-content: space-evenly;
@@ -390,8 +451,8 @@ import * as ProductApi from '@/api/product'
 		border-radius: 20rpx;
 		font-size: 32rpx;
 		flex-wrap: wrap;
-		margin:20rpx 0rpx;
-		padding: 30rpx 0rpx;
+		margin: 0rpx 40rpx 0rpx 0rpx;
+		padding: 24rpx;
 		
 		.sub-cate {
 			font-size: 29rpx;
