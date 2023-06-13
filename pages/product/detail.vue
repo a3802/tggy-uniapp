@@ -527,4 +527,116 @@ import * as ProductApi from '@/api/product'
     }
 
   }
+  
+// 底部操作栏
+.footer-fixed {
+  position: fixed;
+  bottom: var(--window-bottom);
+  left: 0;
+  right: 0;
+  display: flex;
+  z-index: 11;
+  box-shadow: 0 -4rpx 40rpx 0 rgba(151, 151, 151, 0.24);
+  background: #fff;
+
+  // 设置ios刘海屏底部横线安全区域
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.footer-container {
+  width: 100%;
+  display: flex;
+  height: 130rpx;
+}
+
+// 快捷菜单
+.foo-item-fast {
+  box-sizing: border-box;
+  min-width: 214rpx;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-right: 12rpx;
+
+  .fast-item {
+    position: relative;
+    padding: 4rpx 0;
+    line-height: 1;
+    text-align: center;
+    width: 84rpx;
+
+    &--cart {
+      margin-left: 6rpx;
+      .fast-icon { margin-left: -12rpx; }
+    }
+    
+    // 角标
+    .fast-badge {
+      display: inline-block;
+      box-sizing: border-box;
+      min-width: 16px;
+      padding: 0 3px;
+      color: #fff;
+      font-weight: 500;
+      font-size: 12px;
+      font-family: -apple-system-font, Helvetica Neue, Arial, sans-serif;
+      line-height: 1.2;
+      text-align: center;
+      background-color: #ee0a24;
+      border: 1px solid #fff;
+      border-radius: 999px;
+    }
+
+    .fast-badge--fixed {
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform-origin: 100%
+    }
+
+    .fast-icon {
+      font-size: 44rpx;
+      margin-bottom: 8rpx;
+    }
+
+    .fast-text {
+      font-size: 22rpx;
+    }
+  }
+}
+
+// 操作按钮
+.foo-item-btn {
+  flex: 1;
+
+  .btn-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .btn-item {
+    flex: 1;
+    font-size: 35rpx;
+    height: 90rpx;
+    margin-right: 16rpx;
+    color: #fff;
+    border-radius: 50rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // 立即购买按钮
+  .btn-item-main {
+    background: linear-gradient(to right, #f9211c, #ff6335);
+  }
+
+  // 购物车按钮
+  .btn-item-deputy {
+    background: linear-gradient(to right, #ffa600, #ffbb00);
+  }
+}  
 </style>
