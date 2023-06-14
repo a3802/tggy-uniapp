@@ -8,16 +8,16 @@
 		<view class="order-status">
 			<view class="status-icon">
 			  <!-- 商品图标-->
-				<image class="image" :src="product.category.image.preview_url" mode="aspectFit" />
+				<image v-if="product.category" class="image" :src="product.category.image.preview_url" mode="aspectFit"></image>
 			</view>
 			<view class="status-text">
-			  <text>{{ product.category.name }}</text>
+			  <text v-if="product.category">{{ product.category.name }}</text>
 			</view>
 		</view>
     </view>
 	
     <!-- 充值：手机号 -->
-    <view class="delivery-address i-card">
+    <view class="delivery-address i-card" :model="form" ref="uForm">
 		<text class="iconfont icon-help"></text>
 		<text class="text-help">他请确保账号无误，充值成功后不支持退换</text>
 		<view class="form-item">
@@ -42,7 +42,7 @@
 	<view class="product-info">
 		<!-- 权益产品大分类 -->
 		<view class="product-category">
-			<view class="product-master" :class="{ active: selectedTab === item.category_id }" @click="selectedTab = item.category_id" v-for="(item, index) in product.sub_cate" :key="index" >
+			<view class="product-master" :class="{ active: selectedTab === item.category_id }" @click="handleSelectCate(item)" v-for="(item, index) in product.sub_cate" :key="index" >
 				<text class="product-master-name">{{item.name}}</text>
 			</view>
 		</view>
@@ -100,8 +100,6 @@
           </view>
           <!-- 客服 -->
           <view class="fast-item fast-item--cart" @click="onTargetCart">
-            <view v-if="cartTotal > 0" class="fast-badge fast-badge--fixed">{{ cartTotal > 99 ? '99+' : cartTotal }}
-            </view>
             <view class="fast-icon">
               <text class="iconfont icon-gouwuche"></text>
             </view>
@@ -144,7 +142,37 @@
 import * as ProductApi from '@/api/product'
   // import Shortcut from '@/components/shortcut'
   // import Service from './components/Service'
+  
+  // 表单字段元素
+  const form = {
+    phone: '',
+    productIds: ''
+  }
+  
+  // 表单验证规则
+  const rules = {
 
+    phone: [{
+      required: true,
+      message: '请输入手机号',
+      trigger: ['blur', 'change']
+    }, {
+      // 自定义验证函数
+      validator: (rule, value, callback) => {
+        // 返回true表示校验通过，返回false表示不通过
+        return isMobile(value)
+      },
+      message: '手机号码不正确',
+      // 触发器可以同时用blur和change
+      trigger: ['blur'],
+    }],
+    productIds: [{
+      required: true,
+      message: '青',
+      trigger: ['blur', 'change']
+    }],
+  }  
+  
   export default {
     components: {
       // Shortcut,
@@ -170,6 +198,10 @@ import * as ProductApi from '@/api/product'
 		selectedTab: 0,
 		//商品选项卡
 		selectetProductTab: 0,
+		//表单提交
+		form,
+		//验证规则
+		// rules,
       }
     },
 
@@ -202,10 +234,17 @@ import * as ProductApi from '@/api/product'
         return new Promise((resolve, reject) => {
           ProductApi.detail(app.categoryId)
             .then(result => {
-              app.product = result.data.productInfo
-			  app.selectedTab = result.data.productInfo.sub_cate[0].category_id
-			  console.log(app.product)
-              resolve(result)
+				app.product = result.data.productInfo
+				app.selectedTab = result.data.productInfo.sub_cate[0].category_id
+				console.log(app.product)
+				resolve(result)
+				app.product.detail.some((item, index) => {
+					if(item.category_id == app.selectedTab){
+						this.selectetProductTab = item.product_id;
+						return true;
+					}
+				})
+				
             })
             .catch(reject)
         })
@@ -219,17 +258,30 @@ import * as ProductApi from '@/api/product'
 	  //默认选项
 	  handleSelectNav(data) {
 		  
-		  // this.selectetProductTab = data.findIndex(item => {
-			 //  return item.category_id == this.selectedTab
-		  // })
-			  if(data.category_id == this.selectedTab){
-					this.selectetProductTab = data.product_id;
-					return true;
-			  }
+		  if(data.category_id == this.selectedTab){
+			  console.log(data.product_id)
+				this.selectetProductTab = data.product_id;
+				return true;
+		  }
 
 		  
 		  console.log(this.selectetProductTab)
 	  },
+	  
+	  //产品默认选项
+	  handleSelectCate(data) {
+		  console.log(this.selectedTab);
+		  console.log(data);
+		  if(data.category_id == this.selectedTab){
+				this.selectetProductTab = data.product_id;
+				return true;
+		  }else{
+			  this.selectedTab = data.category_id;
+			  console.log(this.selectedTab);
+			  return true;
+		  }		  
+	  },
+	  
 	  // 显示弹窗
 	  handlePopup() {
 	    this.showPopup = !this.showPopup
