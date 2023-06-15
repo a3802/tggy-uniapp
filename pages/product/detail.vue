@@ -17,13 +17,15 @@
     </view>
 	
     <!-- 充值：手机号 -->
-    <view class="delivery-address i-card" :model="form" ref="uForm">
-		<text class="iconfont icon-help"></text>
-		<text class="text-help">他请确保账号无误，充值成功后不支持退换</text>
-		<view class="form-item">
-			<input class="form-item--input" type="number" v-model="mobile" maxlength="11" placeholder="请输入手机号码" />
-		</view>
-    </view>
+	<view class="i-card">
+		<u-form  :model="form" ref="uForm">
+			<text class="iconfont icon-help"></text>
+			<text class="text-help">他请确保账号无误，充值成功后不支持退换</text>
+			<u-form-item class="form-item" prop="phone">
+				<u-input class="form-item--input" type="number" v-model="form.phone" maxlength="11" placeholder="请输入手机号码" />
+			</u-form-item>
+		</u-form>
+	</view>
 	
     <!-- 优惠卷信息 -->
     <view class="service-simple" @click="handlePopup">
@@ -111,7 +113,7 @@
         <!-- 操作按钮 -->
         <view class="foo-item-btn">
           <view class="btn-wrapper">
-            <view class="btn-item btn-item-main" @click="onShowSkuPopup(3)">
+            <view class="btn-item btn-item-main" :class="{ disabled }" @click="handleSubmit()">
               <text>立即充值</text>
             </view>
           </view>
@@ -146,7 +148,7 @@ import * as ProductApi from '@/api/product'
   // 表单字段元素
   const form = {
     phone: '',
-    productIds: ''
+    productIds: '',
   }
   
   // 表单验证规则
@@ -156,7 +158,7 @@ import * as ProductApi from '@/api/product'
       required: true,
       message: '请输入手机号',
       trigger: ['blur', 'change']
-    }, {
+    },{
       // 自定义验证函数
       validator: (rule, value, callback) => {
         // 返回true表示校验通过，返回false表示不通过
@@ -188,12 +190,8 @@ import * as ProductApi from '@/api/product'
         product: {},
 		// 手机号
 		mobile: '',
-        // 购物车总数量
-        // cartTotal: 0,
         // 显示详情内容弹窗
         showPopup: false,
-        // 模式 1:都显示 2:只显示购物车 3:只显示立即购买
-        // skuMode: 1
 		//上级分类项目
 		selectedTab: 0,
 		//商品选项卡
@@ -201,7 +199,9 @@ import * as ProductApi from '@/api/product'
 		//表单提交
 		form,
 		//验证规则
-		// rules,
+		rules,
+        // 按钮禁用
+        disabled: false		
       }
     },
 
@@ -217,6 +217,10 @@ import * as ProductApi from '@/api/product'
       // 加载页面数据
       this.onRefreshPage()
     },
+	
+	onReady(){
+		this.$refs.uForm.setRules(this.rules)
+	},
 
     methods: {
 
@@ -226,6 +230,25 @@ import * as ProductApi from '@/api/product'
         app.isLoading = true
         Promise.all([app.getProductDetail()])
           .finally(() => app.isLoading = false)
+      },
+	  
+      // 表单提交
+      handleSubmit() {
+        const app = this
+        if (app.disabled) {
+          return false
+        }
+        app.$refs.uForm.validate(valid => {
+          if (valid) {
+            app.disabled = true
+            AddressApi.add(app.form)
+              .then(result => {
+                app.$toast(result.message)
+                uni.navigateBack()
+              })
+              .finally(() => app.disabled = false)
+          }
+        })
       },
 
       // 获取商品信息
@@ -274,12 +297,16 @@ import * as ProductApi from '@/api/product'
 		  console.log(data);
 		  if(data.category_id == this.selectedTab){
 				this.selectetProductTab = data.product_id;
-				return true;
 		  }else{
 			  this.selectedTab = data.category_id;
 			  console.log(this.selectedTab);
-			  return true;
-		  }		  
+		  }
+			this.product.detail.some((item, index) => {
+				if(item.category_id == this.selectedTab){
+					this.selectetProductTab = item.product_id;
+					return true;
+				}
+			})					
 	  },
 	  
 	  // 显示弹窗
@@ -363,7 +390,7 @@ import * as ProductApi from '@/api/product'
     padding: 24rpx 24rpx;
     width: 94%;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
-    margin: 0 auto 20rpx auto;
+    margin: -76rpx auto 20rpx auto;
     border-radius: 20rpx; 
 	
 	.iconfont {
@@ -377,6 +404,15 @@ import * as ProductApi from '@/api/product'
 		margin-left:20rpx;
 		color:#e8c269;
 		
+	}
+	.u-border-bottom:after {
+		border-bottom-width:0px
+	}
+	.uni-input-wrapper {
+		font-size:24px;
+	}
+	.u-form-item__message {
+		display:none;
 	}
   }
   
@@ -559,11 +595,10 @@ import * as ProductApi from '@/api/product'
 	}
 }
   // 输入框元素
-  .form-item {
+.form-item {
     display: flex;
     padding: 30rpx 28rpx;
-    // border-bottom: 1rpx solid #f3f1f2;
-    margin-bottom: 30rpx;
+    // border-bottom: none;
     height: 96rpx;
 
     &--input {
@@ -572,13 +607,14 @@ import * as ProductApi from '@/api/product'
       flex: 1;
       height: 100%;
     }
+	
+	
+	.form-item--input {
+		font-size: 44rpx;
+	}
 
-    &--parts {
-      min-width: 100rpx;
-      height: 100%;
-    }
 
-  }
+}
   
 // 底部操作栏
 .footer-fixed {
@@ -684,11 +720,11 @@ import * as ProductApi from '@/api/product'
   // 立即购买按钮
   .btn-item-main {
     background: linear-gradient(to right, #f9211c, #ff6335);
+	// 禁用按钮
+	&.disabled {
+	  opacity: 0.6;
+	}
   }
-
-  // 购物车按钮
-  .btn-item-deputy {
-    background: linear-gradient(to right, #ffa600, #ffbb00);
-  }
+  
 }  
 </style>

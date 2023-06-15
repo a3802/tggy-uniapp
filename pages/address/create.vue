@@ -107,10 +107,12 @@
           return false
         }
         app.$refs.uForm.validate(valid => {
+			console.log(valid);
           if (valid) {
             app.disabled = true
             AddressApi.add(app.form)
               .then(result => {
+				console.log(result.message)
                 app.$toast(result.message)
                 uni.navigateBack()
               })
