@@ -18,11 +18,11 @@
 	
     <!-- 充值：手机号 -->
 	<view class="i-card">
-		<u-form  :model="form" ref="uForm">
+		<u-form  :model="form">
 			<text class="iconfont icon-help"></text>
 			<text class="text-help">他请确保账号无误，充值成功后不支持退换</text>
 			<u-form-item class="form-item" prop="phone">
-				<u-input class="form-item--input" type="number" v-model="form.phone" maxlength="11" placeholder="请输入手机号码" />
+				<u-input class="form-item--input" type="number" v-model="phone" maxlength="11" placeholder="请输入手机号码" />
 			</u-form-item>
 		</u-form>
 	</view>
@@ -113,7 +113,7 @@
         <!-- 操作按钮 -->
         <view class="foo-item-btn">
           <view class="btn-wrapper">
-            <view class="btn-item btn-item-main" :class="{ disabled }" @click="handleSubmit()">
+            <view class="btn-item btn-item-main" :class="{ disabled }" @click="handleBuy()">
               <text>立即充值</text>
             </view>
           </view>
@@ -142,39 +142,14 @@
 
 <script>
 import * as ProductApi from '@/api/product'
-  // import Shortcut from '@/components/shortcut'
-  // import Service from './components/Service'
+import * as Verify from '@/utils/verify'
   
   // 表单字段元素
   const form = {
     phone: '',
     productIds: '',
   }
-  
-  // 表单验证规则
-  const rules = {
-
-    phone: [{
-      required: true,
-      message: '请输入手机号',
-      trigger: ['blur', 'change']
-    },{
-      // 自定义验证函数
-      validator: (rule, value, callback) => {
-        // 返回true表示校验通过，返回false表示不通过
-        return isMobile(value)
-      },
-      message: '手机号码不正确',
-      // 触发器可以同时用blur和change
-      trigger: ['blur'],
-    }],
-    productIds: [{
-      required: true,
-      message: '青',
-      trigger: ['blur', 'change']
-    }],
-  }  
-  
+    
   export default {
     components: {
       // Shortcut,
@@ -189,7 +164,7 @@ import * as ProductApi from '@/api/product'
         // 商品详情
         product: {},
 		// 手机号
-		mobile: '',
+		phone: '',
         // 显示详情内容弹窗
         showPopup: false,
 		//上级分类项目
@@ -199,7 +174,7 @@ import * as ProductApi from '@/api/product'
 		//表单提交
 		form,
 		//验证规则
-		rules,
+		// rules,
         // 按钮禁用
         disabled: false		
       }
@@ -218,10 +193,6 @@ import * as ProductApi from '@/api/product'
       this.onRefreshPage()
     },
 	
-	onReady(){
-		this.$refs.uForm.setRules(this.rules)
-	},
-
     methods: {
 
       // 刷新页面数据
@@ -233,24 +204,68 @@ import * as ProductApi from '@/api/product'
       },
 	  
       // 表单提交
-      handleSubmit() {
+      handleBuy() {
         const app = this
         if (app.disabled) {
           return false
         }
-        app.$refs.uForm.validate(valid => {
-          if (valid) {
-            app.disabled = true
-            AddressApi.add(app.form)
-              .then(result => {
-                app.$toast(result.message)
-                uni.navigateBack()
-              })
-              .finally(() => app.disabled = false)
-          }
-        })
+		console.log(app.isLoading)
+		if (!app.isLoading && app.validteData(app.phone)) {
+		  app.submitBuy()
+		}
+		//表单验证
+		
       },
+	  
+      // 验证手机号
+      validteData(str) {
+		console.log(str);
+        if (Verify.isEmpty(str)) {
+          this.$toast('请先输入手机号')
+          return false
+        }
+        if (!Verify.isMobile(str)) {
+          this.$toast('请输入正确格式的手机号')
+          return false
+        }
+        return true
+      },	  
+	  
+	  //提交数据
+		submitBuy(){
+			app.disabled = true;
+			app.mode = 'TgYi';
+			form.productId = app.selectetProductTab;
+			form.mobile = app.phone;
+			ProductApi.submit(app.mode, app.form).
+			then(result => app.onSubmitCallback(result))
+			.catch(err => {
+				if (err.result) {
+					const errData = err.result.data
+					if (errData.is_created) {
+						// app.navToMyOrder()
+						return false
+					}
+				}
+				app.disabled = false
+			})
+		},
 
+		  // 订单提交成功后回调
+		onSubmitCallback(result) {
+			const app = this
+			// 发起微信支付
+			if (result.data.payType == PayTypeEnum.ALIPAY.value) {
+				aliPayment(result.data.payment)
+					.then(() => app.$success('支付成功'))
+					.catch(err => app.$error('订单未支付'))
+					.finally(() => {
+					  app.disabled = false
+					  app.navToMyOrder()
+					})
+			}
+		},
+	  
       // 获取商品信息
       getProductDetail() {
         const app = this
@@ -285,10 +300,7 @@ import * as ProductApi from '@/api/product'
 			  console.log(data.product_id)
 				this.selectetProductTab = data.product_id;
 				return true;
-		  }
-
-		  
-		  console.log(this.selectetProductTab)
+			}
 	  },
 	  
 	  //产品默认选项
@@ -408,13 +420,34 @@ import * as ProductApi from '@/api/product'
 	.u-border-bottom:after {
 		border-bottom-width:0px
 	}
-	.uni-input-wrapper {
-		font-size:24px;
+	
+	  // 输入框元素
+	.form-item {
+		display: flex;
+		padding: 30rpx 28rpx;
+		height: 96rpx;
+
+		&--input {
+		  letter-spacing: 1rpx;
+		  flex: 1;
+		  height: 100%;
+		}
+		
+		&/deep/.u-input__input {
+			font-size:24px;
+		}
+		
+		&/deep/.u-form-item__message {
+			display: none;
+		}	
 	}
-	.u-form-item__message {
-		display:none;
-	}
-  }
+	
+		
+}
+
+.u-input__input {
+	font-size:24px !important;
+}
   
   // 服务简述
 .service-simple {
@@ -594,27 +627,7 @@ import * as ProductApi from '@/api/product'
 		font-size: 22rpx;
 	}
 }
-  // 输入框元素
-.form-item {
-    display: flex;
-    padding: 30rpx 28rpx;
-    // border-bottom: none;
-    height: 96rpx;
 
-    &--input {
-      font-size: 44rpx;
-      letter-spacing: 1rpx;
-      flex: 1;
-      height: 100%;
-    }
-	
-	
-	.form-item--input {
-		font-size: 44rpx;
-	}
-
-
-}
   
 // 底部操作栏
 .footer-fixed {

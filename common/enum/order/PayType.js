@@ -6,5 +6,6 @@ import Enum from '../enum'
  */
 export default new Enum([
   { key: 'BALANCE', name: '余额支付', value: 10 },
-  { key: 'WECHAT', name: '微信支付', value: 20 }
+  { key: 'WECHAT', name: '微信支付', value: 20 },
+  { key: 'ALIPAY', name: '支付宝支付', value: 30 }
 ])

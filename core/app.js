@@ -167,7 +167,7 @@ export const checkLogin = () => {
 }
 
 /**
- * 发起支付请求
+ * 发起微信支付请求
  * @param {Object} 参数
  */
 export const wxPayment = (option) => {
@@ -191,6 +191,35 @@ export const wxPayment = (option) => {
     })
   })
 }
+
+/**
+ * 发起支付宝支付请求
+ * @param {Object} 参数
+ */
+export const aliPayment = (option) => {
+  const options = {
+    timeStamp: '',
+    nonceStr: '',
+    prepay_id: '',
+    paySign: '',
+    ...option
+  }
+  return new Promise((resolve, reject) => {
+    uni.requestPayment({
+      provider: 'alipay',
+      timeStamp: options.timeStamp,
+      nonceStr: options.nonceStr,
+      'package': `prepay_id=${options.prepay_id}`,
+      signType: 'MD5',
+      paySign: options.paySign,
+      success: res => resolve(res),
+      fail: res => reject(res)
+    })
+  })
+}
+
+
+
 
 /**
  * 加载更多列表数据
