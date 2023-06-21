@@ -113,7 +113,7 @@
         <!-- 操作按钮 -->
         <view class="foo-item-btn">
           <view class="btn-wrapper">
-            <view class="btn-item btn-item-main" :class="{ disabled }" @click="handleBuy()">
+            <view class="btn-item btn-item-main" :class="{ disabled }" @click="handleBuy(PayTypeEnum.ALIPAY.value)">
               <text>立即充值</text>
             </view>
           </view>
@@ -143,11 +143,11 @@
 <script>
 import * as ProductApi from '@/api/product'
 import * as Verify from '@/utils/verify'
+import { PayTypeEnum } from '@/common/enum/order'
   
   // 表单字段元素
   const form = {
     phone: '',
-    productIds: '',
   }
     
   export default {
@@ -176,7 +176,8 @@ import * as Verify from '@/utils/verify'
 		//验证规则
 		// rules,
         // 按钮禁用
-        disabled: false		
+        disabled: false,
+		PayTypeEnum,
       }
     },
 
@@ -204,14 +205,14 @@ import * as Verify from '@/utils/verify'
       },
 	  
       // 表单提交
-      handleBuy() {
+      handleBuy(payType) {
         const app = this
         if (app.disabled) {
           return false
         }
 		console.log(app.isLoading)
 		if (!app.isLoading && app.validteData(app.phone)) {
-		  app.submitBuy()
+		  app.submitBuy(payType)
 		}
 		//表单验证
 		
@@ -232,11 +233,14 @@ import * as Verify from '@/utils/verify'
       },	  
 	  
 	  //提交数据
-		submitBuy(){
+		submitBuy(payType){
+			const app = this
 			app.disabled = true;
 			app.mode = 'TgYi';
 			form.productId = app.selectetProductTab;
-			form.mobile = app.phone;
+			form.phone = app.phone;
+			form.coupon_money = 0;
+			form.payType = payType
 			ProductApi.submit(app.mode, app.form).
 			then(result => app.onSubmitCallback(result))
 			.catch(err => {
@@ -254,16 +258,18 @@ import * as Verify from '@/utils/verify'
 		  // 订单提交成功后回调
 		onSubmitCallback(result) {
 			const app = this
+			// 显示成功信息
+			app.$toast(result.message);
 			// 发起微信支付
-			if (result.data.payType == PayTypeEnum.ALIPAY.value) {
-				aliPayment(result.data.payment)
-					.then(() => app.$success('支付成功'))
-					.catch(err => app.$error('订单未支付'))
-					.finally(() => {
-					  app.disabled = false
-					  app.navToMyOrder()
-					})
-			}
+			// if (result.data.payType == PayTypeEnum.ALIPAY.value) {
+			// 	aliPayment(result.data.payment)
+			// 		.then(() => app.$success('支付成功'))
+			// 		.catch(err => app.$error('订单未支付'))
+			// 		.finally(() => {
+			// 		  app.disabled = false
+			// 		  app.navToMyOrder()
+			// 		})
+			// }
 		},
 	  
       // 获取商品信息
