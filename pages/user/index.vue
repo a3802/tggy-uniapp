@@ -136,14 +136,15 @@
   import SettingModel from '@/common/model/Setting'
   import * as UserApi from '@/api/user'
   import * as OrderApi from '@/api/order'
+  import * as OrderProductApi from '@/api/product'
   import { checkLogin } from '@/core/app'
 
   // 订单操作
   const orderNavbar = [
     { id: 'all', name: '全部订单', icon: 'qpdingdan' },
-    { id: 'payment', name: '待支付', icon: 'daifukuan', count: 0 },
-    { id: 'delivery', name: '待发货', icon: 'daifahuo', count: 0 },
-    { id: 'received', name: '待收货', icon: 'daishouhuo', count: 0 },
+    { id: 'willpay', name: '待支付', icon: 'daifukuan', count: 0 },
+    { id: 'paieding', name: '充值中', icon: 'daifahuo', count: 0 },
+    { id: 'paysuccess', name: '充值成功', icon: 'daishouhuo', count: 0 },
   ]
 
   /**
@@ -151,11 +152,9 @@
    * id: 标识; name: 标题名称; icon: 图标; type 类型(link和button); url: 跳转的链接
    */
   const service = [
-    { id: 'address', name: '收货地址', icon: 'shouhuodizhi', type: 'link', url: 'pages/address/index' },
     { id: 'coupon', name: '领券中心', icon: 'lingquan', type: 'link', url: 'pages/coupon/index' },
     { id: 'myCoupon', name: '优惠券', icon: 'youhuiquan', type: 'link', url: 'pages/my-coupon/index' },
     { id: 'contact', name: '在线客服', icon: 'kefu', type: 'button', openType: 'contact' },
-    { id: 'points', name: '我的积分', icon: 'jifen', type: 'link', url: 'pages/points/log' },
     { id: 'refund', name: '退换/售后', icon: 'shouhou', type: 'link', url: 'pages/refund/index', count: 0 },
     { id: 'orderCenter', name: '订单中心', icon: 'order-c', type: 'link', url: 'pages/order/center' },
     { id: 'help', name: '我的帮助', icon: 'bangzhu', type: 'link', url: 'pages/help/index' },
@@ -313,7 +312,7 @@
       getTodoCounts() {
         const app = this
         return new Promise((resolve, reject) => {
-          !app.isLogin ? resolve(null) : OrderApi.todoCounts({}, { load: app.isFirstload })
+          !app.isLogin ? resolve(null) : OrderProductApi.todoCounts({}, { load: app.isFirstload })
             .then(result => {
               app.todoCounts = result.data.counts
               resolve(app.todoCounts)
@@ -364,10 +363,6 @@
         this.$navTo('pages/order/index', { dataType: item.id })
       },
 
-      // 跳转到我的积分页面
-      onTargetPoints() {
-        this.$navTo('pages/points/log')
-      },
 
       // 跳转到我的优惠券页
       onTargetMyCoupon() {

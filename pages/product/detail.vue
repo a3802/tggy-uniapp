@@ -144,6 +144,7 @@
 import * as ProductApi from '@/api/product'
 import * as Verify from '@/utils/verify'
 import { PayTypeEnum } from '@/common/enum/order'
+import { aliPayment } from '@/core/app'
   
   // 表单字段元素
   const form = {
@@ -259,17 +260,30 @@ import { PayTypeEnum } from '@/common/enum/order'
 		onSubmitCallback(result) {
 			const app = this
 			// 显示成功信息
-			app.$toast(result.message);
-			// 发起微信支付
-			// if (result.data.payType == PayTypeEnum.ALIPAY.value) {
-			// 	aliPayment(result.data.payment)
-			// 		.then(() => app.$success('支付成功'))
-			// 		.catch(err => app.$error('订单未支付'))
-			// 		.finally(() => {
-			// 		  app.disabled = false
-			// 		  app.navToMyOrder()
-			// 		})
-			// }
+			// app.$toast(result.message);
+			console.log(result.data.payment);
+			// 发起支付宝支付
+			if (result.data.payType == PayTypeEnum.ALIPAY.value) {
+				// aliPayment(result.data.payment)
+				// 	.then(() => app.$success('支付成功'))
+				// 	.catch(err => app.$error('订单未支付'))
+				// 	.finally(() => {
+				// 	  app.disabled = false
+				// 	  app.navToMyOrder()
+				// 	})
+				console.log(1111);
+				document.querySelector('.container').innerHTML = result.data.payment;
+				document.forms[0].submit()
+				app.navToMyOrder()
+				
+			}
+		},
+		
+		// 跳转到我的订单(等待1秒)
+		navToMyOrder() {
+		  setTimeout(() => {
+		    this.$navTo('pages/order/index')
+		  }, 1000)
 		},
 	  
       // 获取商品信息

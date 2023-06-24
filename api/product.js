@@ -2,6 +2,7 @@ import request from '@/utils/request'
 
 // api地址
 const api = {
+  todoCounts: 'order/todoCounts',
   list: 'product/list',
   detail: 'product/detail',
   submit: 'product/submit',
@@ -21,4 +22,10 @@ export const detail = categoryId => {
 //权益商品提交
 export const submit = (mode, data) => {
   return request.post(api.submit, { mode, ...data })
+}
+
+
+// 当前用户待处理的订单数量
+export function todoCounts(param, option) {
+  return request.get(api.todoCounts, param, option)
 }

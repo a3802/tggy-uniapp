@@ -22,7 +22,10 @@
             </view>
             <view class="split-line"></view>
             <view class="content dis-flex flex-dir-column flex-x-between">
-              <view class="title">{{ item.name }}</view>
+			  <view class="column-text">
+				  <view class="text-title">{{ item.name }}&nbsp;&nbsp;&nbsp;*</view>
+				  <view class="text-num">{{item.receive_num}}</view>张				  
+			  </view>
               <view class="bottom dis-flex flex-y-center">
                 <view class="time flex-box">
                   <block v-if="item.start_time === item.end_time">{{ item.start_time }} 当天有效</block>
@@ -228,6 +231,20 @@
       flex: 1;
       padding: 30rpx 20rpx;
       border-radius: 16rpx 0 0 16rpx;
+	  
+	  .column-text{
+		  
+		  .text-title{
+				font-size: 32rpx;
+				display: inline-grid;
+		  }
+		  
+		  .text-num{
+				display: inline-grid;
+				font-size: 40rpx;
+		  }
+		  
+	  }
 
       .title {
         font-size: 32rpx;
