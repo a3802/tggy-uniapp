@@ -37,45 +37,6 @@
       </view>
     </view>
 
-    <!-- 我的钱包 -->
-    <view class="my-asset">
-      <view class="asset-left flex-box dis-flex flex-x-around">
-        <view class="asset-left-item" style="max-width: 200rpx;" @click="onTargetWallet">
-          <view class="item-value dis-flex flex-x-center">
-            <text>{{ isLogin ? assets.balance : '--' }}</text>
-          </view>
-          <view class="item-name dis-flex flex-x-center">
-            <text class="oneline-hide">账户余额</text>
-          </view>
-        </view>
-        <view class="asset-left-item" @click="onTargetPoints">
-          <view class="item-value dis-flex flex-x-center">
-            <text>{{ isLogin ? assets.points : '--' }}</text>
-          </view>
-          <view class="item-name dis-flex flex-x-center">
-            <text class="oneline-hide">{{ setting[SettingKeyEnum.POINTS.value].points_name }}</text>
-          </view>
-        </view>
-        <view class="asset-left-item" @click="onTargetMyCoupon">
-          <view class="item-value dis-flex flex-x-center">
-            <text class="oneline-hide">{{ isLogin ? assets.coupon : '--' }}</text>
-          </view>
-          <view class="item-name dis-flex flex-x-center">
-            <text>优惠券</text>
-          </view>
-        </view>
-      </view>
-      <view class="asset-right">
-        <view class="asset-right-item" @click="onTargetWallet">
-          <view class="item-icon dis-flex flex-x-center">
-            <text class="iconfont icon-qianbao"></text>
-          </view>
-          <view class="item-name dis-flex flex-x-center">
-            <text>我的钱包</text>
-          </view>
-        </view>
-      </view>
-    </view>
 
     <!-- 订单操作 -->
     <view class="order-navbar">
