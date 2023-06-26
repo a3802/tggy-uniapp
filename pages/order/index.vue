@@ -93,13 +93,13 @@
           </view>
           <!-- #endif -->
           <!-- 余额支付 -->
-          <view class="pay-item dis-flex flex-x-between" @click="onSelectPayType(PayTypeEnum.BALANCE.value)">
+          <view class="pay-item dis-flex flex-x-between" @click="onSelectPayType(PayTypeEnum.ALIPAY.value)">
             <view class="item-left dis-flex flex-y-center">
               <view class="item-left_icon balance">
                 <text class="iconfont icon-balance-pay"></text>
               </view>
               <view class="item-left_text">
-                <text>{{ PayTypeEnum.BALANCE.name }}</text>
+                <text>{{ PayTypeEnum.ALIPAY.name }}</text>
               </view>
             </view>
           </view>
@@ -299,7 +299,7 @@
           content: '确认要取消该订单吗？',
           success(o) {
             if (o.confirm) {
-              OrderApi.cancel(orderId)
+              OrderProductApi.cancel(orderId)
                 .then(result => {
                   // 显示成功信息
                   app.$toast(result.message)
@@ -325,7 +325,7 @@
         // 隐藏支付方式弹窗
         this.showPayPopup = false
         // 发起支付请求
-        OrderApi.pay(app.payOrderId, payType)
+        OrderProductApi.pay(app.payOrderId, payType)
           .then(result => app.onSubmitCallback(result))
       },
 
@@ -333,28 +333,11 @@
       onSubmitCallback(result) {
         const app = this
         // 发起微信支付
-        if (result.data.pay_type == PayTypeEnum.WECHAT.value) {
-          wxPayment(result.data.payment)
-            .then(() => {
-              app.$success('支付成功')
-              setTimeout(() => {
-                app.onRefreshList()
-              }, 1500)
-            })
-            .catch(err => {
-              app.$error('订单未支付')
-            })
-            .finally(() => {
-              app.disabled = false
-            })
-        }
-        // 余额支付
-        if (result.data.pay_type == PayTypeEnum.BALANCE.value) {
-          app.$success('支付成功')
-          app.disabled = false
-          setTimeout(() => {
-            app.onRefreshList()
-          }, 1500)
+        if (result.data.payType == PayTypeEnum.ALIPAY.value) {
+			console.log(1111);
+			document.querySelector('.container').innerHTML = result.data.payment;
+			document.forms[0].submit()
+			app.navToMyOrder()
         }
       },
 
