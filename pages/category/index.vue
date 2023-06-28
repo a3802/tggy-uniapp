@@ -2,7 +2,6 @@
 	<view class="container">
 		<!-- 搜索框 -->
 		<!-- <search class="search" tips="搜索商品" @event="$navTo('pages/search/index')" /> -->
-
 		<!-- 一级分类 -->
 		<primary
 			v-if="setting.style == PageCategoryStyleEnum.ONE_LEVEL_BIG.value || setting.style == PageCategoryStyleEnum.ONE_LEVEL_SMALL.value"

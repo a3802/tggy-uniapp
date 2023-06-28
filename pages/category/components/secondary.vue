@@ -67,7 +67,7 @@
       // 设置列表内容的高度
       setListHeight() {
         const { windowHeight } = uni.getSystemInfoSync()
-        this.scrollHeight = windowHeight - rpx2px(96)
+        this.scrollHeight = windowHeight
       },
 
       // 一级分类：选中分类
@@ -91,7 +91,8 @@
     display: flex;
     z-index: 1;
     background: #fff;
-    padding-top: 96rpx;
+    padding-top: 50rpx;
+	border-top: 1rpx solid #ddd;
   }
 
   // 一级分类+二级分类 20
