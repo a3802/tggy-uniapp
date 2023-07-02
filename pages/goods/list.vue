@@ -12,33 +12,25 @@
 
     <!-- 排序标签 -->
     <view class="store-sort">
-      <view class="sort-item" :class="{ active: sortType === 'all' }" @click="handleSortType('all')">
-        <text>综合</text>
+      <view class="sort-item" :class="{ active: sortType === 'best' }" @click="handleSortType('best')">
+        <text>热销榜</text>
       </view>
-      <view class="sort-item" :class="{ active: sortType === 'sales' }" @click="handleSortType('sales')">
-        <text>销量</text>
+      <view class="sort-item" :class="{ active: sortType === 'recommend' }" @click="handleSortType('recommend')">
+        <text>推荐榜</text>
       </view>
-      <view class="sort-item sort-item-price" :class="{ active: sortType === 'price' }" @click="handleSortType('price')">
-        <text>价格</text>
-        <view class="price-arrow">
-          <view class="icon up" :class="{ active: sortType === 'price' && !sortPrice }">
-            <text class="iconfont icon-arrow-up"></text>
-          </view>
-          <view class="icon down" :class="{ active: sortType === 'price' && sortPrice }">
-            <text class="iconfont icon-arrow-down"></text>
-          </view>
-        </view>
+      <view class="sort-item sort-item-price" :class="{ active: sortType === 'billion' }" @click="handleSortType('billion')">
+        <text>百亿补贴</text>
       </view>
     </view>
 
     <!-- 商品列表 -->
     <view class="goods-list clearfix" :class="['column-' + (showView ? '1' : '2')]">
-      <view class="goods-item" v-for="(item, index) in list.data" :key="index" @click="onTargetDetail(item.goods_id)">
+      <view class="goods-item" v-for="(item, index) in list.data" :key="index" @click="onTargetDetail(item.short_url)">
         <!-- 单列显示 -->
         <view v-if="showView" class="dis-flex">
           <!-- 商品图片 -->
           <view class="goods-item_left">
-            <image class="image" :src="item.goods_image"></image>
+            <image class="image" :src="item.goods_thumbnail_url"></image>
           </view>
           <view class="goods-item_right">
             <!-- 商品名称 -->
@@ -48,17 +40,23 @@
             <view class="goods-item_desc">
               <!-- 商品卖点 -->
               <view class="desc-selling_point dis-flex">
-                <text class="oneline-hide">{{ item.selling_point }}</text>
+                <text class="oneline-hide">{{ item.opt_name }}</text>
               </view>
               <!-- 商品销量 -->
               <view class="desc-goods_sales dis-flex">
-                <text>已售{{ item.goods_sales }}件</text>
+                已售<text style="color:red">{{ item.sales_tip }}件</text>
               </view>
               <!-- 商品价格 -->
               <view class="desc_footer">
-                <text class="price_x">¥{{ item.goods_price_min }}</text>
-                <text class="price_y col-9" v-if="item.line_price_min > 0">¥{{ item.line_price_min }}</text>
+                <text class="price_x">¥{{(item.min_group_price - item.coupon_discount)/100}}</text>
+                <text class="price_y col-9" v-if="item.min_normal_price > 0">¥{{ item.min_normal_price/100 }}</text>
               </view>
+			  <!-- 商品标签 -->
+              <view class="desc-selling_point">
+				<view class="tag-desc" v-for="(value, ke) in item.unified_tags" :key="ke">
+					<text class="tag">{{ value }}</text>
+				</view>
+              </view>			  
             </view>
           </view>
         </view>
@@ -66,7 +64,7 @@
         <view v-else class="">
           <!-- 商品图片 -->
           <view class="goods-image">
-            <image class="image" mode="aspectFill" :src="item.goods_image"></image>
+            <image class="image" mode="aspectFill" :src="item.goods_thumbnail_url"></image>
           </view>
           <view class="detail">
             <!-- 商品标题 -->
@@ -75,8 +73,8 @@
             </view>
             <!-- 商品价格 -->
             <view class="detail-price oneline-hide">
-              <text class="goods-price f-30 col-m">￥{{ item.goods_price_min }}</text>
-              <text v-if="item.line_price_min > 0" class="line-price col-9 f-24">￥{{ item.line_price_min }}</text>
+              <text class="goods-price f-30 col-m">￥{{(item.min_group_price - item.coupon_discount)/100}}</text>
+              <text v-if="item.min_normal_price > 0" class="line-price col-9 f-24">￥{{ item.min_normal_price/100 }}</text>
             </view>
           </view>
         </view>
@@ -92,7 +90,7 @@
   import { getEmptyPaginateObj, getMoreListData } from '@/core/app'
   import Search from '@/components/search'
 
-  const pageSize = 15
+  const pageSize = 20
   const showViewKey = 'GoodsList-ShowView';
 
   export default {
@@ -106,8 +104,7 @@
     data() {
       return {
         showView: false, // 列表显示方式 (true列表、false平铺)
-        sortType: 'all', // 排序类型
-        sortPrice: false, // 价格排序 (true高到低 false低到高)
+        sortType: 'best', // 排序类型
         options: {}, // 当前页面参数
         list: getEmptyPaginateObj(), // 商品列表数据
 
@@ -132,6 +129,10 @@
       // 设置默认列表显示方式
       this.setShowView()
     },
+	onShow(options){
+		this.options.search = uni.getStorageSync('inputSearch');
+		this.getGoodsList();
+	},
 
     methods: {
 
@@ -163,12 +164,9 @@
        */
       getGoodsList(pageNo = 1) {
         const app = this
-        console.log(app.options)
         const param = {
           sortType: app.sortType,
-          sortPrice: Number(app.sortPrice),
-          categoryId: app.options.categoryId || 0,
-          goodsName: app.options.search || '',
+          goodsName: uni.getStorageSync('inputSearch') || '',
           page: pageNo
         }
         return new Promise((resolve, reject) => {
@@ -186,9 +184,7 @@
       // 切换排序方式
       handleSortType(newSortType) {
         const app = this
-        const newSortPrice = newSortType === 'price' ? !app.sortPrice : true
         app.sortType = newSortType
-        app.sortPrice = newSortPrice
         // 刷新列表数据
         app.list = getEmptyPaginateObj()
         app.mescroll.resetUpScroll()
@@ -202,8 +198,10 @@
       },
 
       // 跳转商品详情页
-      onTargetDetail(goodsId) {
-        this.$navTo('pages/goods/detail', { goodsId })
+      onTargetDetail(url) {
+		  uni.navigateTo({
+			url: '/pages/common/webview?url=' + url
+		  })        
       },
 
       /**
@@ -224,30 +222,6 @@
 
     },
 
-
-    /**
-     * 设置分享内容
-     */
-    onShareAppMessage() {
-      // 构建分享参数
-      return {
-        title: "全部分类",
-        path: "/pages/category/index?" + this.$getShareUrlParams()
-      }
-    },
-
-    /**
-     * 分享到朋友圈
-     * 本接口为 Beta 版本，暂只在 Android 平台支持，详见分享到朋友圈 (Beta)
-     * https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/share-timeline.html
-     */
-    onShareTimeline() {
-      // 构建分享参数
-      return {
-        title: "全部分类",
-        path: "/pages/category/index?" + this.$getShareUrlParams()
-      }
-    }
 
   }
 </script>
@@ -330,7 +304,6 @@
   .goods-list.column-1 {
     .goods-item {
       width: 100%;
-      height: 280rpx;
       margin-bottom: 12rpx;
       padding: 20rpx;
       box-sizing: border-box;
@@ -347,11 +320,12 @@
       width: 300rpx;
       background: #fff;
       align-items: center;
+	  padding:10rpx;
 
       .image {
         display: block;
-        width: 240rpx;
-        height: 240rpx;
+        width: 100%;
+        height: 100%;
       }
     }
 
@@ -378,6 +352,19 @@
       width: 400rpx;
       font-size: 24rpx;
       color: #e49a3d;
+	  
+	  .tag-desc{
+		  display:inline;
+	  }
+	  
+	  .tag {
+		display: inline-block;
+		background-color: #f9f9f9;
+		border-radius: 2px;
+		margin: 2px 2px;
+		padding: 3px;
+		font-size:20rpx;
+	  }
     }
 
     .desc-goods_sales {
@@ -391,7 +378,7 @@
       .price_x {
         margin-right: 16rpx;
         color: #f03c3c;
-        font-size: 30rpx;
+        font-size: 33rpx;
       }
 
       .price_y {

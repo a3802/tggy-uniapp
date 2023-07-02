@@ -108,12 +108,7 @@ export const navTo = (url, query = {}, modo = 'navigateTo') => {
   const queryStr = !util.isEmpty(query) ? '?' + util.urlEncode(query) : ''
   // 普通页面, 使用navigateTo
   modo === 'navigateTo' && uni.navigateTo({
-    url: `/${url}${queryStr}`,
-    fail: function(res) {
-		console.log(res);
-		// 通过eventChannel向被打开页面传送数据
-		// res.eventChannel.emit('acceptDataFromOpenerPage', { data: 'data from starter page' })
-	}		
+    url: `/${url}${queryStr}`,	
   })
   // 特殊指定, 使用redirectTo
   modo === 'redirectTo' && uni.redirectTo({

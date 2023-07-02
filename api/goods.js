@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 // api地址
 const api = {
-  list: 'goods/list',
+  list: 'pgoods/list',
   detail: 'goods/detail',
   specData: 'goods/specData'
 }

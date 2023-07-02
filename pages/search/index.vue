@@ -66,9 +66,12 @@
         if (searchValue) {
           // 记录历史搜索
           this.setHistory(searchValue)
-          // 跳转到商品列表页
-          this.$navTo('pages/goods/list', { search: searchValue })
-        }
+		  uni.setStorageSync('inputSearch', searchValue)
+        }else{
+			uni.setStorageSync('inputSearch', '')
+		}
+		// 跳转到商品列表页
+		 uni.switchTab({url:'/pages/goods/list'})
       },
 
       /**
@@ -103,7 +106,11 @@
        * 跳转到最近搜索
        */
       handleQuick(search) {
-        this.$navTo('pages/goods/list', { search })
+		uni.setStorageSync('inputSearch', search)
+		// 跳转到商品列表页
+		uni.switchTab({
+			url:'/pages/goods/list'
+		})
       }
 
     }

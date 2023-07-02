@@ -15,7 +15,7 @@
       "selectedIconPath": "static/tabbar/equity-active.png",
       "text": "特权"
     }, {
-      "pagePath": "pages/cart/index",
+      "pagePath": "pages/goods/list",
       "iconPath": "static/tabbar/cart.png",
       "selectedIconPath": "static/tabbar/cart-active.png",
       "text": "商城"
@@ -243,7 +243,16 @@
       "style": {
         "navigationBarTitleText": "申请售后"
       }
-    }
+    },
+	{
+		"path" : "pages/common/webview",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
+		
+	}
     ],
   "globalStyle": {
     // #ifdef H5
