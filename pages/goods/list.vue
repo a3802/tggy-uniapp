@@ -76,6 +76,10 @@
               <text class="goods-price f-30 col-m">￥{{(item.min_group_price - item.coupon_discount)/100}}</text>
               <text v-if="item.min_normal_price > 0" class="line-price col-9 f-24">￥{{ item.min_normal_price/100 }}</text>
             </view>
+			<!-- 商品销量 -->
+			<view class="desc-sales dis-flex">
+				<text style="color:white">{{ item.sales_tip }}件</text>
+			</view>			
           </view>
         </view>
       </view>
@@ -437,6 +441,7 @@
       }
 
       .detail-price {
+		display:inline;
         .goods-price {
           margin-right: 8rpx;
         }
@@ -445,6 +450,18 @@
           text-decoration: line-through;
         }
       }
+	  
+	  .desc-sales {
+		  float:right;
+		  font-size:22rpx;
+		  margin: 3px 0px;
+		  
+		  text {
+			  background: red;
+			  border-radius: 2px;
+			  padding: 0px 2px;
+		  }
+	  }
     }
   }
 </style>
