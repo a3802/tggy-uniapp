@@ -6,6 +6,7 @@
       <view v-for="(dataItem, index) in dataList" :key="index" class="data-item" :style="{ padding: `${itemStyle.paddingTop}px ${itemStyle.paddingLeft}px` }">
         <view class="item-image" @click="onLink(dataItem.link)">
           <image class="image" mode="widthFix" :src="dataItem.imgUrl"></image>
+		  <view class="image-text">{{dataItem.link.param.query.search}}</view>
         </view>
       </view>
     </view>
@@ -74,7 +75,14 @@
 
   .diy-window .data-list .image {
     display: block;
-    width: 100%;
+    width: 85%;
+	margin-left: 12rpx;
+  }
+  .diy-window .data-list .image-text {
+    display: flex;
+    justify-content: space-evenly;
+    color: #bbb7b7;
+	// margin-right: 20rpx;
   }
 
   /* 分列布局 */
@@ -99,6 +107,7 @@
 
   .diy-window {
     box-sizing: border-box;
+	margin: 20rpx 19rpx;
   }
 
   .diy-window .display {

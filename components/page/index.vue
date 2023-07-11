@@ -37,6 +37,10 @@
       <block v-if="item.type === 'goods'">
         <Goods :itemStyle="item.style" :params="item.params" :dataList="item.data" />
       </block>
+	  <!-- 拼多多商品 -->
+      <block v-if="item.type === 'pdd'">
+        <Pdd :itemStyle="item.style" :params="item.params" :dataList="item.data" />
+      </block>	  
       <!-- 在线客服 -->
       <block v-if="item.type === 'service'">
         <Service :itemStyle="item.style" :params="item.params" />
@@ -67,6 +71,7 @@
   import Notice from './notice'
   import NavBar from './navBar'
   import Goods from './goods'
+  import Pdd from './pdd'
   import Service from './service'
   import Blank from './blank'
   import Guide from './guide'
@@ -84,6 +89,7 @@
       Notice,
       NavBar,
       Goods,
+	  Pdd,
       Service,
       Blank,
       Guide,

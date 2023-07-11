@@ -62,7 +62,7 @@
 			@click="handleSelectNav(item)" 
 			:data-setr="item.product_id">
 				<view class="sub-cate">
-					<text>年卡</text>
+					<text>{{item.short_name}}</text>
 				</view>
 				<view class="discout-price">
 					<text>¥{{item.purchase_price}}</text>
@@ -317,7 +317,6 @@ import { aliPayment } from '@/core/app'
 	  handleSelectNav(data) {
 		  
 		  if(data.category_id == this.selectedTab){
-			  console.log(data.product_id)
 				this.selectetProductTab = data.product_id;
 				return true;
 			}
@@ -325,13 +324,10 @@ import { aliPayment } from '@/core/app'
 	  
 	  //产品默认选项
 	  handleSelectCate(data) {
-		  console.log(this.selectedTab);
-		  console.log(data);
 		  if(data.category_id == this.selectedTab){
 				this.selectetProductTab = data.product_id;
 		  }else{
 			  this.selectedTab = data.category_id;
-			  console.log(this.selectedTab);
 		  }
 			this.product.detail.some((item, index) => {
 				if(item.category_id == this.selectedTab){
@@ -592,7 +588,7 @@ import { aliPayment } from '@/core/app'
 		border-radius: 20rpx;
 		font-size: 32rpx;
 		flex-wrap: wrap;
-		margin: 0rpx 40rpx 0rpx 0rpx;
+		margin: 0rpx 40rpx 40rpx 0rpx;
 		padding: 24rpx;
 		
 		.sub-cate {
