@@ -20,7 +20,7 @@
 	<view class="i-card">
 		<u-form  :model="form">
 			<text class="iconfont icon-help"></text>
-			<text class="text-help">他请确保账号无误，充值成功后不支持退换</text>
+			<text class="text-help">请确保账号无误，充值成功后不支持退换</text>
 			<u-form-item class="form-item" prop="phone">
 				<u-input class="form-item--input" type="number" v-model="phone" maxlength="11" placeholder="请输入手机号码" />
 			</u-form-item>
@@ -49,8 +49,12 @@
 			</view>
 		</view>
 		<!-- 权益产品介绍标题 -->
-		<view class="product-title">
+		<view class="product-title" v-if="categoryId != 10068">
 			<text class="product-master-name">会员面额</text>
+		</view>
+		<view class="product-title-recharge" v-else>
+			<text style="color:black; font-weight:bold; margin-right:10px;">选择充值金额</text>
+			<text style="color:red; font-size:12px; font-weight: bold;">(注:虚拟号|副卡|空号|错号|携号转网|集团共用号|一机多号:请勿下单  无法售后)</text>
 		</view>
 		<!-- 权益产品详情 -->
 		<view class="product-detail">
@@ -58,16 +62,21 @@
 			v-for="(item, index) in product.detail" 
 			:key="index" 
 			v-show="item.category_id==selectedTab" 
-			:class="{ active: selectetProductTab === item.product_id }" 
+			:class="[ selectetProductTab === item.product_id ? 'active' : '', 
+					categoryId === 10068 ? 'recharge' : '']" 
 			@click="handleSelectNav(item)" 
-			:data-setr="item.product_id">
+			:data-setr="item.product_id"
+			>
 				<view class="sub-cate">
 					<text>{{item.short_name}}</text>
 				</view>
-				<view class="discout-price">
+				<view class="discout-price" v-if="categoryId != 10068">
 					<text>¥{{item.purchase_price}}</text>
 				</view>
-				<view class="market-price">
+				<view class="recharge-price" v-else>
+					券后&nbsp;¥<text style="font-size:17px; font-weight:bold;">{{item.purchase_price}}</text>
+				</view>
+				<view class="market-price" v-if="categoryId != 10068">
 					<text>¥{{item.face_value}}</text>
 				</view>
 			</view>
@@ -75,7 +84,7 @@
 	</view>
 	
 	<!-- 权益产品备注 -->
-	<view class="product-note">
+	<view class="product-note" v-if="categoryId != 10068">
 		<h3>温馨提示</h3>
 		<view>
 			<h4>使用说明:</h4>
@@ -83,7 +92,37 @@
 			<p>2.因虚拟商品特性，官方平台明确售出后不得退换，一经充值成功将不支持退换;</p>
 			<p>3.如对订单有疑问，请联系客服;</p>
 		</view>
-		
+	</view>
+	<view class="product-note" v-else>
+		<h3>温馨提示</h3>
+		<view>
+			<h4>话费优惠券使用说明:</h4>
+			<p>1.100元话费优惠券包含: 5元10张+10元5张;</p>
+			<p>2.话费优惠券每月仅可使用5张,每张最低满100元减5元;</p>
+			<p>3.下载"口袋折扣App",查收100元话费优惠券礼包;</p>
+			<p>4.充值金额门槛:20元,50元,100元,200元,具体以话费充值页面为准;</p>
+			<p>5.话费一般72h内到账,如遇特殊情况联系客服;</p>
+			<p>6.因第三方充值波动,如果缺货请选择其他挡位充值;</p>
+		</view>
+	</view>
+	
+	<view class="product-note" v-if="categoryId === 10068">
+		<h3>注意事项</h3>
+		<view>
+			<h4>单个号码每天最多充值400元、每月最多600元虚拟号、副卡、空号、错号、携号转网、集团共用余额号码请勿下单，无法售后</h4>
+			<h4>[充值范围]:全国移动/联通/电信号码</h4>
+			<h4>[充值方式]: 输入手机号码进行充值</h4>
+			<h4>[话费到账]:付款成功后，系统自动发起充值，一般24小时至72小时左右到账，特殊情况3-7天到账，具体充值到账时间以运营商充值结果为准，充值过程中无法退款，充值高峰可能出现分批到账或充值失败情况，如有异常，请咨询人工客服或拨打010-86391585:</h4>
+			<p>1.请核对手机号码，确认正确再充值，号码错误将无法退款，充值失败资金原路退回，无需担心。</p>
+			<p>2.未实名号码、虚拟号(16611671701171号段)、副卡、销户号、携号转网号码无法充值，请勿提交，提交后无法售后3.慢充一般1-72小时到账，服务器维护或高峰期有延迟，最晚不超72小时。</p>
+			<p>4.充值失败24小时内资金原路退回，急用请勿拍，下单后无法取消充值进度。</p>
+			<p>5.支持全国三通(移动/联通/电信) 缴费充值，不限购、可代充，大部分到账有短信提醒。</p>
+			<p>6.客服工作时间:周一至周六9:00-22:00，有问题请在工作时间添加客服微信咨询。</p>
+			<p>7.请拍下前查询要充值号码的话费余额，如已停机，请查询欠费金额，以免充值后话费金额还不足。</p>
+			<p>8.如充值未到账需要提供APP的话费充值记录截图，必要时需要提供手机号码服务密码，以便客服尽快核实处理。</p>
+			<p>9.若订单提交后商品库存不足时，将会为您所提交的订单发起退款处理。</p>
+			<p>10沉默号码需恢复使用为正常活跃类号码后可进行充值:</p>
+		</view>
 	</view>
 
     <!-- 底部选项卡 -->
@@ -576,6 +615,11 @@ import { aliPayment } from '@/core/app'
 		margin:20rpx 0rpx;
 		color: #a59b9b;
 	}
+	.product-title-recharge{
+		font-size:15px;
+		margin: 34px 0 24px 0;
+	}
+
 	
 	.product-sub {
 		width: 160rpx;
@@ -606,7 +650,16 @@ import { aliPayment } from '@/core/app'
 			color: #a59b9b;
 			
 		}
-	}	
+	}
+		
+	.recharge {
+		padding: 64rpx 0;
+		width: 240rpx;
+		
+		.recharge-price{
+			font-size:12px;
+		}
+	}
  
    .s-item {
      float: left;
