@@ -418,6 +418,21 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 		  
 	  },
 
+      // 选择优惠券
+      handleSelectCoupon(index) {
+        const app = this
+        const { couponList } = app.order
+        // 当前选择的优惠券
+        const couponItem = couponList[index]
+
+        // 记录选中的优惠券id
+        app.selectCouponId = couponItem.user_coupon_id
+        // 重新获取订单信息
+        app.getOrderData()
+        // 隐藏优惠券弹层
+        app.showPopup = false
+      },
+
       // 跳转到首页
       onTargetHome(e) {
         this.$navTo('pages/index/index')
