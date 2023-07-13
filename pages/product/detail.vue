@@ -28,7 +28,7 @@
 	</view>
 	
     <!-- 优惠卷信息 -->
-    <view class="service-simple" @click="handlePopup">
+    <view class="service-simple" @click="handlePopup()">
 		<view class="s-list">
 			<view class="s-item">
 				<text class="item-val">优惠卷</text>
@@ -36,8 +36,13 @@
 		</view>
 		<!-- 扩展箭头 -->
 		<view class="s-arrow f-26 col-9 t-r">
-			<text class="iconfont icon-arrow-right"></text>
+          <view v-if="list.data.length > 0">
+            <text class="col-m">有{{ list.data.length }}张优惠券</text>
+            <text class="right-arrow iconfont icon-arrow-right"></text>
+          </view>
+          <text v-else class="">无优惠券可用</text>
 		</view>
+
     </view>
 	
 	<!-- 权益产品选项 -->
@@ -163,16 +168,51 @@
 	
 	
     <!-- 详情内容弹窗 -->
-    <u-popup v-model="showPopup" mode="bottom" :closeable="true" :border-radius="26">
-		<view class="service-content">
-			<view class="title">优惠卷</view>
-			<view class="status-icon">
-			  <!-- 优惠卷-->
-				<image class="image" src="" mode="aspectFit"></image>
+	<u-popup v-model="showPopup" mode="bottom">
+	  <view class="popup__coupon">
+		<view class="coupon__title f-30">选择优惠券</view>
+		<!-- 优惠券列表 -->
+		<view class="coupon-list">
+		  <scroll-view :scroll-y="true" style="height: 565rpx;">
+			<view class="coupon-item" v-for="(item, index) in list.data" :key="index">
+			  <view class="item-wrapper"
+				:class="['color-' + (item.state.value ? CouponColors[index % CouponColors.length] : 'gray')]"
+				@click="handleSelectCoupon(index)">
+				<view class="coupon-type">{{ CouponTypeEnum[item.coupon_type].name }}</view>
+				<view class="tip dis-flex flex-dir-column flex-x-center">
+				  <view v-if="item.coupon_type == CouponTypeEnum.FULL_DISCOUNT.value">
+					<text class="f-30">￥</text>
+					<text class="money">{{ item.reduce_price }}</text>
+				  </view>
+				  <text class="money"
+					v-if="item.coupon_type == CouponTypeEnum.DISCOUNT.value">{{ item.discount }}折</text>
+				  <text class="pay-line">满{{ item.min_price }}元可用</text>
+				</view>
+				<view class="split-line"></view>
+				<view class="content dis-flex flex-dir-column flex-x-between">
+				  <view class="column-text">
+					  <view class="text-title">{{ item.name }}&nbsp;&nbsp;&nbsp;*</view>
+					  <view class="text-num">{{item.receive_num}}</view>张				  
+				  </view>
+				  <view class="bottom dis-flex flex-y-center">
+					<view class="time flex-box">
+					  <block v-if="item.start_time === item.end_time">{{ item.start_time }}</block>
+					  <block v-else>{{ item.start_time }}~{{ item.end_time }}</block>
+					</view>
+				  </view>
+				</view>
+			  </view>
 			</view>
-			<view class="title">暂无优惠卷</view>
+		  </scroll-view>
 		</view>
-    </u-popup>
+		<!-- 不使用优惠券 -->
+		<view class="coupon__do_not dis-flex flex-y-center flex-x-center">
+		  <view class="control dis-flex flex-y-center flex-x-center" @click="handleNotUseCoupon()">
+			<text class="f-26">不使用优惠券</text>
+		  </view>
+		</view>
+	  </view>
+	</u-popup>
 
 		
 
@@ -184,11 +224,15 @@ import * as ProductApi from '@/api/product'
 import * as Verify from '@/utils/verify'
 import { PayTypeEnum } from '@/common/enum/order'
 import { aliPayment } from '@/core/app'
+import * as MyCouponApi from '@/api/myCoupon'
+import { getEmptyPaginateObj, getMoreListData } from '@/core/app'
+import { CouponTypeEnum } from '@/common/enum/coupon'
   
   // 表单字段元素
   const form = {
     phone: '',
   }
+  const CouponColors = ['red', 'blue', 'violet', 'yellow']
     
   export default {
     components: {
@@ -214,6 +258,12 @@ import { aliPayment } from '@/core/app'
 		//表单提交
 		form,
 		//验证规则
+        // 优惠券列表数据
+        list: getEmptyPaginateObj(),
+		// 枚举类
+		CouponTypeEnum,
+		// 颜色组
+		CouponColors,
 		// rules,
         // 按钮禁用
         disabled: false,
@@ -232,6 +282,8 @@ import { aliPayment } from '@/core/app'
 	  this.getProductDetail()
       // 加载页面数据
       this.onRefreshPage()
+	  
+	  this.getCouponList()
     },
 	
     methods: {
@@ -346,6 +398,25 @@ import { aliPayment } from '@/core/app'
             .catch(reject)
         })
       },
+	  
+	  // 获取优惠卷数据
+	  getCouponList(){
+		const app = this
+		if(app.categoryId == 10068){
+			return new Promise((resolve, reject) => {
+			  MyCouponApi.list({ dataType: 'isUnused', page: 1 }, { load: false })
+				.then(result => {
+				  // 合并新数据
+				  const newList = result.data.list
+				  app.list.data = getMoreListData(newList, app.list, 1)
+				  resolve(newList)
+				})
+			})			
+		}else{
+			return;
+		}		  
+		  
+	  },
 
       // 跳转到首页
       onTargetHome(e) {
@@ -809,4 +880,188 @@ import { aliPayment } from '@/core/app'
   }
   
 }  
+/* 优惠券选择 */
+.popup__coupon {
+  width: 750rpx;
+  background: #fff;
+  box-sizing: border-box;
+  padding: 30rpx;
+  
+  .coupon__do_not {
+    .control {
+      width: 90%;
+      height: 72rpx;
+      margin-bottom: 24rpx;
+      color: #888;
+      border: 1rpx solid #e3e3e3;
+      border-radius: 10rpx;
+         /* #ifdef H5 */
+            max-width: 1120rpx;
+            /* #endif */
+    }
+  }
+  
+  .coupon__title {
+    text-align: center;
+    margin-bottom: 30rpx;
+  }
+
+  .coupon-list {
+    /* #ifdef H5 */
+     max-width: 1120rpx;
+     margin: 0 auto;
+    /* #endif */
+  }
+
+  .coupon-item {
+    overflow: hidden;
+    margin-bottom: 22rpx;
+  }
+  
+  .item-wrapper {
+    width: 100%;
+    display: flex;
+    background: #fff;
+    border-radius: 8rpx;
+    color: #fff;
+    height: 180rpx;
+  
+    .coupon-type {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 10;
+      width: 128rpx;
+      padding: 6rpx 0;
+      background: #a771ff;
+      font-size: 20rpx;
+      text-align: center;
+      color: #ffffff;
+      transform: rotate(45deg);
+      transform-origin: 64rpx 64rpx;
+    }
+  
+    &.color-blue {
+      background: linear-gradient(-125deg, #57bdbf, #2f9de2);
+    }
+  
+    &.color-red {
+      background: linear-gradient(-128deg, #ff6d6d, #ff3636);
+    }
+  
+    &.color-violet {
+      background: linear-gradient(-113deg, #ef86ff, #b66ff5);
+  
+      .coupon-type {
+        background: #55b5ff;
+      }
+    }
+  
+    &.color-yellow {
+      background: linear-gradient(-141deg, #f7d059, #fdb054);
+    }
+  
+    &.color-gray {
+      background: linear-gradient(-113deg, #bdbdbd, #a2a1a2);
+  
+      .coupon-type {
+        background: #9e9e9e;
+      }
+    }
+  
+    .content {
+      flex: 1;
+      padding: 30rpx 20rpx;
+      border-radius: 16rpx 0 0 16rpx;
+	  
+	  .column-text{
+		  
+		  .text-title{
+				font-size: 32rpx;
+				display: inline-grid;
+		  }
+		  
+		  .text-num{
+				display: inline-grid;
+				font-size: 40rpx;
+		  }
+		  
+	  }  
+      .title {
+        font-size: 32rpx;
+      }
+	  
+  
+      .bottom {
+        .time {
+          font-size: 24rpx;
+        }
+  
+        .receive {
+          height: 46rpx;
+          width: 122rpx;
+          line-height: 46rpx;
+          text-align: center;
+          border: 1rpx solid #fff;
+          border-radius: 30rpx;
+          color: #fff;
+          font-size: 24rpx;
+  
+          &.state {
+            border: none;
+          }
+        }
+      }
+    }
+  
+    .tip {
+      position: relative;
+      flex: 0 0 32%;
+      text-align: center;
+      border-radius: 0 16rpx 16rpx 0;
+  
+      .money {
+        font-weight: bold;
+        font-size: 52rpx;
+      }
+  
+      .pay-line {
+        font-size: 22rpx;
+      }
+    }
+  
+    .split-line {
+      position: relative;
+      flex: 0 0 0;
+      border-left: 4rpx solid #fff;
+      margin: 0 10rpx 0 6rpx;
+      background: #fff;
+  
+      &:before,
+        {
+        border-radius: 0 0 16rpx 16rpx;
+        top: 0;
+      }
+  
+      &:after {
+        border-radius: 16rpx 16rpx 0 0;
+        bottom: 0;
+      }
+  
+      &:before,
+      &:after {
+        content: '';
+        position: absolute;
+        width: 24rpx;
+        height: 12rpx;
+        background: #f7f7f7;
+        left: -14rpx;
+        z-index: 1;
+      }
+  
+  
+    }
+  }
+  
+}
 </style>
