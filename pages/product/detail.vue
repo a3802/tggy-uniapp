@@ -36,8 +36,8 @@
 		</view>
 		<!-- 扩展箭头 -->
 		<view class="s-arrow f-26 col-9 t-r">
-          <view v-if="list.data.length > 0">
-            <text class="col-m">有{{ list.data.length }}张优惠券</text>
+          <view v-if="ArrvalueIn(list.data,selectetProductTab)">
+            <text class="col-m">选择优惠券</text>
             <text class="right-arrow iconfont icon-arrow-right"></text>
           </view>
           <text v-else class="">无优惠券可用</text>
@@ -177,7 +177,7 @@
 			<view class="coupon-item" v-for="(item, index) in list.data" :key="index">
 			  <view class="item-wrapper"
 				:class="['color-' + (item.state.value ? CouponColors[index % CouponColors.length] : 'gray')]"
-				@click="handleSelectCoupon(index)">
+				@click="handleSelectCoupon(index)" v-if="valueIn(item.apply_range_config.applyProductIds,selectetProductTab)">
 				<view class="coupon-type">{{ CouponTypeEnum[item.coupon_type].name }}</view>
 				<view class="tip dis-flex flex-dir-column flex-x-center">
 				  <view v-if="item.coupon_type == CouponTypeEnum.FULL_DISCOUNT.value">
@@ -264,6 +264,12 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 		CouponTypeEnum,
 		// 颜色组
 		CouponColors,
+		// 选择的优惠券
+		selectCouponId: 0,
+		//优惠卷适用商品范围
+		coupon_range: [],
+		//选中的优惠卷信息
+		couponItem: {},
 		// rules,
         // 按钮禁用
         disabled: false,
@@ -295,6 +301,27 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
         Promise.all([app.getProductDetail()])
           .finally(() => app.isLoading = false)
       },
+	  
+	  //验证商品可以使用的优惠卷
+	  valueIn(item,Id){
+		  if(item.includes(Id)){
+			  return true;
+		  }
+	  },
+	  
+	  //验证用户使用有可用的优惠卷
+	  ArrvalueIn(list,Id){
+		  try {
+			  list.forEach((item, index)=>{
+				  if(item.apply_range_config.applyProductIds.includes(Id)){
+					 throw new Error("存在");
+				  }
+			  });
+		  } catch(e) {
+		      if(e.message =="存在") return true;
+		  };
+		  return false;
+	  },
 	  
       // 表单提交
       handleBuy(payType) {
@@ -329,6 +356,16 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 			const app = this
 			app.disabled = true;
 			app.mode = 'TgYi';
+			if(app.categoryId == 10068){
+				if(!app.coupon_range.includes(app.selectetProductTab)){
+					app.$toast('该商品不能使用此优惠券')
+					return false;
+				}				
+				app.mode = 'ReCh'; //话费充值
+				form.couponId = app.selectCouponId || 0;
+				form.reduce_price = app.couponItem.reduce_price;
+
+			}
 			form.productId = app.selectetProductTab;
 			form.phone = app.phone;
 			form.coupon_money = 0;
@@ -421,14 +458,15 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
       // 选择优惠券
       handleSelectCoupon(index) {
         const app = this
-        const { couponList } = app.order
+		console.log(index);
+        // const { couponList } = app.order
         // 当前选择的优惠券
-        const couponItem = couponList[index]
-
+        app.couponItem = app.list.data[index]
         // 记录选中的优惠券id
-        app.selectCouponId = couponItem.user_coupon_id
-        // 重新获取订单信息
-        app.getOrderData()
+        app.selectCouponId = app.couponItem.user_coupon_id
+		app.coupon_range = app.couponItem.apply_range_config.applyProductIds
+
+
         // 隐藏优惠券弹层
         app.showPopup = false
       },
