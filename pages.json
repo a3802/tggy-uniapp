@@ -252,6 +252,15 @@
 			"enablePullDownRefresh": false
 		}
 		
+	},
+	{
+		"path" : "pages/common/payment",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
+		
 	}
     ],
   "globalStyle": {

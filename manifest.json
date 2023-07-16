@@ -1,9 +1,9 @@
 {
     "name" : "口袋折扣",
     "appid" : "__UNI__592005D",
-    "description" : "萤火商城V2.0，是2021年全新推出的一款轻量级、高性能、前后端分离的电商系统",
-    "versionName" : "2.0.3",
-    "versionCode" : 203,
+    "description" : "口袋折扣是一款强大的商品折扣优惠平台,口袋折扣,集购物返利,优惠卷发放,本地生活服务一体的电商平台,与国内千家电商平台",
+    "versionName" : "1.0.1",
+    "versionCode" : 101,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -59,7 +59,9 @@
                 "minSdkVersion" : 28
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+                "dSYMs" : false
+            },
             /* SDK配置 */
             "sdkConfigs" : {
                 "ad" : {},
@@ -70,7 +72,8 @@
                 }
             },
             "splashscreen" : {
-                "iosStyle" : "common"
+                "iosStyle" : "common",
+                "androidStyle" : "default"
             },
             "icons" : {
                 "android" : {

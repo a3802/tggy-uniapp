@@ -37,7 +37,8 @@
 		<!-- 扩展箭头 -->
 		<view class="s-arrow f-26 col-9 t-r">
           <view v-if="ArrvalueIn(list.data,selectetProductTab)">
-            <text class="col-m">选择优惠券</text>
+			<text class="col-m" v-if="selectCouponId > 0">-￥{{ couponItem.reduce_price }}</text>
+            <text class="col-m" v-else>选择优惠券</text>
             <text class="right-arrow iconfont icon-arrow-right"></text>
           </view>
           <text v-else class="">无优惠券可用</text>
@@ -282,7 +283,7 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
      */
     onLoad(options) {
       // 记录商品ID
-	  console.log(options);
+
       this.categoryId = parseInt(options.categoryId)
 	  
 	  this.getProductDetail()
@@ -329,7 +330,7 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
         if (app.disabled) {
           return false
         }
-		console.log(app.isLoading)
+
 		if (!app.isLoading && app.validteData(app.phone)) {
 		  app.submitBuy(payType)
 		}
@@ -339,7 +340,7 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 	  
       // 验证手机号
       validteData(str) {
-		console.log(str);
+
         if (Verify.isEmpty(str)) {
           this.$toast('请先输入手机号')
           return false
@@ -357,18 +358,17 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 			app.disabled = true;
 			app.mode = 'TgYi';
 			if(app.categoryId == 10068){
-				if(!app.coupon_range.includes(app.selectetProductTab)){
+				if(!app.coupon_range.includes(app.selectetProductTab) && app.coupon_range.length != 0){
 					app.$toast('该商品不能使用此优惠券')
 					return false;
 				}				
 				app.mode = 'ReCh'; //话费充值
 				form.couponId = app.selectCouponId || 0;
-				form.reduce_price = app.couponItem.reduce_price;
+				form.coupon_money = (app.couponItem.reduce_price === undefined ? 0: app.couponItem.reduce_price);
 
 			}
 			form.productId = app.selectetProductTab;
 			form.phone = app.phone;
-			form.coupon_money = 0;
 			form.payType = payType
 			ProductApi.submit(app.mode, app.form).
 			then(result => app.onSubmitCallback(result))
@@ -389,9 +389,10 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 			const app = this
 			// 显示成功信息
 			// app.$toast(result.message);
-			console.log(result.data.payment);
+			// console.log(result.data.payment);
 			// 发起支付宝支付
 			if (result.data.payType == PayTypeEnum.ALIPAY.value) {
+				// console.log(111111)
 				// aliPayment(result.data.payment)
 				// 	.then(() => app.$success('支付成功'))
 				// 	.catch(err => app.$error('订单未支付'))
@@ -399,10 +400,15 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 				// 	  app.disabled = false
 				// 	  app.navToMyOrder()
 				// 	})
-				console.log(1111);
-				document.querySelector('.container').innerHTML = result.data.payment;
-				document.forms[0].submit()
-				app.navToMyOrder()
+				// console.log(1111);
+				// document.querySelector('.container').innerHTML = result.data.payment;
+				// document.forms[0].submit()
+				// app.navToMyOrder()
+				uni.setStorageSync('alipay_str', result.data.payment)
+				app.$navTo('pages/common/payment')
+				// uni.redirectTo({
+				// 		url: '/pages/common/payment?pay_str='+ result.data.payment
+				// })
 				
 			}
 		},
@@ -422,7 +428,7 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
             .then(result => {
 				app.product = result.data.productInfo
 				app.selectedTab = result.data.productInfo.sub_cate[0].category_id
-				console.log(app.product)
+				// console.log(app.product)
 				resolve(result)
 				app.product.detail.some((item, index) => {
 					if(item.category_id == app.selectedTab){
@@ -503,7 +509,24 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 	  // 显示弹窗
 	  handlePopup() {
 	    this.showPopup = !this.showPopup
-	  }
+	  },
+	  //客服
+	  onTargetCart(){
+		  
+	  },
+	  
+	  // 不使用优惠券
+	  handleNotUseCoupon() {
+	    const app = this
+		
+        app.couponItem = {}
+        // 记录选中的优惠券id
+        app.selectCouponId = 0
+		//清空优惠卷使用商品范围
+		app.coupon_range = []
+	    // 隐藏优惠券弹层
+	    app.showPopup = false
+	  },
 
     },
 
