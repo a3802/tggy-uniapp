@@ -404,8 +404,15 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 				// document.querySelector('.container').innerHTML = result.data.payment;
 				// document.forms[0].submit()
 				// app.navToMyOrder()
-				uni.setStorageSync('alipay_str', result.data.payment)
-				app.$navTo('pages/common/payment')
+				// #ifdef APP-PLUS
+					uni.setStorageSync('alipay_str', result.data.payment)
+					app.$navTo('pages/common/payment')
+				// #endif
+				// #ifdef H5
+					document.querySelector('.container').innerHTML = result.data.payment;
+					document.forms[0].submit()
+					app.navToMyOrder();
+				// #endif
 				// uni.redirectTo({
 				// 		url: '/pages/common/payment?pay_str='+ result.data.payment
 				// })

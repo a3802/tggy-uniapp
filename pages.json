@@ -257,7 +257,7 @@
 		"path" : "pages/common/payment",
 		"style" :                                                                                    
 		{
-			"navigationBarTitleText": "",
+			"navigationBarTitleText": "支付宝付款",
 			"enablePullDownRefresh": false
 		}
 		
