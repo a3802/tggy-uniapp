@@ -261,6 +261,15 @@
 			"enablePullDownRefresh": false
 		}
 		
+	},
+	{
+		"path" : "pages/common/webtest",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "测试webview回调",
+			"enablePullDownRefresh": false
+		}
+		
 	}
     ],
   "globalStyle": {
