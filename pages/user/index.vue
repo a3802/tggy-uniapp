@@ -122,6 +122,7 @@
     { id: 'orderCenter', name: '订单中心', icon: 'order-c', type: 'link', url: 'pages/order/center' },
     { id: 'help', name: '我的帮助', icon: 'bangzhu', type: 'link', url: 'pages/help/index' },
 	{ id: 'help', name: '设置', icon: 'bangzhu', type: 'link', url: 'pages/setting/index' },
+
   ]
 
   export default {
