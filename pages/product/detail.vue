@@ -173,7 +173,7 @@
 	  <view class="popup__coupon">
 		<view class="coupon__title f-30">选择优惠券</view>
 		<!-- 优惠券列表 -->
-		<view class="coupon-list">
+		<view class="coupon-list" v-if="list.data.length > 0">
 		  <scroll-view :scroll-y="true" style="height: 565rpx;">
 			<view class="coupon-item" v-for="(item, index) in list.data" :key="index">
 			  <view class="item-wrapper"
@@ -206,10 +206,13 @@
 			</view>
 		  </scroll-view>
 		</view>
+		<view class="coupon-list" v-else>
+			<image  class="image" src="/static/empty-coupon.png" style="padding:25px;"></image>
+		</view>
 		<!-- 不使用优惠券 -->
 		<view class="coupon__do_not dis-flex flex-y-center flex-x-center">
 		  <view class="control dis-flex flex-y-center flex-x-center" @click="handleNotUseCoupon()">
-			<text class="f-26">不使用优惠券</text>
+			<text class="f-26"  style="font-size:28rpx;">不使用优惠券</text>
 		  </view>
 		</view>
 	  </view>
@@ -392,18 +395,7 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 			// console.log(result.data.payment);
 			// 发起支付宝支付
 			if (result.data.payType == PayTypeEnum.ALIPAY.value) {
-				// console.log(111111)
-				// aliPayment(result.data.payment)
-				// 	.then(() => app.$success('支付成功'))
-				// 	.catch(err => app.$error('订单未支付'))
-				// 	.finally(() => {
-				// 	  app.disabled = false
-				// 	  app.navToMyOrder()
-				// 	})
-				// console.log(1111);
-				// document.querySelector('.container').innerHTML = result.data.payment;
-				// document.forms[0].submit()
-				// app.navToMyOrder()
+
 				// #ifdef APP-PLUS
 					uni.setStorageSync('alipay_str', result.data.payment)
 					app.$navTo('pages/common/payment')
@@ -413,9 +405,7 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 					document.forms[0].submit()
 					app.navToMyOrder();
 				// #endif
-				// uni.redirectTo({
-				// 		url: '/pages/common/payment?pay_str='+ result.data.payment
-				// })
+		
 				
 			}
 		},
@@ -846,7 +836,7 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 		margin-bottom: 20rpx;
 	}
 	h4,p {
-		color:#ddd;
+		color:black;
 		font-size: 22rpx;
 	}
 }
@@ -987,6 +977,8 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
   .coupon__title {
     text-align: center;
     margin-bottom: 30rpx;
+	font-weight: bold;
+	font-size:32rpx;
   }
 
   .coupon-list {

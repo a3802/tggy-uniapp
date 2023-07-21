@@ -86,6 +86,8 @@
       </view>
     </view>
 
+
+	<view class="my-logout" style="margin-top: 120px;color: #cbc6c6;">Copyright@2023 口袋折扣 版权所有</view>
   </view>
 </template>
 
@@ -116,9 +118,10 @@
     { id: 'coupon', name: '领券中心', icon: 'lingquan', type: 'link', url: 'pages/coupon/index' },
     { id: 'myCoupon', name: '优惠券', icon: 'youhuiquan', type: 'link', url: 'pages/my-coupon/index' },
     { id: 'contact', name: '在线客服', icon: 'kefu', type: 'button', openType: 'contact' },
-    { id: 'refund', name: '退换/售后', icon: 'shouhou', type: 'link', url: 'pages/refund/index', count: 0 },
+    { id: 'refund', name: '退款/售后', icon: 'shouhou', type: 'link', url: 'pages/refund/index', count: 0 },
     { id: 'orderCenter', name: '订单中心', icon: 'order-c', type: 'link', url: 'pages/order/center' },
     { id: 'help', name: '我的帮助', icon: 'bangzhu', type: 'link', url: 'pages/help/index' },
+	{ id: 'help', name: '设置', icon: 'bangzhu', type: 'link', url: 'pages/setting/index' },
   ]
 
   export default {

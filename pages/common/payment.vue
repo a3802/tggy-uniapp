@@ -1,6 +1,6 @@
 <template>
 	<view  class="container">
-		<web-view :src="url"></web-view>
+		<web-view :src="url" @message="getMessage"></web-view>
 	</view>
 	
 </template>
@@ -18,16 +18,12 @@ export default {
     }
   },
   
-	mounted() {
-		  // #ifdef APP-PLUS 
-		  // var w = plus.webview.create(this.url + '?pay_str='+this.pay_str);
-		  // w.show();
-		  // setTimeout(() => {
-				// plus.webview.close(w);
-			 //  }, 1000)
-		  // #endif
-		  
-		},
+  getMessage(e) {
+     console.log('webView传递过来的消息')
+     const action = e.detail.data[0].action
+   },
+  
+
 		
 	 created(){
 		 this.url = this.url +'?pay_str='+this.pay_str;
@@ -43,36 +39,11 @@ export default {
     // 记录商品ID
     this.pay_str = uni.getStorageSync('alipay_str')
 	console.log(this.pay_str);
- //    // 加载页面数据
-	// this.platform = this.$u.os();
-	// console.log(this.platform);
-	// if(this.platform === 'android'){
-	// 	console.log(222)
-	// 	uni.createSelectorQuery().select('.container').innerHTML = this.pay_str;
-	// 	// this.container = this.pay_str;
-		
-	// } 	
+
   },
   
   onReady(){
-	//  console.log(2112122)
-	//  console.log(this.platform);
-	//  // let query = uni.createSelectorQuery().select('#alipay_submit');
-	//  // console.log(query);
-	//  // document.forms[0].submit()
-	// if(this.platform === 'android'){
 
-	// // 	console.log(222)
-	// 	// uni.createSelectorQuery().select('.container').innerHTML = this.pay_str;
-	// // 	this.container = this.pay_str;
-		
-	// // 	// console.log(cont);
-	// // 	uni.createSelectorQuery().select('#alipay_submit').submit();
-	// } 
-	// document.querySelector('.container').innerHTML = this.pay_str;
-	// document.forms[0].submit()
-	
-	// this.navToMyOrder()
 	  
   },
   
