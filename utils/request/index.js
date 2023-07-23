@@ -4,9 +4,10 @@
 import store from '@/store'
 import request from './request'
 import Config from '@/core/config'
-
+import {appUnilogin} from '../login.js'
 // 后端api地址
 const apiUrl = Config.get('apiUrl')
+const cloudUrl = Config.get('cloudUrl')
 
 // 可以new多个request来支持多个域名请求
 const $http = new request({
@@ -146,9 +147,9 @@ $http.dataFactory = async res => {
         cancelText: "再逛会",
         success: res => {
           if (res.confirm) {
-            uni.navigateTo({
-              url: "/pages/login/index"
-            })
+			  console.log(1112);
+			  let rest = appUnilogin();
+			  console.log(rest);
           }
           if (res.cancel && getCurrentPages().length > 1) {
             uni.navigateBack()
@@ -183,6 +184,10 @@ $http.dataFactory = async res => {
       result: httpData
     })
   }
+  
+  
+  
+  
 
   /*********以上只是模板(及共参考)，需要开发者根据各自的接口返回类型修改*********/
 }

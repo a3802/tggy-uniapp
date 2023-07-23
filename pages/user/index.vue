@@ -95,6 +95,7 @@
   import store from '@/store'
   import AvatarImage from '@/components/avatar-image'
   import { setCartTabBadge } from '@/core/app'
+  import {appUnilogin} from '@/utils/login.js'
   import SettingKeyEnum from '@/common/enum/setting/Key'
   import SettingModel from '@/common/model/Setting'
   import * as UserApi from '@/api/user'
@@ -115,15 +116,16 @@
    * id: 标识; name: 标题名称; icon: 图标; type 类型(link和button); url: 跳转的链接
    */
   const service = [
-    { id: 'coupon', name: '领券中心', icon: 'lingquan', type: 'link', url: 'pages/coupon/index' },
+    // { id: 'coupon', name: '领券中心', icon: 'lingquan', type: 'link', url: 'pages/coupon/index' },
     { id: 'myCoupon', name: '优惠券', icon: 'youhuiquan', type: 'link', url: 'pages/my-coupon/index' },
     { id: 'contact', name: '在线客服', icon: 'kefu', type: 'button', openType: 'contact' },
     { id: 'refund', name: '退款/售后', icon: 'shouhou', type: 'link', url: 'pages/refund/index', count: 0 },
     { id: 'orderCenter', name: '订单中心', icon: 'order-c', type: 'link', url: 'pages/order/center' },
-    { id: 'help', name: '我的帮助', icon: 'bangzhu', type: 'link', url: 'pages/help/index' },
-	{ id: 'help', name: '设置', icon: 'bangzhu', type: 'link', url: 'pages/setting/index' },
+    // { id: 'help', name: '我的帮助', icon: 'bangzhu', type: 'link', url: 'pages/help/index' },
+	{ id: 'setting', name: '设置', icon: 'shezhi', type: 'link', url: 'pages/setting/index' },
 
   ]
+  
 
   export default {
     components: {
@@ -150,7 +152,7 @@
         // 订单操作
         orderNavbar,
         // 当前用户待处理的订单数量
-        todoCounts: { payment: 0, deliver: 0, received: 0 }
+        todoCounts: { payment: 0, deliver: 0, received: 0 },
       }
     },
 
@@ -171,6 +173,7 @@
         this.isLogin = checkLogin()
         // 获取页面数据
         this.getPageData()
+		
       },
 
       // 获取页面数据
@@ -295,7 +298,7 @@
 
       // 跳转到登录页
       handleLogin() {
-        !this.isLogin && this.$navTo('pages/login/index')
+        !this.isLogin && this.userlogin();
       },
 
       // 跳转到修改个人信息页
@@ -318,26 +321,20 @@
         })
       },
 
-      // 跳转到钱包页面
-      onTargetWallet() {
-        this.$navTo('pages/wallet/index')
-      },
-
       // 跳转到订单页
       onTargetOrder(item) {
         this.$navTo('pages/order/index', { dataType: item.id })
-      },
-
-
-      // 跳转到我的优惠券页
-      onTargetMyCoupon() {
-        this.$navTo('pages/my-coupon/index')
       },
 
       // 跳转到服务页面
       handleService({ url }) {
         this.$navTo(url)
       },
+	  
+	  userlogin() {
+		let rest = appUnilogin();
+		console.log(rest); 
+	  }
 
     },
 

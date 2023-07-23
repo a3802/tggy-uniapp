@@ -40,6 +40,7 @@
       // 数据加载完成
       this.isLoad = true
       console.log('isLoad', true)
+	  
     },
 
     methods: {
@@ -77,7 +78,9 @@
         this.isMpWeixinAuth = false
         // 已获取到了第三方用户信息
         this.isParty = true
-      }
+		
+      },
+	  
     }
   }
 </script>

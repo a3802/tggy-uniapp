@@ -4,6 +4,14 @@
        url('https://at.alicdn.com/t/c/font_2282770_14425t4oa60f.woff?t=1673327595201') format('woff'),
        url('https://at.alicdn.com/t/c/font_2282770_14425t4oa60f.ttf?t=1673327595201') format('truetype'),
        url('https://at.alicdn.com/t/c/font_2282770_14425t4oa60f.svg?t=1673327595201#iconfont') format('svg');
+	   
+}
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: 'iconfont';  /* Project id 4157714 */
+  src: url('https://at.alicdn.com/t/c/font_4157714_77dcnt62j7j.woff2?t=1689936506046') format('woff2'),
+       url('https://at.alicdn.com/t/c/font_4157714_77dcnt62j7j.woff?t=1689936506046') format('woff'),
+       url('https://at.alicdn.com/t/c/font_4157714_77dcnt62j7j.ttf?t=1689936506046') format('truetype');
 }
 
 .iconfont {
@@ -352,3 +360,9 @@
 .icon-zhibozhong:before {
   content: "\e837";
 }
+
+.icon-shezhi:before {
+  content: "\eb8d";
+}
+
+

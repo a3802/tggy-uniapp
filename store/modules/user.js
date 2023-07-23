@@ -71,6 +71,19 @@ const user = {
           .catch(reject)
       })
     },
+	
+	//一键登录
+	QyLogin({commit}, data) {
+      return new Promise((resolve, reject) => {
+        LoginApi.unilogin({ form: data }, { isPrompt: false })
+          .then(response => {
+            const result = response.data
+            loginSuccess(commit, result)
+            resolve(response)
+          })
+          .catch(reject)
+      })		
+	},
 
     // 退出登录
     Logout({ commit }, data) {

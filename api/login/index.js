@@ -5,11 +5,17 @@ const api = {
   login: 'passport/login',
   loginMpWx: 'passport/loginMpWx',
   loginMpWxMobile: 'passport/loginMpWxMobile',
+  unilogin: 'equity/qyLogin'
 }
 
 // 用户登录(手机号+验证码)
 export function login(data) {
   return request.post(api.login, data)
+}
+
+// 一键登录(手机号)
+export function unilogin(data) {
+  return request.post(api.unilogin, data)
 }
 
 // 微信小程序快捷登录(获取微信用户基本信息)
