@@ -77,10 +77,10 @@
 					<text>{{item.short_name}}</text>
 				</view>
 				<view class="discout-price" v-if="categoryId != 10068">
-					<text>¥{{item.purchase_price}}</text>
+					<text>¥{{item.store_price}}</text>
 				</view>
 				<view class="recharge-price" v-else>
-					券后&nbsp;¥<text style="font-size:17px; font-weight:bold;">{{item.purchase_price}}</text>
+					券后&nbsp;¥<text style="font-size:17px; font-weight:bold;">{{item.store_price}}</text>
 				</view>
 				<view class="market-price" v-if="categoryId != 10068">
 					<text>¥{{item.face_value}}</text>

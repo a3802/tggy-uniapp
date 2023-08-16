@@ -5,12 +5,12 @@
       <image class="bg-image" src="/static/background/user-header2.png" mode="scaleToFill"></image>
       <!-- 用户信息 -->
       <view v-if="isLogin" class="user-info">
-        <view class="user-avatar" @click="handlePersonal()">
+        <view class="user-avatar">
           <avatar-image :url="userInfo.avatar_url" :width="100" />
         </view>
         <view class="user-content">
           <!-- 会员昵称 -->
-          <view class="nick-name oneline-hide" @click="handlePersonal()">{{ userInfo.nick_name }}</view>
+          <view class="nick-name oneline-hide">{{ userInfo.nick_name }}</view>
           <!-- 会员等级 -->
           <view v-if="userInfo.grade_id > 0 && userInfo.grade" class="user-grade">
             <view class="user-grade_icon">

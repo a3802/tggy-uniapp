@@ -40,12 +40,6 @@
       }
     },
     {
-      "path": "pages/cart/index",
-      "style": {
-        "navigationBarTitleText": "购物车"
-      }
-    },
-    {
       "path": "pages/user/index",
       "style": {
         "navigationBarTitleText": "个人中心",
@@ -78,24 +72,6 @@
       }
     },
     {
-      "path": "pages/user/personal/index",
-      "style": {
-        "navigationBarTitleText": "个人信息"
-      }
-    },
-    {
-      "path": "pages/article/index",
-      "style": {
-        "navigationBarTitleText": "资讯列表"
-      }
-    },
-    {
-      "path": "pages/article/detail",
-      "style": {
-        "navigationBarTitleText": "资讯详情"
-      }
-    },
-    {
       "path": "pages/help/index",
       "style": {
         "navigationBarTitleText": "帮助中心"
@@ -115,81 +91,15 @@
       }
     },
     {
-      "path": "pages/goods/detail",
-      "style": {
-        "navigationBarTitleText": "商品详情页"
-      }
-    },
-    {
       "path": "pages/product/detail",
       "style": {
         "navigationBarTitleText": "权益充值"
       }
     },	
     {
-      "path": "pages/comment/index",
-      "style": {
-        "navigationBarTitleText": "商品评价页"
-      }
-    },
-    {
       "path": "pages/my-coupon/index",
       "style": {
         "navigationBarTitleText": "我的优惠券"
-      }
-    },
-    {
-      "path": "pages/address/index",
-      "style": {
-        "navigationBarTitleText": "收货地址"
-      }
-    },
-    {
-      "path": "pages/address/create",
-      "style": {
-        "navigationBarTitleText": "新增收货地址"
-      }
-    },
-    {
-      "path": "pages/address/update",
-      "style": {
-        "navigationBarTitleText": "编辑收货地址"
-      }
-    },
-    {
-      "path": "pages/points/log",
-      "style": {
-        "navigationBarTitleText": "账单明细"
-      }
-    },
-    {
-      "path": "pages/wallet/index",
-      "style": {
-        "navigationBarTitleText": "我的钱包"
-      }
-    },
-    {
-      "path": "pages/wallet/balance/log",
-      "style": {
-        "navigationBarTitleText": "账单详情"
-      }
-    },
-    {
-      "path": "pages/wallet/recharge/index",
-      "style": {
-        "navigationBarTitleText": "充值中心"
-      }
-    },
-    {
-      "path": "pages/wallet/recharge/order",
-      "style": {
-        "navigationBarTitleText": "充值记录"
-      }
-    },
-    {
-      "path": "pages/checkout/index",
-      "style": {
-        "navigationBarTitleText": "订单结算台"
       }
     },
     {
@@ -215,33 +125,9 @@
       }
     },
     {
-      "path": "pages/order/express/index",
-      "style": {
-        "navigationBarTitleText": "物流跟踪"
-      }
-    },
-    {
-      "path": "pages/order/comment/index",
-      "style": {
-        "navigationBarTitleText": "订单评价"
-      }
-    },
-    {
       "path": "pages/refund/index",
       "style": {
         "navigationBarTitleText": "退换/售后"
-      }
-    },
-    {
-      "path": "pages/refund/detail",
-      "style": {
-        "navigationBarTitleText": "售后详情"
-      }
-    },
-    {
-      "path": "pages/refund/apply",
-      "style": {
-        "navigationBarTitleText": "申请售后"
       }
     },
 	{

@@ -16,7 +16,7 @@ export default {
 		  //运行平台,
 		  platform: '',
 		  container: '',
-		  url: "http://tgqy.yueyueyouqian.cn/shop.html",
+		  url: "https://tgqy.yueyueyouqian.cn/shop.html",
 		}
 	  },
   
@@ -54,10 +54,8 @@ export default {
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-	  console.log('iiii');
     // 记录商品ID
     this.pay_str = uni.getStorageSync('alipay_str')
-	console.log(this.pay_str);
 
   },
   

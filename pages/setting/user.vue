@@ -8,7 +8,7 @@
 export default {
 	  data() {
 		return {
-		  url: "http://tgqy.yueyueyouqian.cn/user_agree.html",
+		  url: "http://dizait.yueyueyouqian.cn/user_agree.html",
 		}
 	  }
 	}
