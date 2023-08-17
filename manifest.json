@@ -68,7 +68,16 @@
             },
             /* SDK配置 */
             "sdkConfigs" : {
-                "ad" : {},
+                "ad" : {
+                    "360" : {},
+                    "gdt" : {},
+                    "csj" : {},
+                    "ks" : {},
+                    "ks-content" : {},
+                    "sigmob" : {},
+                    "hw" : {},
+                    "bd" : {}
+                },
                 "payment" : {
                     "alipay" : {
                         "__platform__" : [ "ios", "android" ]
@@ -114,6 +123,9 @@
                     }
                 }
             }
+        },
+        "uniStatistics" : {
+            "enable" : true
         }
     },
     /* 快应用特有相关 */
@@ -150,7 +162,8 @@
         "usingComponents" : true
     },
     "uniStatistics" : {
-        "enable" : false
+        "enable" : false,
+        "version" : "2"
     },
     "h5" : {
         "router" : {
