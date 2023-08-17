@@ -147,9 +147,15 @@ $http.dataFactory = async res => {
         cancelText: "再逛会",
         success: res => {
           if (res.confirm) {
-			  console.log(1112);
-			  let rest = appUnilogin();
-			  console.log(rest);
+			  
+			  // #ifdef APP-PLUS
+				let rest = appUnilogin();
+			  // #endif
+			  // #ifdef H5
+				  uni.navigateTo({
+					url: "/pages/login/index"
+				  })	
+			  // #endif
           }
           if (res.cancel && getCurrentPages().length > 1) {
             uni.navigateBack()

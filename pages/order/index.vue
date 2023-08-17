@@ -92,7 +92,7 @@
             </view>
           </view>
           <!-- #endif -->
-          <!-- 余额支付 -->
+          <!-- 支付宝支付 -->
           <view class="pay-item dis-flex flex-x-between" @click="onSelectPayType(PayTypeEnum.ALIPAY.value)">
             <view class="item-left dis-flex flex-y-center">
               <view class="item-left_icon balance">
@@ -325,7 +325,7 @@
         // 隐藏支付方式弹窗
         this.showPayPopup = false
         // 发起支付请求
-        OrderProductApi.pay(app.payOrderId, payType)
+        OrderProductApi.payAgain(app.payOrderId, payType)
           .then(result => app.onSubmitCallback(result))
       },
 
@@ -334,10 +334,17 @@
         const app = this
         // 发起微信支付
         if (result.data.payType == PayTypeEnum.ALIPAY.value) {
-			console.log(1111);
-			document.querySelector('.container').innerHTML = result.data.payment;
-			document.forms[0].submit()
-			app.navToMyOrder()
+			
+			// #ifdef APP-PLUS
+				uni.setStorageSync('alipay_str', result.data.payment)
+				app.$navTo('pages/common/payment')
+			// #endif
+			// #ifdef H5
+				document.querySelector('.container').innerHTML = result.data.payment;
+				document.forms[0].submit()
+				app.navToMyOrder();
+			// #endif
+			
         }
       },
 

@@ -332,8 +332,15 @@
       },
 	  
 	  userlogin() {
-		let rest = appUnilogin();
-		console.log(rest); 
+		  
+		  //#ifdef APP-PLUS
+			let rest = appUnilogin(); //一键登录
+		  //#endif
+		  //#ifdef H5
+			  uni.navigateTo({
+				url: "/pages/login/index" //验证码登录
+			  })	
+		  //#endif
 	  }
 
     },

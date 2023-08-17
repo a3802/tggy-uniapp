@@ -117,14 +117,6 @@
       }
     },
     {
-      "path": "pages/order/detail",
-      "style": {
-        "navigationBarTitleText": "订单详情",
-        "navigationBarTextStyle": "white",
-        "navigationBarBackgroundColor": "#e8c269"
-      }
-    },
-    {
       "path": "pages/refund/index",
       "style": {
         "navigationBarTitleText": "退换/售后"

@@ -7,7 +7,7 @@ const api = {
   detail: 'product/detail',
   submit: 'product/submit',
   orderlist: 'product/orderlist',
-  pay: 'product/pay',
+  payAgain: 'product/payAgain',
   cancel: 'product/cancel',
 }
 
@@ -44,6 +44,6 @@ export function orderlist(param, option) {
 }
 
 // 立即支付
-export function pay(orderId, payType, param) {
-  return request.get(api.pay, { orderId, payType, ...param })
+export function payAgain(orderId, data) {
+  return request.get(api.payAgain, { orderId, ...data })
 }
