@@ -133,9 +133,9 @@
       // 设置默认列表显示方式
       this.setShowView()
     },
-	onShow(options){
+	async onShow(options){
 		this.options.search = uni.getStorageSync('inputSearch');
-		this.getGoodsList();
+		await this.getGoodsList();
 	},
 
     methods: {

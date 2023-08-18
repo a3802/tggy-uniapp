@@ -518,19 +518,19 @@
     padding: 24rpx;
 
     .title {
-      font-size: 30rpx;
+      font-size: 44rpx;
       margin-bottom: 40rpx;
       font-weight: bold;
       text-align: center;
     }
 
     .pop-content {
-      min-height: 260rpx;
+      min-height: 290rpx;
       padding: 0 10rpx;
 
       .pay-item {
         padding: 24rpx 35rpx;
-        font-size: 28rpx;
+        font-size: 60rpx;
         border-bottom: 1rpx solid #f1f1f1;
 
         &:last-child {
@@ -539,7 +539,7 @@
 
         .item-left_icon {
           margin-right: 20rpx;
-          font-size: 32rpx;
+          font-size: 96rpx;
 
           &.wechat {
             color: #00c800;

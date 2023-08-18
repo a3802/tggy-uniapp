@@ -38,12 +38,12 @@
       color: 'rgb(253 65 0)',
       path: 'pages/order/index'
     },
-    {
-      name: '充值订单',
-      icon: 'icon-jifen',
-      color: 'rgb(191, 150, 7)',
-      path: 'pages/wallet/recharge/order'
-    }
+    // {
+    //   name: '充值订单',
+    //   icon: 'icon-jifen',
+    //   color: 'rgb(191, 150, 7)',
+    //   path: 'pages/wallet/recharge/order'
+    // }
   ]
 
   export default {
