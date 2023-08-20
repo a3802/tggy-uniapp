@@ -446,9 +446,11 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 			return new Promise((resolve, reject) => {
 			  MyCouponApi.list({ dataType: 'isUnused', page: 1 }, { load: false })
 				.then(result => {
+					
 				  // 合并新数据
 				  const newList = result.data.list
 				  app.list.data = getMoreListData(newList, app.list, 1)
+				  console.log(app.list.data);
 				  resolve(newList)
 				})
 			})			
