@@ -238,3 +238,7 @@ export const getMoreListData = (resList, oldList, pageNo) => {
   // 合并新数据
   return oldList.data.concat(resList.data)
 }
+
+export const getKeFuLink = () => {
+	return 'https://tb.53kf.com/code/app/818133c55cba154d3d56d99366e4b4475/1';
+}

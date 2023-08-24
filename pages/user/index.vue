@@ -94,14 +94,12 @@
 <script>
   import store from '@/store'
   import AvatarImage from '@/components/avatar-image'
-  import { setCartTabBadge } from '@/core/app'
+  import { setCartTabBadge, getKeFuLink, checkLogin } from '@/core/app'
   import {appUnilogin} from '@/utils/login.js'
   import SettingKeyEnum from '@/common/enum/setting/Key'
   import SettingModel from '@/common/model/Setting'
   import * as UserApi from '@/api/user'
-  import * as OrderApi from '@/api/order'
   import * as OrderProductApi from '@/api/product'
-  import { checkLogin } from '@/core/app'
 
   // 订单操作
   const orderNavbar = [
@@ -118,9 +116,9 @@
   const service = [
     // { id: 'coupon', name: '领券中心', icon: 'lingquan', type: 'link', url: 'pages/coupon/index' },
     { id: 'myCoupon', name: '优惠券', icon: 'youhuiquan', type: 'link', url: 'pages/my-coupon/index' },
-    { id: 'contact', name: '在线客服', icon: 'kefu', type: 'button', openType: 'contact' },
+    // { id: 'contact', name: '在线客服', icon: 'kefu', type: 'button', openType: 'contact' },
     { id: 'refund', name: '退款/售后', icon: 'shouhou', type: 'link', url: 'pages/refund/index', count: 0 },
-    { id: 'orderCenter', name: '订单中心', icon: 'order-c', type: 'link', url: 'pages/order/center' },
+    { id: 'contact', name: '在线客服', icon: 'kefu', type: 'link', url: 'pages/common/webview?url=https://tb.53kf.com/code/app/818133c55cba154d3d56d99366e4b4475/1' },
     // { id: 'help', name: '我的帮助', icon: 'bangzhu', type: 'link', url: 'pages/help/index' },
 	{ id: 'setting', name: '设置', icon: 'shezhi', type: 'link', url: 'pages/setting/index' },
 

@@ -91,8 +91,8 @@
     display: flex;
     z-index: 1;
     background: #fff;
-    padding-top: 50rpx;
-	border-top: 1rpx solid #ddd;
+ //    padding-top: 50rpx;
+	// border-top: 1rpx solid #ddd;
   }
 
   // 一级分类+二级分类 20

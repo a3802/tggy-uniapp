@@ -146,9 +146,9 @@
             </view>
           </view>
           <!-- 客服 -->
-          <view class="fast-item fast-item--cart" @click="onTargetCart">
+          <view class="fast-item fast-item--cart" @click="onTargetKeFu">
             <view class="fast-icon">
-              <text class="iconfont icon-gouwuche"></text>
+              <text class="iconfont icon-kefu"></text>
             </view>
             <view class="fast-text">
               <text>客服</text>
@@ -227,9 +227,8 @@
 import * as ProductApi from '@/api/product'
 import * as Verify from '@/utils/verify'
 import { PayTypeEnum } from '@/common/enum/order'
-import { aliPayment } from '@/core/app'
 import * as MyCouponApi from '@/api/myCoupon'
-import { getEmptyPaginateObj, getMoreListData } from '@/core/app'
+import { getEmptyPaginateObj, getMoreListData, aliPayment, getKeFuLink  } from '@/core/app'
 import { CouponTypeEnum } from '@/common/enum/coupon'
   
   // 表单字段元素
@@ -510,8 +509,11 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 	    this.showPopup = !this.showPopup
 	  },
 	  //客服
-	  onTargetCart(){
-		  
+	  onTargetKeFu(){
+		  let url = getKeFuLink();
+		  uni.navigateTo({
+			url: '/pages/common/webview?url=' + url
+		  })		  
 	  },
 	  
 	  // 不使用优惠券

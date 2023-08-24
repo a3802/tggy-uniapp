@@ -91,7 +91,7 @@ export default {
 		// 显示的主题，success|error|primary|info|warning
 		type: {
 			type: String,
-			default: 'warning'
+			default: 'success'
 		},
 		// 是否显示左侧的音量图标
 		volumeIcon: {
@@ -131,7 +131,7 @@ export default {
 		// 滚动方向，horizontal-水平滚动，vertical-垂直滚动
 		mode: {
 			type: String,
-			default: 'horizontal'
+			default: 'vertical'
 		},
 		// 是否显示
 		show: {
@@ -189,6 +189,8 @@ export default {
 	computed: {
 		// 如果设置show为false，或者设置了noListHidden为true，且list长度又为零的话，隐藏组件
 		isShow() {
+			console.log(this.list);
+			console.log(typeof(this.list));
 			if(this.show == false || (this.noListHidden == true && this.list.length == 0)) return false;
 			else return true;
 		}

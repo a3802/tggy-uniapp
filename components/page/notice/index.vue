@@ -3,7 +3,7 @@
   <view class="diy-notice" :style="{ paddingTop: `${itemStyle.paddingTop}px`, paddingBottom: `${itemStyle.paddingTop}px` }"
     @click="onLink(params.link)">
     <u-notice-bar padding="10rpx 24rpx" :volume-icon="params.showIcon" :autoplay="params.scrollable"
-      :bg-color="itemStyle.background" :color="itemStyle.textColor" :list="[params.text]"></u-notice-bar>
+      :bg-color="itemStyle.background" :color="itemStyle.textColor" :list="params.text"></u-notice-bar>
   </view>
 </template>
 
@@ -28,7 +28,7 @@
      * 更新属性和数据的方法与更新页面数据的方法类似
      */
     methods: {
-
+		
 
     }
 
