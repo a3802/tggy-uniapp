@@ -1,11 +1,9 @@
 <script>
   export default {
-
     /**
      * 全局变量
      */
     globalData: {
-
     },
 
     /**
