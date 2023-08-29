@@ -7,7 +7,7 @@
 	</view>
     <view class="goods-list" :class="[`display__${itemStyle.display}`, `column__${itemStyle.column}`]">
       <scroll-view :scroll-x="itemStyle.display === 'slide'">
-        <view class="goods-item" v-for="(dataItem, index) in dataList" :key="index" @click="onTargetGoods(dataItem.short_url)">
+        <view class="goods-item" v-for="(dataItem, index) in dataList" :key="index" @click="onTargetGoods(dataItem.mobile_url)">
 
           <!-- 单列商品 -->
           <block v-if="itemStyle.column === 1">

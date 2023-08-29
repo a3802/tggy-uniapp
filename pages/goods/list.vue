@@ -25,7 +25,7 @@
 
     <!-- 商品列表 -->
     <view class="goods-list clearfix" :class="['column-' + (showView ? '1' : '2')]">
-      <view class="goods-item" v-for="(item, index) in list.data" :key="index" @click="onTargetDetail(item.short_url)">
+      <view class="goods-item" v-for="(item, index) in list.data" :key="index" @click="onTargetDetail(item.schema_url)">
         <!-- 单列显示 -->
         <view v-if="showView" class="dis-flex">
           <!-- 商品图片 -->
@@ -203,6 +203,7 @@
 
       // 跳转商品详情页
       onTargetDetail(url) {
+		  console.log(url);
 		  uni.navigateTo({
 			url: '/pages/common/webview?url=' + url
 		  })        
