@@ -5,7 +5,8 @@ const api = {
   login: 'passport/login',
   loginMpWx: 'passport/loginMpWx',
   loginMpWxMobile: 'passport/loginMpWxMobile',
-  unilogin: 'equity/qyLogin'
+  unilogin: 'equity/qyLogin',
+  logOff: 'user/logOff'
 }
 
 // 用户登录(手机号+验证码)
@@ -26,4 +27,10 @@ export function loginMpWx(data, option) {
 // 微信小程序快捷登录(授权手机号)
 export function loginMpWxMobile(data, option) {
   return request.post(api.loginMpWxMobile, data, option)
+}
+
+
+// 注销用户
+export const logOff = (userId) =>  {
+  return request.post(api.logOff, {userId})
 }

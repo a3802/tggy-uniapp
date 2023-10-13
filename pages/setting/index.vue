@@ -20,22 +20,76 @@
           <text class="iconfont icon-arrow-right"></text>
         </view>
       </view>
+      <view v-if="isLogin" class="order-item"  @click="logOff()">
+        <view class="order-item-name">注销账户</view>
+        <view class="icon-arrow">
+          <text class="iconfont icon-arrow-right"></text>
+        </view>
+      </view>
     </view>
   </view>
 </template>
 
 <script>
+	
+import store from '@/store'	
+import * as LoginApi from '@/api/login'
+import { checkLogin } from '@/core/app'
+	
 	export default {
 		data() {
 			return {
-				
+				// 是否已登录
+				isLogin: false,
 			}
 		},
+		
+		/**
+		 * 生命周期函数--监听页面显示
+		 */
+		onShow(options) {
+			// 判断是否已登录
+		  this.isLogin = checkLogin()
+		},
+		
 		methods: {
+			
+		  // 刷新页面
+		  onRefreshPage() {
+			// 判断是否已登录
+			this.isLogin = checkLogin()
+
+		  },
+
 			// 跳转到服务页面
 			handleService({ url }) {
 			  this.$navTo(url)
 			},
+			
+			//注销账户
+			logOff(){
+				const app = this;
+				uni.showModal({
+					title: '温馨提示',
+					content: '注销账户之后，所有用户数据都会被删除，请问是否确认注销',
+					confirmText: "确认",
+					cancelText: "取消",
+					success: res => {
+					  if (res.confirm) {
+						app.userId = store.getters.userId
+						console.log(app.userId);
+						LoginApi.logOff(app.userId)
+							.then(result => {
+								app.$toast('用户账户已注销');
+								store.dispatch('Logout', {})
+								  .then(result => app.onRefreshPage())
+							})
+						.catch()
+				  
+					  }
+					}
+				})					
+			}
 		}
 
 	}

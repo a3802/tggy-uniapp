@@ -59,8 +59,9 @@
                     "request" : "none",
                     "prompt" : "为保证您正常、安全地使用，需要获取设备识别码（部分手机提示为获取手机号码）使用权限，请允许。"
                 },
-                "minSdkVersion" : 28,
-                "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ]
+                "minSdkVersion" : 29,
+                "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ],
+                "targetSdkVersion" : 30
             },
             /* ios打包配置 */
             "ios" : {
@@ -94,7 +95,7 @@
             "icons" : {
                 "android" : {
                     "hdpi" : "unpackage/res/icons/72x72.png",
-                    "xhdpi" : "unpackage/res/icons/144x144.png",
+                    "xhdpi" : "unpackage/res/icons/96x96.png",
                     "xxhdpi" : "unpackage/res/icons/144x144.png",
                     "xxxhdpi" : "unpackage/res/icons/192x192.png"
                 },
@@ -126,7 +127,7 @@
         },
         "uniStatistics" : {
             "enable" : true,
-			"version": "2"
+            "version" : "2"
         }
     },
     /* 快应用特有相关 */
@@ -172,5 +173,6 @@
             "base" : "./"
         }
     },
-    "vueVersion" : "2"
+    "vueVersion" : "2",
+    "locale" : "zh-Hans"
 }
