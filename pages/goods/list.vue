@@ -25,7 +25,7 @@
 
     <!-- 商品列表 -->
     <view class="goods-list clearfix" :class="['column-' + (showView ? '1' : '2')]">
-      <view class="goods-item" v-for="(item, index) in list.data" :key="index" @click="onTargetDetail(item.schema_url)">
+      <view class="goods-item" v-for="(item, index) in list.data" :key="index" @click="onTargetDetail(item.goods_sign)">
         <!-- 单列显示 -->
         <view v-if="showView" class="dis-flex">
           <!-- 商品图片 -->
@@ -173,6 +173,7 @@
           goodsName: uni.getStorageSync('inputSearch') || '',
           page: pageNo
         }
+		
         return new Promise((resolve, reject) => {
           GoodsApi.list(param)
             .then(result => {
@@ -202,10 +203,10 @@
       },
 
       // 跳转商品详情页
-      onTargetDetail(url) {
-		  console.log(url);
+      onTargetDetail(goods_sign) {
+		  // console.log(goods_sign);
 		  uni.navigateTo({
-			url: '/pages/common/webview?url=' + url
+			url: '/pages/goods/detail?goods_sign=' + goods_sign
 		  })        
       },
 

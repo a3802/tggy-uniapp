@@ -184,6 +184,15 @@
 			"enablePullDownRefresh": false
 		}
 		
+	},
+	{
+		"path" : "pages/goods/detail",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
+		
 	}
     ],
   "globalStyle": {

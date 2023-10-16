@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // api地址
 const api = {
   list: 'pgoods/list',
-  detail: 'goods/detail',
+  detail: 'pgoods/detail',
   specData: 'goods/specData'
 }
 
@@ -13,8 +13,8 @@ export const list = param => {
 }
 
 // 商品详情
-export const detail = goodsId => {
-  return request.get(api.detail, { goodsId })
+export const detail = goods_sign => {
+  return request.get(api.detail, { goods_sign })
 }
 
 // 获取商品规格数据
