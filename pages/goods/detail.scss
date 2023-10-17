@@ -49,6 +49,8 @@
   color: #EEE0C3;
 }
 
+//品牌标签
+
 // 商品标签
 .desc-selling_point {
   width: 400rpx;
@@ -75,7 +77,18 @@
 }
 
 .info-item__name .goods-name {
-  font-size: 30rpx;
+  font-size: 36rpx;
+  
+  image{
+	height: 36rpx;;
+    width: 92rpx;
+	padding-top:4rpx;
+	padding-right:10rpx;
+  }
+  text{
+	  display: inline;
+	  font-weight: 700;
+  }
 }
 
 /* 商品分享 */

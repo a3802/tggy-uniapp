@@ -27,10 +27,8 @@
       </view>
       <!-- 标题、分享 -->
       <view class="info-item info-item__name dis-flex flex-y-center">
-		<view class="brand-name flex-box">
-		  <image class="image" :draggable="false" :src="goods.brand_type" style="height: 0.17rem;width: 0.46rem;"></image>
-		</view>
         <view class="goods-name flex-box">
+		  <image class="image" :draggable="false" :src="goods.brand_type"></image>
           <text class="twoline-hide">{{ goods.goods_name }}</text>
         </view>
         <!-- #ifdef MP-WEIXIN -->
@@ -53,18 +51,8 @@
     </view>
 
 
-    <!-- 商品描述 -->
-    <view v-if="!isLoading" class="goods-content m-top20">
-      <view class="item-title b-f">
-        <text>商品描述</text>
-      </view>
-      <block v-if="goods.content != ''">
-        <view class="goods-content__detail b-f">
-          <mp-html :content="goods.content" />
-        </view>
-      </block>
-      <empty v-else tips="亲，暂无商品描述" />
-    </view>
+    <!-- 商品服务 -->
+    <Service v-if="!isLoading" :service_tags="goods.service_array" />
 
     <!-- 底部选项卡 -->
     <view class="footer-fixed">
@@ -108,11 +96,8 @@
         <!-- 操作按钮 -->
         <view class="foo-item-btn">
           <view class="btn-wrapper">
-            <view class="btn-item btn-item-deputy" @click="onShowSkuPopup(2)">
-              <text>加入购物车</text>
-            </view>
-            <view class="btn-item btn-item-main" @click="onShowSkuPopup(3)">
-              <text>立即购买</text>
+            <view class="btn-item btn-item-main" @click="onTargetUrl(goods.short_url)">
+              <text>直达链接</text>
             </view>
           </view>
         </view>
@@ -128,6 +113,7 @@
 <script>
   import * as GoodsApi from '@/api/goods'
   import SlideImage from './components/SlideImage'
+  import Service from './components/Service'
 
   export default {
     components: {
@@ -135,7 +121,7 @@
       SlideImage,
       // SkuPopup,
       // Comment,
-      // Service
+      Service
     },
     data() {
       return {
@@ -210,7 +196,7 @@
        * 显示/隐藏SKU弹窗
        * @param {skuMode} 模式 1:都显示 2:只显示购物车 3:只显示立即购买
        */
-      onShowSkuPopup(skuMode = 1) {
+      onShowSkuPopup(skuMode = 3) {
         this.skuMode = skuMode
         this.showSkuPopup = !this.showSkuPopup
       },
@@ -221,8 +207,10 @@
       },
 
       // 跳转到购物车页
-      onTargetCart() {
-        this.$navTo('pages/cart/index')
+      onTargetUrl(url) {
+		   uni.navigateTo({
+					url: '/pages/common/webview?url=' + url
+		   })  
       },
 
     },

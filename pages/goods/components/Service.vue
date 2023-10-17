@@ -1,11 +1,12 @@
 <template>
-  <view v-if="list.length" class="service-wrapper">
+  <view v-if="service_tags.length" class="service-wrapper">
     <!-- 服务简述 -->
     <view class="service-simple" @click="handlePopup">
       <view class="s-list">
-        <view class="s-item" v-for="(item, index) in service_tags" :key="index">
-          <text class="item-icon iconfont icon-fuwu"></text>
-          <text class="item-val">{{ item }}</text>
+        <view class="s-item" v-for="(item, index) in service_tags" :key="index"  v-if="item.tags_name != ''">
+			
+          <text class="item-icon iconfont icon-fuwu" ></text>
+          <text class="item-val">{{ item.tags_name }}</text>
         </view>
       </view>
       <!-- 扩展箭头 -->
@@ -19,10 +20,10 @@
         <view class="title">服务</view>
         <scroll-view class="content-scroll" :scroll-y="true">
           <view class="s-list clearfix">
-            <view class="s-item" v-for="(item, index) in list" :key="index">
+            <view class="s-item" v-for="(item, index) in service_tags" :key="index">
               <text class="item-icon iconfont icon-fuwu"></text>
-              <view class="item-val">{{ item.name }}</view>
-              <view class="item-summary">{{ item.summary }}</view>
+              <view class="item-val">{{ item.tags_name }}</view>
+              <view class="item-summary">{{ item.tags_desc }}</view>
             </view>
           </view>
         </scroll-view>
@@ -36,13 +37,9 @@
 
   export default {
     props: {
-      // 商品ID
-      goods_sign: {
-        type: String,
-        default: null
-      },
-	  // 图片轮播
-	  service: {
+
+	  // 服务标签
+	  service_tags: {
 	    type: Array,
 	    default: []
 	  }
@@ -57,21 +54,7 @@
       }
     },
 
-    created() {
-      // 获取商品服务列表
-      this.getServiceList()
-    },
-
     methods: {
-
-      // 获取商品服务列表
-      getServiceList() {
-        const app = this
-        app.isLoading = true
-        ServiceApi.list(app.goodsId)
-          .then(result => app.list = result.data.list)
-          .finally(() => app.isLoading = false)
-      },
 
       // 显示弹窗
       handlePopup() {

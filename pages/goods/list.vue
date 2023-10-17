@@ -30,7 +30,7 @@
         <view v-if="showView" class="dis-flex">
           <!-- 商品图片 -->
           <view class="goods-item_left">
-            <image class="image" :src="item.goods_thumbnail_url"></image>
+            <image class="image" :src="item.goods_image_url"></image>
           </view>
           <view class="goods-item_right">
             <!-- 商品名称 -->
@@ -64,7 +64,7 @@
         <view v-else class="">
           <!-- 商品图片 -->
           <view class="goods-image">
-            <image class="image" mode="aspectFill" :src="item.goods_thumbnail_url"></image>
+            <image class="image" mode="aspectFill" :src="item.goods_image_url"></image>
           </view>
           <view class="detail">
             <!-- 商品标题 -->
