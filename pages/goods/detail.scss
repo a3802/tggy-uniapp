@@ -147,6 +147,62 @@
   font-size: 28rpx;
 }
 
+
+//店铺详情
+.goods_brand_detail{
+	margin-top: 10px;
+	height: 160px;
+	align-self: stretch;
+	border-radius: 2px;
+	display: flex;
+	align-items: stretch;
+	
+	.goods_discount{
+		flex-basis: 0;
+		flex-grow: 1;
+		display: flex;
+		flex-flow: column;
+		align-items: center;
+		padding: 29px 0 28px;
+		
+		.coupon_expire{
+			margin: 5px 0px;
+			font-size: 12px;
+		}
+		
+		.goods_discount_text{
+			font-size: 14px;
+			color: #333;
+			line-height: 14px;
+			margin-bottom: 14px;
+		}
+		
+		.goods_discount_count{
+			font-size: 26px;
+			font-family: Helvetica;
+			color: #333;
+			line-height: 38px;
+			display: flex;
+			align-items: baseline;		
+			
+			small{
+				font-size: 14px;
+			}
+			
+			span{
+				font-size: 16px;
+			}
+		}
+	}
+	
+	.goods_point{
+		width: 1px;
+		height: 90px;
+		align-self: center;
+		background-color: #ededed;
+	}
+}
+
 // 底部操作栏
 .footer-fixed {
   position: fixed;

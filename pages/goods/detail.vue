@@ -16,7 +16,7 @@
             <text>会员价</text>
           </view>
           <!-- 划线价 -->
-          <text v-if="goods.min_normal_price > 0" class="original-price">￥{{ goods.min_normal_price/100 }}</text>
+          <text v-if="goods.min_normal_price > 0" class="original-price">￥{{ goods.min_group_price/100 }}</text>
         </view>
         <view class="block-right dis-flex">
           <!-- 销量 -->
@@ -53,6 +53,28 @@
 
     <!-- 商品服务 -->
     <Service v-if="!isLoading" :service_tags="goods.service_array" />
+	
+	
+	<!---店铺明细和优惠卷 -->
+	<view v-if="!isLoading" class="goods-info m-top20 goods_brand_detail">
+		<view class="goods_discount">
+			<text class="goods_discount_text">优惠卷金额(元)</text>
+			<text class="goods_discount_count">{{ goods.coupon_discount/100 }}</text>
+		</view>
+		<view class="goods_point"></view>
+		<view class="goods_discount">
+			<text class="goods_discount_text">优惠卷数量(张)</text>
+			<text class="goods_discount_count">{{ goods.coupon_total_quantity }}</text>
+		</view>
+		<view class="goods_point"></view>
+		<view class="goods_discount">
+			<text class="goods_discount_text">券后价(元)</text>
+			<text class="goods_discount_count">{{(goods.min_group_price - goods.coupon_discount)/100}}</text>	
+			<span class="coupon_expire">有效期:{{ goods.coupon_start_time }}-{{goods.coupon_end_time}}</span>		
+		</view>
+	</view>
+	
+	
 
     <!-- 底部选项卡 -->
     <view class="footer-fixed">
@@ -114,6 +136,7 @@
   import * as GoodsApi from '@/api/goods'
   import SlideImage from './components/SlideImage'
   import Service from './components/Service'
+  import timeFormat from '@/uview-ui/libs/function/timeFormat.js';
 
   export default {
     components: {
