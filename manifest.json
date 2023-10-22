@@ -19,7 +19,8 @@
         /* 模块配置 */
         "modules" : {
             "Payment" : {},
-            "OAuth" : {}
+            "OAuth" : {},
+            "Push" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -85,6 +86,27 @@
                 },
                 "oauth" : {
                     "univerify" : {}
+                },
+                "push" : {
+                    "unipush" : {
+                        "version" : "2",
+                        "offline" : false,
+                        "hms" : {},
+                        "oppo" : {},
+                        "vivo" : {},
+                        "mi" : {},
+                        "meizu" : {},
+                        "fcm" : {},
+                        "icons" : {
+                            "small" : {
+                                "ldpi" : "D:/Downloads/icons/icons/Android/Images.xcassets/AppIcon.appiconset/AndroidIcon_36pt.png",
+                                "mdpi" : "D:/Downloads/icons/icons/Apple Watch/Images.xcassets/AppIcon.appiconset/notificationCenter_24pt@2x.png",
+                                "hdpi" : "D:/Downloads/icons/icons/Android/Images.xcassets/AppIcon.appiconset/AndroidIcon_36pt.png",
+                                "xhdpi" : "D:/Downloads/icons/icons/Android/Images.xcassets/AppIcon.appiconset/AndroidIcon_48pt.png",
+                                "xxhdpi" : "D:/Downloads/icons/icons/Android/Images.xcassets/AppIcon.appiconset/AndroidIcon_96pt.png"
+                            }
+                        }
+                    }
                 }
             },
             "splashscreen" : {

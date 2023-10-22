@@ -4,22 +4,26 @@
     "version" : "0.0",
     "configurations" : [
         {
-            "app-plus" : {
-                "launchtype" : "remote"
-            },
-            "default" : {
-                "launchtype" : "remote"
-            },
-            "h5" : {
-                "launchtype" : "remote"
-            },
-            "mp-weixin" : {
-                "launchtype" : "remote"
-            },
-            "type" : "uniCloud"
+        	"app-plus" : 
+        	{
+        		"launchtype" : "remote"
+        	},
+        	"default" : 
+        	{
+        		"launchtype" : "remote"
+        	},
+        	"h5" : 
+        	{
+        		"launchtype" : "remote"
+        	},
+        	"mp-weixin" : 
+        	{
+        		"launchtype" : "remote"
+        	},
+        	"type" : "uniCloud"
         },
         {
-            "playground" : "standard",
+            "playground" : "custom",
             "type" : "uni-app:app-android"
         }
     ]

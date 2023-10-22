@@ -12,6 +12,10 @@
     onLaunch() {
       // 小程序主动更新
       this.updateManager()
+
+		uni.onPushMessage((res) => {
+		console.log("收到推送消息：",res) //监听推送消息
+		})	  
     },
 
     methods: {

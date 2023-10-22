@@ -1,4 +1,5 @@
 <template>
+
   <view v-show="!isLoading" class="container">
     <!-- 商品图片轮播 -->
     <SlideImage v-if="!isLoading" :video="goods.video_urls[0]" :videoCover="goods.goods_thumbnail_url" :images="goods.goods_gallery_urls" />
@@ -169,7 +170,7 @@
     onLoad(options) {
       // 记录商品ID
       this.goods_sign = options.goods_sign
-	  console.log(this.goods_sign);
+	  // console.log(this.goods_sign);
       // 加载页面数据
       this.onRefreshPage()
     },
@@ -232,7 +233,7 @@
       // 跳转到购物车页
       onTargetUrl(url) {
 		   uni.navigateTo({
-					url: '/pages/common/webview?url=' + url
+				url: '/pages/common/appToapp?url=' + url
 		   })  
       },
 
@@ -275,6 +276,9 @@
 <style>
   page {
     background: #fafafa;
+  }
+  .uni-page-head{
+	  display:none;
   }
 </style>
 <style lang="scss" scoped>

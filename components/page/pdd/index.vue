@@ -7,7 +7,7 @@
 	</view>
     <view class="goods-list" :class="[`display__${itemStyle.display}`, `column__${itemStyle.column}`]">
       <scroll-view :scroll-x="itemStyle.display === 'slide'">
-        <view class="goods-item" v-for="(dataItem, index) in dataList" :key="index" @click="onTargetGoods(dataItem.mobile_url)">
+        <view class="goods-item" v-for="(dataItem, index) in dataList" :key="index" @click="onTargetGoods(dataItem.goods_sign)">
 
           <!-- 单列商品 -->
           <block v-if="itemStyle.column === 1">
@@ -89,10 +89,10 @@
       /**
        * 跳转商品详情页
        */
-      onTargetGoods(url) {
+      onTargetGoods(goods_sign) {
 		  uni.navigateTo({
-			url: '/pages/common/webview?url=' + url
-		  })
+			url: '/pages/goods/detail?goods_sign=' + goods_sign
+		  })   
       }
 
     }

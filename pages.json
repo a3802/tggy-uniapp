@@ -177,10 +177,10 @@
 		
 	},
 	{
-		"path" : "pages/common/webtest",
+		"path" : "pages/common/appToapp",
 		"style" :                                                                                    
 		{
-			"navigationBarTitleText": "测试webview回调",
+			"navigationBarTitleText": "",
 			"enablePullDownRefresh": false
 		}
 		
@@ -190,7 +190,14 @@
 		"style" :                                                                                    
 		{
 			"navigationBarTitleText": "",
-			"enablePullDownRefresh": false
+			"enablePullDownRefresh": false,
+			"transparentTitle": "auto",
+			"app-plus": {
+				"titleNView": {
+					"type": "transparent" 
+				}
+			}
+
 		}
 		
 	}
