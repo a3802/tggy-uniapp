@@ -5,7 +5,7 @@ module.exports = {
 
   // 必填: 后端api地址, 斜杠/结尾, 参照下面格式
   // 例如: https://www.你的域名.com/index.php?s=/api/
-  apiUrl: "https://tgqy.yueyueyouqian.cn/api/",
+  apiUrl: "https://api-tgqy.yueyueyouqian.cn/api/",
   //云函数url
   cloudUrl: "https://fc-mp-e9911e20-0f91-4252-8d66-3e99a074d5fd.next.bspapp.com/",
   /**
