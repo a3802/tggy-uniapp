@@ -34,12 +34,12 @@
      * 生命周期函数--监听页面加载
      */
     async onLoad(options) {
-      console.log('login onLoad')
+
       // 设置当前是否显示微信小程序授权登录
       await this.setShowUserInfo()
       // 数据加载完成
       this.isLoad = true
-      console.log('isLoad', true)
+
 	  
     },
 
@@ -51,7 +51,7 @@
        *  - 条件2: 后台设置是否已开启该选项 [后台-客户端-注册设置]
        */
       async setShowUserInfo() {
-        console.log('setShowUserInfo start')
+
         const app = this
         // 判断当前客户端是微信小程序, 并且支持getUserProfile接口
         const isMpWeixin = app.platform === 'MP-WEIXIN' && wx.canIUse('getUserProfile')
@@ -60,7 +60,7 @@
         await SettingModel.item(SettingKeyEnum.REGISTER.value, false)
           .then(setting => {
             app.isMpWeixinAuth = isMpWeixin && setting.isOauthMpweixin
-            console.log('setShowUserInfo complete')
+
           })
       },
 

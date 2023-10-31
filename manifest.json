@@ -2,8 +2,8 @@
     "name" : "口袋折扣",
     "appid" : "__UNI__88811EE",
     "description" : "口袋折扣是一款强大的商品折扣优惠平台,口袋折扣,集购物返利,优惠卷发放,本地生活服务一体的电商平台,与国内千家电商平台",
-    "versionName" : "1.0.1",
-    "versionCode" : 101,
+    "versionName" : "1.0.2",
+    "versionCode" : 102,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -55,7 +55,7 @@
                     "request" : "none",
                     "prompt" : "为保证您正常、安全地使用，需要获取设备识别码（部分手机提示为获取手机号码）使用权限，请允许。"
                 },
-                "minSdkVersion" : 29,
+                "minSdkVersion" : 28,
                 "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ],
                 "targetSdkVersion" : 30
             },

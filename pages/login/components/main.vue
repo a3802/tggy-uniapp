@@ -40,6 +40,14 @@
         <text>登录</text>
       </view>
     </view>
+	
+
+	<view class="uni-form-item uni-column privacy">
+		<checkbox-group @change="checkboxChange">
+			<checkbox value="checkbox1"/>
+		</checkbox-group>
+		<text>我已阅读并同意<span style="color:#5496E3" @click="handlePrivacy()">口袋折扣隐私协议</span>并使用手机号登录</text>
+	</view>
 
     <!-- 微信授权手机号一键登录 -->
     <!-- #ifdef MP-WEIXIN -->
@@ -95,7 +103,9 @@
         // 图形验证码
         captchaCode: '',
         // 短信验证码
-        smsCode: ''
+        smsCode: '',
+		// 隐私协议状态
+		privacy: '',
       }
     },
 
@@ -109,6 +119,10 @@
     },
 
     methods: {
+		
+		checkboxChange(e) {
+			this.privacy = e.detail.value;
+		},
 
       // 获取图形验证码
       getCaptcha() {
@@ -136,7 +150,7 @@
         }
         // 验证提交登录
         if (scene === SUBMIT_LOGIN) {
-          if (!app.validteMobile(app.mobile) || !app.validteSmsCode(app.smsCode)) {
+          if (!app.validtePrivacy() || !app.validteMobile(app.mobile) || !app.validteSmsCode(app.smsCode)) {
             return false
           }
         }
@@ -164,6 +178,15 @@
         }
         return true
       },
+	  
+	  //验证隐私登录协议
+	  validtePrivacy(){
+		  if (this.privacy == ''){
+			  this.$toast('请先勾选隐私协议')
+			  return false
+		  }
+		  return true;
+	  },
 
       // 验证短信验证码
       validteSmsCode(str) {
@@ -208,6 +231,12 @@
           }
         }, 1000)
       },
+	  
+	  // 隐私协议
+	  handlePrivacy() {
+		this.$navTo('pages/setting/secret')
+		  
+	  },
 
       // 点击登录
       handleLogin() {
@@ -347,4 +376,24 @@
     justify-content: center;
     align-items: center;
   }
+  
+	.privacy{
+		  display: flex;
+		  justify-content: center;
+		  margin-top:400rpx;
+		  color:#BBBBBB;
+		  
+		  text{
+			text-align: center;
+			line-height: 22px;
+			font-size:12px;
+		  }
+		  
+		&/deep/ uni-checkbox .uni-checkbox-input{
+		  height:15px !important;
+		  width:15px !important;
+		}		  
+		  
+	}  
+  
 </style>
