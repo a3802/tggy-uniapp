@@ -20,7 +20,8 @@
         "modules" : {
             "Payment" : {},
             "OAuth" : {},
-            "Push" : {}
+            "Push" : {},
+            "VideoPlayer" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
