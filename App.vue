@@ -30,36 +30,36 @@
 				})
 			}else{
 				console.log(222222);
-				// if(msg.data.payload.page){
-				// 	clearTimeout(timer);
-				// 	timer = setTimeout(() => {
-				// 		console.log(1111, msg.data.payload);
-				// 		if (msg.data.payload) {
-				// 			if(msg.data.payload.page=='/pages/order/serverNeedDetail' || msg.data.payload.page=='/pages/order/myNeedDetail'){
-				// 				uni.navigateTo({
-				// 					url: `${msg.data.payload.page}?id=${msg.data.payload.id}`
-				// 				})
-				// 			}else if(msg.data.payload.page=='/pages/order/detail1' || msg.data.payload.page=='/pages/order/detail'){
-				// 				uni.navigateTo({
-				// 					url: `${msg.data.payload.page}?orderId=${msg.data.payload.id}&type=1`
-				// 				})
-				// 			}
+				if(msg.data.payload.page){
+					clearTimeout(timer);
+					timer = setTimeout(() => {
+						console.log(1111, msg.data.payload);
+						if (msg.data.payload) {
+							if(msg.data.payload.page=='/pages/order/serverNeedDetail' || msg.data.payload.page=='/pages/order/myNeedDetail'){
+								uni.navigateTo({
+									url: `${msg.data.payload.page}?id=${msg.data.payload.id}`
+								})
+							}else if(msg.data.payload.page=='/pages/order/detail1' || msg.data.payload.page=='/pages/order/detail'){
+								uni.navigateTo({
+									url: `${msg.data.payload.page}?orderId=${msg.data.payload.id}&type=1`
+								})
+							}
 							
-				// 		}
-				// 	}, 1500)
-				// }
+						}
+					}, 1500)
+				}
 			}
 		})
  
-		uni.getPushClientId({  
-			success: (res) => {  
-			  let push_clientid = res.cid  
-			  console.log('客户端推送标识cid:',push_clientid)  
-			},  
-			fail(err) {  
-			  console.log(err)  
-			}  
-		})			  
+		// uni.getPushClientId({  
+		// 	success: (res) => {  
+		// 	  let push_clientid = res.cid  
+		// 	  console.log('客户端推送标识cid:',push_clientid)  
+		// 	},  
+		// 	fail(err) {  
+		// 	  console.log(err)  
+		// 	}  
+		// })			  
     },
 
     methods: {

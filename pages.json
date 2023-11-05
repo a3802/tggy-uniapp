@@ -95,7 +95,22 @@
       "style": {
         "navigationBarTitleText": "权益充值"
       }
-    },	
+    },
+    {
+      "path": "pages/product/cate",
+	  "style" :                                                                                    
+		{
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false,
+			"transparentTitle": "auto",
+			"app-plus": {
+				"titleNView": {
+					"type": "transparent" 
+				}
+			}
+
+		}
+    },
     {
       "path": "pages/my-coupon/index",
       "style": {
