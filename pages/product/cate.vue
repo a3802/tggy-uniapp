@@ -2,13 +2,26 @@
 	<view v-show="!isLoading" class="container">
 		<!-- 权益商品详情页面 -->	
 		<view class="header"></view>
+		<!-- 权益商品 -->
 		<!-- 充值：手机号 -->
 		<view class="i-card">
-			<view>
+			<view class="order-status">
+				<view class="status-icon">
+				  <!-- 商品图标-->
+					<image  class="image" :src="subInfo.image_url" mode="aspectFit"></image>
+				</view>
+				<view class="status-text">
+				  <text >{{ subInfo.name }}</text>
+				</view>
+			</view>				
+			<view class="sub_content">
 				<text class="iconfont icon-help"></text>
 				<text class="text-help">请确保账号无误，充值成功后不支持退换</text>
 			</view>
-		</view>
+		</view>						
+						
+		
+
 		<view class="goods-list clearfix column-1">
 			<view class="goods-item" v-for="(item, index) in list.data" :key="index" @click="onTargetDetail(item.goods_sign)">
 				<!-- 单列显示 -->
@@ -57,6 +70,7 @@ import * as ProductApi from '@/api/product'
 import { PayTypeEnum } from '@/common/enum/order'
 import { getEmptyPaginateObj, getMoreListData  } from '@/core/app'
 import * as GoodsApi from '@/api/goods'
+import * as PushSubApi from '@/api/subscribe.js'
 
 const pageSize = 20 
     
@@ -67,14 +81,16 @@ const pageSize = 20
       return {
         // 正在加载
         isLoading: true,
-        // 当前分类商品ID
-        categoryId: null,
+        // 当前订阅推送ID
+        subId: null,
         // 显示详情内容弹窗
         showPopup: false,
 		//上级分类项目
 		selectedTab: 0,
 		//商品选项卡
 		selectetProductTab: 0,
+		//订阅数据
+		subInfo: {},
 		// rules,
         // 按钮禁用
         disabled: false,
@@ -100,7 +116,11 @@ const pageSize = 20
     onLoad(options) {
       // 记录商品ID
 		console.log(11111);
-      this.categoryId = parseInt(options.categoryId)
+
+      this.subId = parseInt(options.subId)
+
+	  //调用订阅推送基本信息
+	  this.getPushInfo()
 	  
 	  this.getGoodsList()
       // 加载页面数据
@@ -117,6 +137,21 @@ const pageSize = 20
         Promise.all([app.getGoodsList()])
           .finally(() => app.isLoading = false)
       },
+	  
+	  getPushInfo(){
+		const app = this
+        return new Promise((resolve, reject) => {
+          PushSubApi.detail(app.subId)
+            .then(result => {
+				console.log(result);
+				
+				app.subInfo = result.data.SubInfo
+              // 合并新数据
+              resolve(result)
+            })
+            .catch(reject)
+        })		  
+	  },
 	  
 
       /**
@@ -176,62 +211,51 @@ const pageSize = 20
     display: flex;
     justify-content: space-between;
     background: repeating-linear-gradient(to right,#f1d696,#e8c269);
-    height: 280rpx;
-    padding: 70rpx 30rpx 0 30rpx;
-
+    height: 300rpx;
+	justify-content: center;
+	flex-direction: column;
+	
+	}
     .order-status {
       display: flex;
       align-items: center;
-      height: 128rpx;
+      height: 200rpx;
+	  margin: 40rpx;
+	  margin-top: 50px;
 
       .status-icon {
         width: 128rpx;
         height: 128rpx;
+		
+		
 
         .image {
           display: block;
           width: 100%;
           height: 100%;
+		  margin-top: -32px;
         }
       }
 
       .status-text {
         padding-left: 20rpx;
-        color: #fff;
         font-size: 54rpx;
         font-weight: bold;
       }
     }
 
-		.next-action {
-		  display: flex;
-		  align-items: center;
-		  height: 128rpx;
-
-		  .action-btn {
-			min-width: 152rpx;
-			height: 56rpx;
-			padding: 0 30rpx;
-			line-height: 56rpx;
-			background-color: #fff;
-			text-align: center;
-			border-radius: 28rpx;
-			border-color: rgb(102, 102, 102);
-			cursor: pointer;
-			user-select: none;
-			color: #c7a157;
-		  }
-		}
-	}
+	
   
   // 通栏卡片
   .i-card {
     background: #fff;
-    padding: 24rpx 24rpx;
     width: 94%;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
-    margin: -76rpx auto 20rpx auto;
-    border-radius: 20rpx; 
+    // margin: -76rpx auto 20rpx auto;
+    border-radius: 20rpx;
+	     margin-top: -102px;
+	     margin-bottom: 20px;
+	     margin-left: 12px;
 	
 	.iconfont {
 		font-size:40rpx;
