@@ -28,7 +28,7 @@ export const appUnilogin = () => {
 				"suffix": "并使用本机号码登录", // 条款后的文案 默认值：“并使用本机号码登录”    
 			}
 		},
-		success (res) {x
+		success (res) {
 			console.log(res);
 			
 			uniCloud.callFunction({
@@ -66,6 +66,7 @@ export const appUnilogin = () => {
 				.finally()			  
 			  // 登录成功，可以关闭一键登录授权界面了
 			}).catch(err=>{
+				console.log(err);
 			  // 处理错误
 			  uni.closeAuthView() 
 			})	

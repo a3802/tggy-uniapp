@@ -46,7 +46,7 @@
 		<checkbox-group @change="checkboxChange">
 			<checkbox value="checkbox1"/>
 		</checkbox-group>
-		<text>我已阅读并同意<span style="color:#5496E3" @click="handlePrivacy()">口袋折扣隐私协议</span>并使用手机号登录</text>
+		<text>我已阅读并同意<span style="color:#5496E3" @click="handlePrivacy()">口袋折扣隐私协议</span>和<span style="color:#5496E3" @click="handleUsers()">用户协议</span>并使用手机号登录</text>
 	</view>
 
     <!-- 微信授权手机号一键登录 -->
@@ -235,6 +235,11 @@
 	  // 隐私协议
 	  handlePrivacy() {
 		this.$navTo('pages/setting/secret')
+		  
+	  },
+	  // 隐私协议
+	  handleUsers() {
+		this.$navTo('pages/setting/user')
 		  
 	  },
 

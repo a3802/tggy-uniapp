@@ -189,8 +189,8 @@ export default {
 	computed: {
 		// 如果设置show为false，或者设置了noListHidden为true，且list长度又为零的话，隐藏组件
 		isShow() {
-			console.log(this.list);
-			console.log(typeof(this.list));
+			// console.log(this.list);
+			// console.log(typeof(this.list));
 			if(this.show == false || (this.noListHidden == true && this.list.length == 0)) return false;
 			else return true;
 		}
