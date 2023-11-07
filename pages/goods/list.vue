@@ -16,7 +16,7 @@
         <text>热销榜</text>
       </view>
       <view class="sort-item" :class="{ active: sortType === 'recommend' }" @click="handleSortType('recommend')">
-        <text>推荐榜</text>
+        <text>优惠榜</text>
       </view>
       <view class="sort-item sort-item-price" :class="{ active: sortType === 'billion' }" @click="handleSortType('billion')">
         <text>百亿补贴</text>
