@@ -44,6 +44,11 @@
             <text class="unit">￥</text>
             <text class="money">{{ item.pay_price }}</text>
           </view>
+		  <view class="time timeplus" v-if="item.order_status == OrderStatusEnum.WAITING.value">
+				<text>剩余</text>
+				<u-count-down ref="uCountDown" :timestamp="item.pay_time + 172800 - CurTime" :show-days="false" :show-border="true" font-size="26"></u-count-down>
+				<text>充值成功</text>
+		  </view>
           <!-- 订单操作 -->
           <view v-if="item.order_status != OrderStatusEnum.CANCELLED.value" class="order-handle">
             <view class="btn-group clearfix">
@@ -62,10 +67,6 @@
               <!-- 未支付的订单 -->
               <block v-if="item.pay_status == PayStatusEnum.PENDING.value">
                 <view class="btn-item active" @click="onPay(item.order_product_id)">去支付</view>
-              </block>
-              <!-- 确认收货 -->
-              <block v-if="item.delivery_status == DeliveryStatusEnum.DELIVERED.value && item.receipt_status == ReceiptStatusEnum.NOT_RECEIVED.value">
-                <view class="btn-item active" @click="onReceipt(item.order_product_id)">确认收货</view>
               </block>
             </view>
           </view>
@@ -159,7 +160,8 @@
         PayStatusEnum,
         PayTypeEnum,
         ReceiptStatusEnum,
-
+		//当前时间
+		CurTime: new Date().getTime()/1000,
         // 当前页面参数
         options: { dataType: 'all' },
         // tab栏数据
@@ -196,9 +198,9 @@
       // 初始化当前选中的标签
       this.initCurTab(options)
       // 注册全局事件订阅: 是否刷新订单列表
-      uni.$on('syncRefresh', canReset => {
-        this.canReset = canReset
-      })
+	  uni.$on('syncRefresh', canReset => {
+		this.canReset = canReset
+	  })
     },
 
     /**
@@ -252,7 +254,7 @@
           OrderProductApi.orderlist({ dataType: app.getTabValue(), page: pageNo }, { load: false })
 		  // OrderApi.list({ dataType: app.getTabValue(), page: pageNo }, { load: false })
             .then(result => {
-				console.log(result);
+				// console.log(result);
               // 合并新数据
               const newList = app.initList(result.data.list)
               app.list.data = getMoreListData(newList, app.list, pageNo)
@@ -347,6 +349,7 @@
 			
         }
       },
+	  
 
     },
 
@@ -362,6 +365,16 @@
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
     border-radius: 16rpx;
     background: #fff;
+	
+	.timeplus {
+			display: flex;
+			justify-content: flex-end;
+			
+			text {
+				margin: 0 10rpx;
+				font-size: 26rpx;
+			}
+	}
   }
   .line {
 	  border-bottom: 1px solid #f3f3ee;
@@ -381,6 +394,7 @@
     .order-time {
       color: black;
 	  font-weight: bold;
+	  
 	  
     }
 

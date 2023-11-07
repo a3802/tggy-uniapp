@@ -92,7 +92,7 @@ export default {
 		// 用英文冒号(colon)或者中文(zh)当做分隔符，false的时候为中文，如："11:22"或"11时22秒"
 		separator: {
 			type: String,
-			default: 'colon'
+			default: '时'
 		},
 		// 分隔符的大小，单位rpx
 		separatorSize: {
