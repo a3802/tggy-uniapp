@@ -13,7 +13,7 @@
 			{{ separator == 'colon' ? ':' : '天' }}
 		</view>
 		<view class="u-countdown-item" :style="[itemStyle]" v-if="showHours">
-			<view class="u-countdown-time" :style="{ fontSize: fontSize + 'rpx', color: color}">
+			<view class="u-countdown-time" :style="{ fontSize: fontSize + 'rpx', color: color, fontFamily: fontFamily}">
 				{{ h }}
 			</view>
 		</view>
@@ -25,7 +25,7 @@
 			{{ separator == 'colon' ? ':' : '时' }}
 		</view>
 		<view class="u-countdown-item" :style="[itemStyle]" v-if="showMinutes">
-			<view class="u-countdown-time" :style="{ fontSize: fontSize + 'rpx', color: color}">
+			<view class="u-countdown-time" :style="{ fontSize: fontSize + 'rpx', color: color, fontFamily: fontFamily}">
 				{{ i }}
 			</view>
 		</view>
@@ -37,7 +37,7 @@
 			{{ separator == 'colon' ? ':' : '分' }}
 		</view>
 		<view class="u-countdown-item" :style="[itemStyle]" v-if="showSeconds">
-			<view class="u-countdown-time" :style="{ fontSize: fontSize + 'rpx', color: color}">
+			<view class="u-countdown-time" :style="{ fontSize: fontSize + 'rpx', color: color, fontFamily: fontFamily}">
 				{{ s }}
 			</view>
 		</view>
@@ -62,6 +62,7 @@
  * @property {String Number} separator-size 分隔符的字体大小，单位rpx（默认30）
  * @property {String} separator-color 分隔符的颜色（默认#303133）
  * @property {String Number} font-size 倒计时字体大小，单位rpx（默认30）
+ * @property {String} font-family 设置字体，单位rpx（默认30）
  * @property {Boolean} show-border 是否显示倒计时数字的边框（默认false）
  * @property {Boolean} hide-zero-day 当"天"的部分为0时，隐藏该字段 （默认true）
  * @property {String} border-color 数字边框的颜色（默认#303133）
@@ -113,6 +114,11 @@ export default {
 		fontSize: {
 			type: [Number, String],
 			default: 30
+		},
+		// 字体大小，单位rpx
+		fontFamily: {
+			type: String,
+			default: 'fantasy'
 		},
 		// 背景颜色
 		bgColor: {
@@ -201,6 +207,7 @@ export default {
 			let style = {};
 			if(this.fontSize) style.fontSize = this.fontSize +  'rpx';
 			if(this.color) style.color = this.color;
+			if(this.fontFamily) style.fontFamily = this.fontFamily;
 			return style;
 		}
 	},

@@ -46,7 +46,15 @@
           </view>
 		  <view class="time timeplus" v-if="item.order_status == OrderStatusEnum.WAITING.value">
 				<text>剩余</text>
-				<u-count-down ref="uCountDown" :timestamp="item.pay_time + 172800 - CurTime" :show-days="false" :show-border="true" font-size="26"></u-count-down>
+				<u-count-down ref="uCountDown" 
+				:timestamp="item.pay_time + 172800 - CurTime" 
+				:show-days="false" 
+				:show-border="true" 
+				font-size="26"
+				bg-color="#ff0000"
+				color="#ffffff"
+				font-family="fantasy">
+				</u-count-down>
 				<text>充值成功</text>
 		  </view>
           <!-- 订单操作 -->
