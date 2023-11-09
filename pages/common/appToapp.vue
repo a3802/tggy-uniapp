@@ -37,12 +37,56 @@
 		},
 		
 		onLoad(item) {
-			
+			console.log(item);
+		
 			setTimeout(() => {
-				this.url = decodeURIComponent(item.url)	
-			}, 1000);// 传入需要跳转的链接 使用web-view标签进行跳转
-		},		
+				
+				if(this.checkApp()){
+					let url = decodeURIComponent(item.schema_url);
+						console.log(url);
+						this.openClient(url)
+				}else{
+					this.url = decodeURIComponent(item.mini)	
+				}
+				
+			}, 3000);// 传入需要跳转的链接 使用web-view标签进行跳转		
+			
 
+		},		
+		
+		methods: {
+			
+			//打开第三方客户端,有可能时app,或者小程序
+			openClient(url){
+				console.log(url);
+				
+				// 判断平台  
+				if (plus.os.name == 'Android') {  
+					plus.runtime.openURL(url, function(e) {  
+							console.log('Open system default browser failed: ' + e.message);  
+						}  
+					);  
+				} else if (plus.os.name == 'iOS') {  
+					plus.runtime.launchApplication({ action: 'taobao://' }, function(e) {  
+						console.log('Open system default browser failed: ' + e.message);  
+					});  
+				} 
+			},
+			
+		  //判断手机是否安装了对应app
+		   checkApp(){
+			if(plus.runtime.isApplicationExist({pname:'com.xunmeng.pinduoduo',action:'pinduoduo://'})){
+				console.log("应用已安装");
+				return true;
+			}else{
+				console.log("应用未安装");
+				return false;
+			}
+		  
+		  },			
+		
+
+		},
 	}
 </script>
 

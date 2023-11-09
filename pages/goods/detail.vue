@@ -105,7 +105,7 @@
           </button>
           <!-- #endif -->
           <!-- 购物车 -->
-          <view class="fast-item fast-item--cart" @click="onTargetCart">
+          <view class="fast-item fast-item--cart" @click="onFavorite">
             <view v-if="cartTotal > 0" class="fast-badge fast-badge--fixed">{{ cartTotal > 99 ? '99+' : cartTotal }}
             </view>
             <view class="fast-icon">
@@ -119,7 +119,7 @@
         <!-- 操作按钮 -->
         <view class="foo-item-btn">
           <view class="btn-wrapper">
-            <view class="btn-item btn-item-main" @click="onTargetUrl(goods.short_url)">
+            <view class="btn-item btn-item-main" @click="onTargetUrl(goods.url)">
               <text>直达链接</text>
             </view>
           </view>
@@ -230,12 +230,22 @@
         this.$navTo('pages/index/index')
       },
 
-      // 跳转到购物车页
-      onTargetUrl(url) {
+      // 跳转到第三方中间页面
+      onTargetUrl(item) {
+		  const app = this;
+		  //判断手机是否安装三方app
+		  console.log(item);
 		   uni.navigateTo({
-				url: '/pages/common/appToapp?url=' + url
+				url: '/pages/common/appToapp?schema_url=' + item.schema_url + '&mini=' + item.short_url
 		   })  
       },
+	  
+
+	  
+	  //喜欢该商品,收藏
+	  onFavorite(){
+		  
+	  }
 
     },
 

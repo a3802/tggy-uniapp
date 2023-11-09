@@ -16,7 +16,7 @@ export default {
 		  //运行平台,
 		  platform: '',
 		  container: '',
-		  url: "https://tgqy.yueyueyouqian.cn/shop.html",
+		  url: "http://tgqy-test.yueyueyouqian.cn/shop.html",
 		}
 	  },
   
@@ -30,9 +30,9 @@ export default {
 	methods: {
 		// 触发方法
 		handleMessage(data) {
-			console.log(data)
-			console.log(data.detail.data[0].data)
-			console.log(data.detail.data[0]['data'])
+			// console.log(data)
+			// console.log(data.detail.data[0].data)
+			// console.log(data.detail.data[0]['data'])
 			if (data.detail.data.data == 'h5页面传的值') {
 				// 给url重新赋值
 				this.url = ""
