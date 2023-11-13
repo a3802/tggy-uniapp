@@ -39,16 +39,15 @@
 							
 							if(msg.data.payload.page=='/pages/product/cate'){
 								uni.navigateTo({
-									// url: `${msg.data.payload.page}?subId=${msg.data.payload.id}`
 									url : msg.data.payload.page + '?subId=' + msg.data.payload.id
 								})
 							}else if(msg.data.payload.page=='/pages/product/detail'){
 								uni.navigateTo({
-									url: `${msg.data.payload.page}?categoryId=${msg.data.payload.id}`
+									url: msg.data.payload.page + '?categoryId=' + msg.data.payload.id
 								})
 							}else if(msg.data.payload.page=='/pages/goods/detail'){
 								uni.navigateTo({
-									url: `${msg.data.payload.page}?goods_sign=${msg.data.payload.id}`
+									url: msg.data.payload.page + '?goods_sign=' + msg.data.payload.id
 								})								
 							}
 							

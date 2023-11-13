@@ -7,7 +7,7 @@ const api = {
 
 
 // 商品详情
-export const detail = subId => {
-  return request.get(api.detail, { subId })
+export const detail = (subId, page) => {
+  return request.get(api.detail, { subId, page })
 }
 

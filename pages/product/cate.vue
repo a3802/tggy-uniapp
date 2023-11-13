@@ -2,8 +2,6 @@
 	<view v-show="!isLoading" class="container">
 		<!-- 权益商品详情页面 -->	
 		<view class="header"></view>
-		<!-- 权益商品 -->
-		<!-- 充值：手机号 -->
 		<view class="i-card">
 			<view class="order-status">
 				<view class="status-icon">
@@ -22,7 +20,7 @@
 		</view>						
 						
 		
-
+	<mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback" :up="upOption" @up="upCallback">
 		<view class="goods-list clearfix column-1">
 			<view class="goods-item" v-for="(item, index) in list.data" :key="index" @click="onTargetDetail(item.goods_sign)">
 				<!-- 单列显示 -->
@@ -61,12 +59,14 @@
 				</view>
 			</view>
 		</view>
-		
+	</mescroll-body>	
 	</view>
 	
 </template>
 
 <script>
+import MescrollBody from '@/components/mescroll-uni/mescroll-body.vue'
+import MescrollMixin from '@/components/mescroll-uni/mescroll-mixins'
 import * as ProductApi from '@/api/product'
 import { PayTypeEnum } from '@/common/enum/order'
 import { getEmptyPaginateObj, getMoreListData  } from '@/core/app'
@@ -77,7 +77,9 @@ const pageSize = 20
     
   export default {
     components: {
+		MescrollBody
     },
+	mixins: [MescrollMixin],
     data() {
       return {
         // 正在加载
@@ -121,9 +123,6 @@ const pageSize = 20
       this.subId = parseInt(options.subId)
 
 	  //调用订阅推送基本信息
-	  this.getPushInfo()
-	  
-	  // this.getGoodsList()
       // 加载页面数据
       this.onRefreshPage()
 	  
@@ -136,18 +135,38 @@ const pageSize = 20
       onRefreshPage() {
         const app = this
         app.isLoading = true
-        Promise.all([app.getGoodsList()])
+        Promise.all([app.getPushInfo()])
           .finally(() => app.isLoading = false)
       },
 	  
-	  getPushInfo(){
+      /**
+       * 上拉加载的回调 (页面初始化时也会执行一次)
+       * 其中page.num:当前页 从1开始, page.size:每页数据条数,默认10
+       * @param {Object} page
+       */
+      upCallback(page) {
+        const app = this
+        // 设置列表数据
+        app.getPushInfo(page.num)
+          .then(result => {
+            const curPageLen = result.data.list.data.length
+            const totalSize = result.data.list.data.total
+            app.mescroll.endBySize(curPageLen, totalSize)
+          })
+          .catch(() => app.mescroll.endErr())
+      },
+	  
+	  getPushInfo(pageNo = 1){
 		const app = this
         return new Promise((resolve, reject) => {
-          PushSubApi.detail(app.subId)
+          PushSubApi.detail(app.subId,pageNo)
             .then(result => {
-				console.log(result);
+				// console.log(result);
 				
-				app.subInfo = result.data.SubInfo
+				app.subInfo = result.data.subInfo
+				const newList = result.data.list
+				// console.log(newList);
+				app.list.data = getMoreListData(newList, app.list, pageNo)	
               // 合并新数据
               resolve(result)
             })
@@ -162,31 +181,6 @@ const pageSize = 20
 			url: '/pages/goods/detail?goods_sign=' + goods_sign
 		})        
 	  },
-	  
-
-      /**
-       * 获取商品列表
-       * @param {number} pageNo 页码
-       */
-      getGoodsList(pageNo = 1) {
-        const app = this
-        const param = {
-          sortType: app.sortType,
-          goodsName: uni.getStorageSync('inputSearch') || '',
-          page: pageNo
-        }
-		
-        return new Promise((resolve, reject) => {
-          GoodsApi.list(param)
-            .then(result => {
-              // 合并新数据
-              const newList = result.data.list
-              app.list.data = getMoreListData(newList, app.list, pageNo)
-              resolve(newList)
-            })
-            .catch(reject)
-        })
-      },
 			  
 		// 跳转到我的订单(等待1秒)
 		navToMyOrder() {

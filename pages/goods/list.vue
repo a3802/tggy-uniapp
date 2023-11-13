@@ -160,7 +160,7 @@
         app.getGoodsList(page.num)
           .then(list => {
             const curPageLen = list.data.length
-            const totalSize = list.data.total
+            const totalSize = list.data.total //列表取出数据的总数
             app.mescroll.endBySize(curPageLen, totalSize)
           })
           .catch(() => app.mescroll.endErr())
@@ -189,6 +189,7 @@
               // 合并新数据
               const newList = result.data.list
               app.list.data = getMoreListData(newList, app.list, pageNo)
+			  console.log(app.list.data);
               resolve(newList)
             })
             .catch(reject)
