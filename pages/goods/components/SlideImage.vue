@@ -63,6 +63,11 @@
         this.autoplay = false
       },
 	  
+	  videoErrorCallback(e){
+		  console.log(e);
+		  return false;
+	  },
+	  
 
       // 设置轮播图当前指针 数字
       setCurrent({ detail }) {

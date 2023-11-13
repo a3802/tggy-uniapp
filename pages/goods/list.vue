@@ -111,6 +111,7 @@
         sortType: 'best', // 排序类型
         options: {}, // 当前页面参数
         list: getEmptyPaginateObj(), // 商品列表数据
+		
 
         // 上拉加载配置
         upOption: {
@@ -132,6 +133,8 @@
       this.options = options
       // 设置默认列表显示方式
       this.setShowView()
+	  
+	  this.onRefreshPage()
     },
 	async onShow(options){
 		this.options.search = uni.getStorageSync('inputSearch');
@@ -139,6 +142,12 @@
 	},
 
     methods: {
+		
+		// 刷新页面数据
+		onRefreshPage() {
+		  const app = this
+		  Promise.all([app.getGoodsList()])
+		},
 
       /**
        * 上拉加载的回调 (页面初始化时也会执行一次)

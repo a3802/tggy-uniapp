@@ -11,12 +11,13 @@
 					<image  class="image" :src="subInfo.image_url" mode="aspectFit"></image>
 				</view>
 				<view class="status-text">
-				  <text >{{ subInfo.name }}</text>
+				  <text class="status_text_name">{{ subInfo.name }}</text>
+				  <text class="status_text_num">{{ subInfo.rand_num }}人喜欢</text>
 				</view>
 			</view>				
 			<view class="sub_content">
-				<text class="iconfont icon-help"></text>
-				<text class="text-help">请确保账号无误，充值成功后不支持退换</text>
+				<!-- <text class="iconfont icon-help"></text> -->
+				<text class="text-help">{{subInfo.sub_desc}}</text>
 			</view>
 		</view>						
 						
@@ -115,18 +116,19 @@ const pageSize = 20
      */
     onLoad(options) {
       // 记录商品ID
-		console.log(11111);
+		// console.log(11111);
 
       this.subId = parseInt(options.subId)
 
 	  //调用订阅推送基本信息
 	  this.getPushInfo()
 	  
-	  this.getGoodsList()
+	  // this.getGoodsList()
       // 加载页面数据
       this.onRefreshPage()
 	  
     },
+	
 	
     methods: {
 
@@ -151,6 +153,14 @@ const pageSize = 20
             })
             .catch(reject)
         })		  
+	  },
+	  
+	  // 跳转商品详情页
+	  onTargetDetail(goods_sign) {
+		  // console.log(goods_sign);
+		uni.navigateTo({
+			url: '/pages/goods/detail?goods_sign=' + goods_sign
+		})        
 	  },
 	  
 
@@ -219,13 +229,13 @@ const pageSize = 20
     .order-status {
       display: flex;
       align-items: center;
-      height: 200rpx;
-	  margin: 40rpx;
-	  margin-top: 50px;
+      height: 120rpx;
+	  margin: 40rpx 40rpx 0 40rpx;
+	  margin-top: 160rpx;
 
       .status-icon {
-        width: 128rpx;
-        height: 128rpx;
+        width: 180rpx;
+        height: 180rpx;
 		
 		
 
@@ -234,13 +244,24 @@ const pageSize = 20
           width: 100%;
           height: 100%;
 		  margin-top: -32px;
+		  border-radius: 15rpx;
+		  border: 2rpx solid;
+		  border-color:#fff;
         }
       }
 
       .status-text {
-        padding-left: 20rpx;
-        font-size: 54rpx;
+        padding-left: 30rpx;
+        font-size: 38rpx;
         font-weight: bold;
+		line-height: 44rpx;
+		// margin-bottom: 60rpx; 
+		
+		.status_text_num{
+			font-size:24rpx !important;
+			color:#bdbdbd !important;
+			display: block;
+		}
       }
     }
 
@@ -251,11 +272,11 @@ const pageSize = 20
     background: #fff;
     width: 94%;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
-    // margin: -76rpx auto 20rpx auto;
+    height: 200rpx;
     border-radius: 20rpx;
-	     margin-top: -102px;
-	     margin-bottom: 20px;
-	     margin-left: 12px;
+	margin-top: -240rpx;
+	margin-bottom: 30rpx;
+	margin-left: 12px;
 	
 	.iconfont {
 		font-size:40rpx;
@@ -264,9 +285,10 @@ const pageSize = 20
 		top:6rpx;
 	}
 	.text-help{
-		font-size:28rpx;
-		margin-left:20rpx;
-		color:#e8c269;
+		font-size:24rpx;
+		margin-left: 50rpx;
+		color:#353434;
+		font-weight: 605;
 		
 	}
 	.u-border-bottom:after {
