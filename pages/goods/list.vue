@@ -189,7 +189,7 @@
               // 合并新数据
               const newList = result.data.list
               app.list.data = getMoreListData(newList, app.list, pageNo)
-			  console.log(app.list.data);
+			  // console.log(app.list.data);
               resolve(newList)
             })
             .catch(reject)

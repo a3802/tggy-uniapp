@@ -104,12 +104,12 @@
             </view>
           </button>
           <!-- #endif -->
-          <!-- 购物车 -->
-          <view class="fast-item fast-item--cart" @click="onFavorite">
+          <!-- 收藏 -->
+          <view class="fast-item fast-item--cart" @click="onFavorite()">
             <view v-if="cartTotal > 0" class="fast-badge fast-badge--fixed">{{ cartTotal > 99 ? '99+' : cartTotal }}
             </view>
             <view class="fast-icon">
-              <text class="iconfont icon-a-xihuan1"></text>
+              <text class="iconfont" :class="['icon-a-xihuan'+(isFavorite ? '2' : '1')]"></text>
             </view>
             <view class="fast-text">
               <text>收藏</text>
@@ -135,7 +135,11 @@
 
 <script>
   import { ACCESS_TOKEN, USER_ID } from '@/store/mutation-types'
+  import { checkLogin } from '@/core/app'
+  import {appUnilogin} from '@/utils/login.js'
+  import storage from '@/utils/storage'
   import * as GoodsApi from '@/api/goods'
+  import * as FavoriteApi from '@/api/favorite.js'
   import SlideImage from './components/SlideImage'
   import Service from './components/Service'
   import timeFormat from '@/uview-ui/libs/function/timeFormat.js';
@@ -154,6 +158,10 @@
         isLoading: true,
         // 当前商品ID
         goods_sign: null,
+		// 是否已登录
+		isLogin: false,
+		// 是否收藏
+		isFavorite: false,
         // 商品详情
         goods: {},
         // 购物车总数量
@@ -161,7 +169,9 @@
         // 显示/隐藏SKU弹窗
         showSkuPopup: false,
         // 模式 1:都显示 2:只显示购物车 3:只显示立即购买
-        skuMode: 1
+        skuMode: 1,
+		//防止重复弹窗
+		loginModal: false
       }
     },
 
@@ -171,6 +181,10 @@
     onLoad(options) {
       // 记录商品ID
       this.goods_sign = options.goods_sign
+	  
+	  
+	  // 判断是否已登录
+	  this.isLogin = checkLogin()
 	  // console.log(this.goods_sign);
       // 加载页面数据
       this.onRefreshPage()
@@ -182,7 +196,7 @@
       onRefreshPage() {
         const app = this
         app.isLoading = true
-        Promise.all([app.getGoodsDetail()])
+        Promise.all([app.getFavorite(),app.getGoodsDetail()])
           .finally(() => app.isLoading = false)
       },
 
@@ -198,33 +212,27 @@
             .catch(reject)
         })
       },
-
-      // 获取购物车总数量
-      getCartTotal() {
+	  
+	  // 获取用户是否收藏该商品
+	  getFavorite(){
         const app = this
+		const user_id = storage.get(USER_ID)
         return new Promise((resolve, reject) => {
-          CartApi.total()
+          FavoriteApi.detail(user_id,app.goods_sign)
             .then(result => {
-              app.cartTotal = result.data.cartTotal
+				if(result.data.detail == null){
+					app.isFavorite = false;
+				}else{
+					app.isFavorite = result.data.detail.is_favorite
+				}
+			  
               resolve(result)
             })
             .catch(reject)
-        })
-      },
+        })		  
+	  },
 
-      // 更新购物车数量
-      onAddCart(total) {
-        this.cartTotal = total
-      },
 
-      /**
-       * 显示/隐藏SKU弹窗
-       * @param {skuMode} 模式 1:都显示 2:只显示购物车 3:只显示立即购买
-       */
-      onShowSkuPopup(skuMode = 3) {
-        this.skuMode = skuMode
-        this.showSkuPopup = !this.showSkuPopup
-      },
 
       // 跳转到首页
       onTargetHome(e) {
@@ -245,8 +253,57 @@
 	  
 	  //喜欢该商品,收藏
 	  onFavorite(){
-		  
+		  // console.log(goods_sign);
+		  const app = this
+		  const user_id = storage.get(USER_ID)
+		  if(!app.isLogin){
+			 app.userlogin(); 
+		  }else{
+			return new Promise((resolve, reject) => {
+			  FavoriteApi.favorite(user_id, app.goods_sign, !app.isFavorite)
+				.then(result => {
+				  app.isFavorite = !app.isFavorite;
+				  resolve(result)
+				})
+				.catch(reject)
+			})		  
+		  }
+		  // storage.get(USER_ID)
+	  },
+	  
+	  //登录提示
+	  userLogin(){
+		  if(!this.loginModal){
+			  this.loginModal = true
+			  // 弹窗告诉用户去登录
+			  uni.showModal({
+				title: '温馨提示',
+				content: '此时此刻需要您登录喔~',
+				// showCancel: false,
+				confirmText: "去登录",
+				cancelText: "再逛会",
+				success: res => {
+				  if (res.confirm) {
+						  
+					//#ifdef APP-PLUS
+						let rest = appUnilogin();
+					//#endif
+					//#ifdef H5
+						  uni.navigateTo({
+							url: "/pages/login/index"
+						  })	
+					//#endif
+				  }
+				  if (res.cancel && getCurrentPages().length > 1) {
+					uni.navigateBack()
+				  }
+				  this.loginModal = false
+				}
+			  })				  
+		  }
+	  
 	  }
+
 
     },
 
@@ -290,6 +347,9 @@
   }
   .uni-page-head{
 	  display:none;
+  }
+  .icon-a-xihuan2{
+	  color:#e46161;
   }
 </style>
 <style lang="scss" scoped>
