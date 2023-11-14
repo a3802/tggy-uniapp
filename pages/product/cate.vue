@@ -120,9 +120,9 @@ const pageSize = 20
       this.subId = parseInt(options.subId)
 
 	  //调用订阅推送基本信息
-	  this.getPushInfo()
+	  // this.getPushInfo()
 	  
-	  this.getGoodsList()
+	  // this.getGoodsList()
       // 加载页面数据
       this.onRefreshPage()
 	  
@@ -134,20 +134,23 @@ const pageSize = 20
       onRefreshPage() {
         const app = this
         app.isLoading = true
-        Promise.all([app.getGoodsList()])
+        Promise.all([app.getPushInfo()])
           .finally(() => app.isLoading = false)
       },
 	  
-	  getPushInfo(){
+	  getPushInfo(pageNo = 1){
 		const app = this
+		const page = pageNo
         return new Promise((resolve, reject) => {
-          PushSubApi.detail(app.subId)
+          PushSubApi.detail(app.subId, page)
             .then(result => {
 				console.log(result);
 				
-				app.subInfo = result.data.SubInfo
+				app.subInfo = result.data.subInfo
+				const newList = result.data.list
+				app.list.data = getMoreListData(newList, app.list, pageNo)
               // 合并新数据
-              resolve(result)
+              resolve(newList)
             })
             .catch(reject)
         })		  
@@ -158,25 +161,25 @@ const pageSize = 20
        * 获取商品列表
        * @param {number} pageNo 页码
        */
-      getGoodsList(pageNo = 1) {
-        const app = this
-        const param = {
-          sortType: app.sortType,
-          goodsName: uni.getStorageSync('inputSearch') || '',
-          page: pageNo
-        }
+  //     getGoodsList(pageNo = 1) {
+  //       const app = this
+  //       const param = {
+  //         sortType: app.sortType,
+  //         goodsName: uni.getStorageSync('inputSearch') || '',
+  //         page: pageNo
+  //       }
 		
-        return new Promise((resolve, reject) => {
-          GoodsApi.list(param)
-            .then(result => {
-              // 合并新数据
-              const newList = result.data.list
-              app.list.data = getMoreListData(newList, app.list, pageNo)
-              resolve(newList)
-            })
-            .catch(reject)
-        })
-      },
+  //       return new Promise((resolve, reject) => {
+  //         GoodsApi.list(param)
+  //           .then(result => {
+  //             // 合并新数据
+  //             const newList = result.data.list
+  //             app.list.data = getMoreListData(newList, app.list, pageNo)
+  //             resolve(newList)
+  //           })
+  //           .catch(reject)
+  //       })
+  //     },
 			  
 		// 跳转到我的订单(等待1秒)
 		navToMyOrder() {

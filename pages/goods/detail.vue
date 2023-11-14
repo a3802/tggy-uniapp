@@ -109,10 +109,10 @@
             <view v-if="cartTotal > 0" class="fast-badge fast-badge--fixed">{{ cartTotal > 99 ? '99+' : cartTotal }}
             </view>
             <view class="fast-icon">
-              <text class="iconfont icon-gouwuche"></text>
+              <text class="iconfont icon-a-xihuan1"></text>
             </view>
             <view class="fast-text">
-              <text>购物车</text>
+              <text>收藏</text>
             </view>
           </view>
         </view>
@@ -134,6 +134,7 @@
 </template>
 
 <script>
+  import { ACCESS_TOKEN, USER_ID } from '@/store/mutation-types'
   import * as GoodsApi from '@/api/goods'
   import SlideImage from './components/SlideImage'
   import Service from './components/Service'
