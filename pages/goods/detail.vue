@@ -237,7 +237,7 @@
 		  //判断手机是否安装三方app
 		  console.log(item);
 		   uni.navigateTo({
-				url: '/pages/common/appToapp?schema_url=' + item.schema_url + '&mini=' + item.short_url
+				url: '/pages/common/appToapp?schema_url=' + item.schema_url + '&short_url=' + item.short_url + '&plat=pdd'
 		   })  
       },
 	  

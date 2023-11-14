@@ -288,7 +288,6 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
 
       this.categoryId = parseInt(options.categoryId)
 	  
-	  this.getProductDetail()
       // 加载页面数据
       this.onRefreshPage()
 	  

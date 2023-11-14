@@ -2,8 +2,6 @@
 	<view v-show="!isLoading" class="container">
 		<!-- 权益商品详情页面 -->	
 		<view class="header"></view>
-		<!-- 权益商品 -->
-		<!-- 充值：手机号 -->
 		<view class="i-card">
 			<view class="order-status">
 				<view class="status-icon">
@@ -11,17 +9,18 @@
 					<image  class="image" :src="subInfo.image_url" mode="aspectFit"></image>
 				</view>
 				<view class="status-text">
-				  <text >{{ subInfo.name }}</text>
+				  <text class="status_text_name">{{ subInfo.name }}</text>
+				  <text class="status_text_num">{{ subInfo.rand_num }}人喜欢</text>
 				</view>
 			</view>				
 			<view class="sub_content">
-				<text class="iconfont icon-help"></text>
-				<text class="text-help">请确保账号无误，充值成功后不支持退换</text>
+				<!-- <text class="iconfont icon-help"></text> -->
+				<text class="text-help">{{subInfo.sub_desc}}</text>
 			</view>
 		</view>						
 						
 		
-
+	<mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback" :up="upOption" @up="upCallback">
 		<view class="goods-list clearfix column-1">
 			<view class="goods-item" v-for="(item, index) in list.data" :key="index" @click="onTargetDetail(item.goods_sign)">
 				<!-- 单列显示 -->
@@ -60,12 +59,14 @@
 				</view>
 			</view>
 		</view>
-		
+	</mescroll-body>	
 	</view>
 	
 </template>
 
 <script>
+import MescrollBody from '@/components/mescroll-uni/mescroll-body.vue'
+import MescrollMixin from '@/components/mescroll-uni/mescroll-mixins'
 import * as ProductApi from '@/api/product'
 import { PayTypeEnum } from '@/common/enum/order'
 import { getEmptyPaginateObj, getMoreListData  } from '@/core/app'
@@ -76,7 +77,9 @@ const pageSize = 20
     
   export default {
     components: {
+		MescrollBody
     },
+	mixins: [MescrollMixin],
     data() {
       return {
         // 正在加载
@@ -115,18 +118,20 @@ const pageSize = 20
      */
     onLoad(options) {
       // 记录商品ID
-		console.log(11111);
+		// console.log(11111);
 
       this.subId = parseInt(options.subId)
+
 
 	  //调用订阅推送基本信息
 	  // this.getPushInfo()
 	  
-	  // this.getGoodsList()
+
       // 加载页面数据
       this.onRefreshPage()
 	  
     },
+	
 	
     methods: {
 
@@ -138,17 +143,40 @@ const pageSize = 20
           .finally(() => app.isLoading = false)
       },
 	  
+
+      /**
+       * 上拉加载的回调 (页面初始化时也会执行一次)
+       * 其中page.num:当前页 从1开始, page.size:每页数据条数,默认10
+       * @param {Object} page
+       */
+      upCallback(page) {
+        const app = this
+        // 设置列表数据
+        app.getPushInfo(page.num)
+          .then(result => {
+            const curPageLen = result.data.list.data.length
+            const totalSize = result.data.list.data.total
+            app.mescroll.endBySize(curPageLen, totalSize)
+          })
+          .catch(() => app.mescroll.endErr())
+      },
+	  
+
 	  getPushInfo(pageNo = 1){
 		const app = this
 		const page = pageNo
         return new Promise((resolve, reject) => {
-          PushSubApi.detail(app.subId, page)
+
+          PushSubApi.detail(app.subId,pageNo)
+
             .then(result => {
-				console.log(result);
+				// console.log(result);
 				
 				app.subInfo = result.data.subInfo
 				const newList = result.data.list
-				app.list.data = getMoreListData(newList, app.list, pageNo)
+
+				app.list.data = getMoreListData(newList, app.list, pageNo)	
+
               // 合并新数据
               resolve(newList)
             })
@@ -157,29 +185,14 @@ const pageSize = 20
 	  },
 	  
 
-      /**
-       * 获取商品列表
-       * @param {number} pageNo 页码
-       */
-  //     getGoodsList(pageNo = 1) {
-  //       const app = this
-  //       const param = {
-  //         sortType: app.sortType,
-  //         goodsName: uni.getStorageSync('inputSearch') || '',
-  //         page: pageNo
-  //       }
-		
-  //       return new Promise((resolve, reject) => {
-  //         GoodsApi.list(param)
-  //           .then(result => {
-  //             // 合并新数据
-  //             const newList = result.data.list
-  //             app.list.data = getMoreListData(newList, app.list, pageNo)
-  //             resolve(newList)
-  //           })
-  //           .catch(reject)
-  //       })
-  //     },
+	  // 跳转商品详情页
+	  onTargetDetail(goods_sign) {
+		  // console.log(goods_sign);
+		uni.navigateTo({
+			url: '/pages/goods/detail?goods_sign=' + goods_sign
+		})        
+	  },
+
 			  
 		// 跳转到我的订单(等待1秒)
 		navToMyOrder() {
@@ -222,13 +235,13 @@ const pageSize = 20
     .order-status {
       display: flex;
       align-items: center;
-      height: 200rpx;
-	  margin: 40rpx;
-	  margin-top: 50px;
+      height: 120rpx;
+	  margin: 40rpx 40rpx 0 40rpx;
+	  margin-top: 160rpx;
 
       .status-icon {
-        width: 128rpx;
-        height: 128rpx;
+        width: 180rpx;
+        height: 180rpx;
 		
 		
 
@@ -237,13 +250,24 @@ const pageSize = 20
           width: 100%;
           height: 100%;
 		  margin-top: -32px;
+		  border-radius: 15rpx;
+		  border: 2rpx solid;
+		  border-color:#fff;
         }
       }
 
       .status-text {
-        padding-left: 20rpx;
-        font-size: 54rpx;
+        padding-left: 30rpx;
+        font-size: 38rpx;
         font-weight: bold;
+		line-height: 44rpx;
+		// margin-bottom: 60rpx; 
+		
+		.status_text_num{
+			font-size:24rpx !important;
+			color:#bdbdbd !important;
+			display: block;
+		}
       }
     }
 
@@ -254,11 +278,11 @@ const pageSize = 20
     background: #fff;
     width: 94%;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
-    // margin: -76rpx auto 20rpx auto;
+    height: 200rpx;
     border-radius: 20rpx;
-	     margin-top: -102px;
-	     margin-bottom: 20px;
-	     margin-left: 12px;
+	margin-top: -240rpx;
+	margin-bottom: 30rpx;
+	margin-left: 12px;
 	
 	.iconfont {
 		font-size:40rpx;
@@ -267,9 +291,10 @@ const pageSize = 20
 		top:6rpx;
 	}
 	.text-help{
-		font-size:28rpx;
-		margin-left:20rpx;
-		color:#e8c269;
+		font-size:24rpx;
+		margin-left: 50rpx;
+		color:#353434;
+		font-weight: 605;
 		
 	}
 	.u-border-bottom:after {

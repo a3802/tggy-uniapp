@@ -14,7 +14,7 @@
       this.updateManager()
 
 		uni.onPushMessage((msg)=>{
-			console.log(msg,'msg*-*-*-')
+
 			if(msg.type=='receive'){
 				uni.createPushMessage({
 					title:msg.data.title,
@@ -30,23 +30,29 @@
 				})
 			}else{
 				console.log(222222);
+				console.log(msg.data.payload.page)
 				if(msg.data.payload.page){
-					clearTimeout(timer);
-					timer = setTimeout(() => {
-						console.log(1111, msg.data.payload);
+					// clearTimeout(timer);
+					// timer = setTimeout(() => {
+						console.log(msg.data.payload.page);
 						if (msg.data.payload) {
-							if(msg.data.payload.page=='/pages/order/serverNeedDetail' || msg.data.payload.page=='/pages/order/myNeedDetail'){
+							
+							if(msg.data.payload.page=='/pages/product/cate'){
 								uni.navigateTo({
-									url: `${msg.data.payload.page}?id=${msg.data.payload.id}`
+									url : msg.data.payload.page + '?subId=' + msg.data.payload.id
 								})
-							}else if(msg.data.payload.page=='/pages/order/detail1' || msg.data.payload.page=='/pages/order/detail'){
+							}else if(msg.data.payload.page=='/pages/product/detail'){
 								uni.navigateTo({
-									url: `${msg.data.payload.page}?orderId=${msg.data.payload.id}&type=1`
+									url: msg.data.payload.page + '?categoryId=' + msg.data.payload.id
 								})
+							}else if(msg.data.payload.page=='/pages/goods/detail'){
+								uni.navigateTo({
+									url: msg.data.payload.page + '?goods_sign=' + msg.data.payload.id
+								})								
 							}
 							
 						}
-					}, 1500)
+					// }, 1500)
 				}
 			}
 		})

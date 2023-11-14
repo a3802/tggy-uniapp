@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view class="transition_title">正在跳转拼多多APP</view>
+		<view class="transition_title">正在跳转{{title}}</view>
 		<view class="transition_content">
 			<view class="transition_icon">
 				<view class="transition_image">
@@ -17,14 +17,14 @@
 			</view>
 			<view class="transition_icon">
 				<view class="transition_image">
-					<image class="image" src="../../static/share_logo.jpg"></image>
+					<image class="image" :src="image_url"></image>
 				</view>
 				<view class="transition_name">
-					<text>拼多多APP</text>
+					<text>{{sub_title}}</text>
 				</view>
 			</view>
 		</view>
-		<web-view :src="url"></web-view>
+		<!-- <web-view :src="url"></web-view> -->
 	</view>
 </template>
 
@@ -32,24 +32,46 @@
 	export default {
 		data() {
 			return {
-				url: ''
+				url: '',
+				platform: {
+					pdd :{
+						name:'拼多多APP',
+						image_app: 'https://image.hrzhuolin.com/10001/20231111/5835560c12f4f53939bf06e3db3f7af3.png',
+						image_weixin: 'https://image.hrzhuolin.com/10001/20231110/3eac0d6db4d73c03f465510d17be0ea6.png',
+						pname: 'com.xunmeng.pinduoduo',
+						action: 'pinduoduo://',
+						sub_name: '微信-拼多多小程序'
+					}
+				},
+				plat: {},
+				title: '',
+				image_url: '',
+				sub_title: ''
+				
 			}
 		},
 		
 		onLoad(item) {
 			console.log(item);
-		
-			setTimeout(() => {
+			const app = this;
+			const plat = app.platform[item.plat];
+			// console.log(plat);
+			if(app.checkApp(plat)){
 				
-				if(this.checkApp()){
-					let url = decodeURIComponent(item.schema_url);
-						console.log(url);
-						this.openClient(url)
-				}else{
-					this.url = decodeURIComponent(item.mini)	
-				}
+				app.title = plat.name
+				app.image_url = plat.image_app
+				app.sub_title = plat.name
+				let url = decodeURIComponent(item.schema_url);
+				app.openClient(url,plat)
 				
-			}, 3000);// 传入需要跳转的链接 使用web-view标签进行跳转		
+			}else{
+				
+				app.title = plat.sub_name
+				app.image_url = plat.image_weixin
+				app.sub_title = plat.sub_name
+				app.openWx(item.short_url);						
+			}			
+			
 			
 
 		},		
@@ -57,25 +79,38 @@
 		methods: {
 			
 			//打开第三方客户端,有可能时app,或者小程序
-			openClient(url){
+			openClient(url,obj){
 				console.log(url);
-				
-				// 判断平台  
-				if (plus.os.name == 'Android') {  
-					plus.runtime.openURL(url, function(e) {  
+				setTimeout(() => {
+					// 判断平台  
+					if (plus.os.name == 'Android') {  
+						plus.runtime.openURL(url, function(e) {  
+								console.log('Open system default browser failed: ' + e.message);  
+							}  
+						);  
+					} else if (plus.os.name == 'iOS') {  
+						plus.runtime.launchApplication({ action: obj.action }, function(e) {  
 							console.log('Open system default browser failed: ' + e.message);  
-						}  
-					);  
-				} else if (plus.os.name == 'iOS') {  
-					plus.runtime.launchApplication({ action: 'taobao://' }, function(e) {  
-						console.log('Open system default browser failed: ' + e.message);  
-					});  
-				} 
+						});  
+					}
+				},2000);
+			},
+			
+			
+			//跳转微信小程序
+			openWx(url){
+
+				setTimeout(() => {
+					uni.redirectTo({
+						url: '/pages/common/webview?url=' + url
+					}) 	
+				},2000)
 			},
 			
 		  //判断手机是否安装了对应app
-		   checkApp(){
-			if(plus.runtime.isApplicationExist({pname:'com.xunmeng.pinduoduo',action:'pinduoduo://'})){
+		   checkApp(obj){
+			   // return true;
+			if(plus.runtime.isApplicationExist({pname:obj.pname,action:obj.action})){
 				console.log("应用已安装");
 				return true;
 			}else{
@@ -95,7 +130,7 @@
   .container {
 	height:100%;
     background: #fff;
-	padding:80px 0px 400px 0px;
+	padding:80px 0px 800px 0px;
   }
   
   .transition_content{
@@ -118,10 +153,11 @@
   .transition_image{
 	  
 	  margin:20px 0 10px 0;
+	  padding:0 20px;
 	  
 	  image {
-		  width:160rpx;
-		  height:160rpx;		  
+		  width:120rpx;
+		  height:120rpx;		  
 	  }
   }
   
