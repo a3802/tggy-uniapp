@@ -119,7 +119,7 @@
     // { id: 'contact', name: '在线客服', icon: 'kefu', type: 'button', openType: 'contact' },
     { id: 'refund', name: '退款/售后', icon: 'shouhou', type: 'link', url: 'pages/refund/index', count: 0 },
     { id: 'contact', name: '在线客服', icon: 'kefu', type: 'link', url: 'pages/common/webview?url=https://tb.53kf.com/code/app/818133c55cba154d3d56d99366e4b4475/1' },
-    // { id: 'help', name: '我的帮助', icon: 'bangzhu', type: 'link', url: 'pages/help/index' },
+    { id: 'help', name: '收藏', icon: 'a-xihuan1', type: 'link', url: 'pages/favorite/list' },
 	{ id: 'setting', name: '设置', icon: 'shezhi', type: 'link', url: 'pages/setting/index' },
 
   ]

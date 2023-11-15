@@ -257,7 +257,7 @@
 		  const app = this
 		  const user_id = storage.get(USER_ID)
 		  if(!app.isLogin){
-			 app.userlogin(); 
+			 app.userLogin(); 
 		  }else{
 			return new Promise((resolve, reject) => {
 			  FavoriteApi.favorite(user_id, app.goods_sign, !app.isFavorite)

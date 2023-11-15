@@ -4,6 +4,7 @@ import request from '@/utils/request'
 const api = {
   favorite: 'favorite/addFavorite',
   detail: 'favorite/getFavorite',
+  list: 'favorite/list'
 }
 
 
@@ -15,4 +16,9 @@ export const detail = (user_id,goods_sign) => {
 // 收藏和取消收藏
 export const favorite = (user_id, goods_sign,is_favorite) => {
   return request.post(api.favorite, { user_id, goods_sign,is_favorite })
+}
+
+// 商品详情
+export const list = (user_id,page) => {
+  return request.get(api.list, { user_id,page })
 }
