@@ -20,5 +20,5 @@ export const favorite = (user_id, goods_sign,is_favorite) => {
 
 // 商品详情
 export const list = (user_id,page) => {
-  return request.get(api.list, { user_id,page })
+  return request.get(api.list, { user_id, page })
 }

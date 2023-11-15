@@ -1,12 +1,10 @@
 <template>
   <mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback" :up="upOption" @up="upCallback">
-    <!-- 页面头部 -->
-    <!-- 排序标签 -->
     <!-- 商品列表 -->
     <view class="goods-list clearfix column-1">
       <view class="goods-item" v-for="(item, index) in list.data" :key="index" @click="onTargetDetail(item.goods_sign)">
         <!-- 单列显示 -->
-        <view v-if="showView" class="dis-flex">
+        <view  class="dis-flex">
           <!-- 商品图片 -->
           <view class="goods-item_left">
             <image class="image" :src="item.goods_image_url"></image>
@@ -55,7 +53,6 @@
 
 
   const pageSize = 20
-  const showViewKey = 'GoodsList-ShowView';
 
   export default {
     components: {
@@ -66,8 +63,7 @@
 
     data() {
       return {
-        showView: false, // 列表显示方式 (true列表、false平铺)
-        sortType: 'best', // 排序类型
+
         options: {}, // 当前页面参数
         list: getEmptyPaginateObj(), // 商品列表数据
 		
@@ -86,6 +82,10 @@
           page: { size: pageSize },
           // 数量要大于4条才显示无更多数据
           noMoreSize: 4,
+          // 空布局
+          empty: {
+            tip: '亲，暂时没有收藏的商品'
+          }		  
         }
       }
     },
@@ -119,9 +119,10 @@
         const app = this
         // 设置列表数据
         app.getGoodsList(page.num)
-          .then(list => {
-            const curPageLen = list.data.length
-            const totalSize = list.data.total //列表取出数据的总数
+          .then(result => {
+			  // console.log(result);
+            const curPageLen = result.data.current_page
+            const totalSize = result.data.total
             app.mescroll.endBySize(curPageLen, totalSize)
           })
           .catch(() => app.mescroll.endErr())
@@ -143,7 +144,7 @@
               // 合并新数据
               const newList = result.data.list
               app.list.data = getMoreListData(newList, app.list, pageNo)
-			  // console.log(app.list.data);
+			  console.log(app.list.data);
               resolve(newList)
             })
             .catch(reject)
@@ -159,12 +160,6 @@
         app.mescroll.resetUpScroll()
       },
 
-      // 切换列表显示方式
-      handleShowView() {
-        const app = this
-        app.showView = !app.showView
-        uni.setStorageSync(showViewKey, app.showView)
-      },
 
       // 跳转商品详情页
       onTargetDetail(goods_sign) {
