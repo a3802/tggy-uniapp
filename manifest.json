@@ -80,7 +80,7 @@
                 "push" : {
                     "unipush" : {
                         "version" : "2",
-                        "offline" : false,
+                        "offline" : true,
                         "icons" : {
                             "small" : {
                                 "ldpi" : "D:/Downloads/icons/icons/Android/Images.xcassets/AppIcon.appiconset/AndroidIcon_36pt.png",
@@ -89,7 +89,11 @@
                                 "xhdpi" : "D:/Downloads/icons/icons/Android/Images.xcassets/AppIcon.appiconset/AndroidIcon_48pt.png",
                                 "xxhdpi" : "D:/Downloads/icons/icons/Android/Images.xcassets/AppIcon.appiconset/AndroidIcon_96pt.png"
                             }
-                        }
+                        },
+                        "hms" : {},
+                        "oppo" : {},
+                        "vivo" : {},
+                        "mi" : {}
                     }
                 }
             },
