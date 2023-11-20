@@ -66,14 +66,7 @@
             /* SDK配置 */
             "sdkConfigs" : {
                 "ad" : {
-                    "360" : {},
-                    "gdt" : {},
-                    "csj" : {},
-                    "ks" : {},
-                    "ks-content" : {},
-                    "sigmob" : {},
-                    "hw" : {},
-                    "bd" : {}
+                    "360" : {}
                 },
                 "payment" : {
                     "alipay" : {

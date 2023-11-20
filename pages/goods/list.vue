@@ -132,13 +132,21 @@
       this.options = options
       // 设置默认列表显示方式
       this.setShowView()
+	  
+	  this.onRefreshPage()
     },
 	async onShow(options){
 		this.options.search = uni.getStorageSync('inputSearch');
-		await this.getGoodsList();
+		// await this.getGoodsList();
 	},
 
     methods: {
+		
+		// 刷新页面数据
+		onRefreshPage() {
+		  const app = this
+		  Promise.all([app.getGoodsList()])
+		},
 
       /**
        * 上拉加载的回调 (页面初始化时也会执行一次)

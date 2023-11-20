@@ -74,9 +74,11 @@ export const appUnilogin = () => {
 		fail(res){  // 登录失败
 			console.log(res);
 			if(res.code !== 30003){
+				uni.closeAuthView() 
 				uni.navigateTo({
 				  url: "/pages/login/index"
-				})						
+				})
+				
 			}else{
 				uni.navigateBack()
 			}
