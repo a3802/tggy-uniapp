@@ -14,17 +14,13 @@ export default new Vuex.Store({
     user
   },
   state: {
-	dynamicTabbar: [] // 动态tabbar
+	  
   },
   mutations: {
-		updateTabbar(state, payload) {
-			state.dynamicTabbar = payload
-		}
+
   },
   actions: {
-		changeTabbar({commit}, payload) {
-			commit('updateTabbar', payload)
-		}
+
   },
   getters
 })

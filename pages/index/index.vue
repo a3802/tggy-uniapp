@@ -17,7 +17,6 @@
 </template>
 
 <script>
-  import { setCartTabBadge } from '@/core/app'
   import * as Api from '@/api/page'
   import Page from '@/components/page'
 
@@ -36,7 +35,9 @@
 		// 是否显示优惠卷说明
 		showPoints: false,
         // 页面元素
-        items: []
+        items: [],
+		// ios 过审开关
+		iosType: false
       }
     },
 
@@ -47,20 +48,23 @@
       // 当前页面参数
       this.options = options
       // 加载页面数据
-      this.getPageData();
-	  // 显示优惠卷说明
-	  this.handleShowPoints();
+	  this.onRefreshPage()
     },
 
     /**
      * 生命周期函数--监听页面显示
      */
     onShow() {
-      // 更新购物车角标
-      setCartTabBadge()
+
     },
 
     methods: {
+		
+		// 刷新页面数据
+		onRefreshPage() {
+		  const app = this
+		  Promise.all([app.getPageData()])
+		},
 
       /**
        * 加载页面数据
@@ -69,17 +73,34 @@
       getPageData(callback) {
         const app = this
         const pageId = app.options.pageId || 0
+		Api.setting()
+			.then(result => { //ios过审方法,返回由后台控制
+				// console.log(result)
+				if(result.data.tabar){
+					uni.setTabBarItem({
+						index: 1,
+						visible: false,
+					})
+					app.iosType = true;
+				}
+			}).finally(() => callback && callback())	
+				
         Api.detail(pageId)
           .then(result => {
             // 设置页面数据
             const { data: { pageData } } = result
             app.page = pageData.page
             app.items = pageData.items
+			if(app.iosType){
+				app.items.splice(1,1); //清除所有因为ios过审失败的因素,ios不能允许售卖第三方虚拟产品,所以后台开关关闭
+			}
             // 设置顶部导航栏栏
             app.setPageBar();
           })
           .finally(() => callback && callback())
+
       },
+	   
 
       /**
        * 设置顶部导航栏
@@ -99,11 +120,6 @@
         })
       },
 	  
-	  // 显示积分说明
-	  handleShowPoints() {
-	    this.showPoints = true
-	  },
-
     },
 
     /**
