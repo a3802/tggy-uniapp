@@ -130,6 +130,7 @@
 			if(this.hideTabBar) uni.hideTabBar();
 			// 获取引入了u-tabbar页面的路由地址，该地址没有路径前面的"/"
 			let pages = getCurrentPages();
+			// console.log(pages);
 			// 页面栈中的最后一个即为项为当前页面，route属性为页面路径
 			this.pageUrl = pages[pages.length - 1].route;
 		},

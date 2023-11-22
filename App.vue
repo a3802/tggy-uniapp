@@ -1,4 +1,6 @@
 <script>
+  import store from './store'
+  import { userTabbar, adminTabbar } from './utils/tabbar.js'
   export default {
     /**
      * 全局变量
@@ -12,6 +14,8 @@
     onLaunch() {
       // 小程序主动更新
       this.updateManager()
+	  
+	  this.changeBar()
     },
 
     methods: {
@@ -46,7 +50,36 @@
             showCancel: false
           })
         })
-      }
+      },
+	
+	//请求后台判断是否开启动态修改tabbar，为了过审
+	changeBar(){
+		uni.request({
+			url:'https://api-tgqy.yueyueyouqian.cn/api/judgeTab/change',
+			method:'GET',
+			header:{},
+			success:(res)=>{
+				console.log('数据',res)
+				// console.log(store);
+				
+				if(res.data.data.tabar){
+					console.log(11111);
+					// this.$store.dispatch('changeTabbar', adminTabbar)
+					// uni.hideTabBar({
+					// 	index:1
+					// })
+
+				uni.setTabBarItem({
+					index: 1,
+					text: '发现',
+				})
+
+				}else{
+					this.$store.dispatch('changeTabbar', userTabbar)
+				}
+			}
+		})	
+	}
 
     }
 
