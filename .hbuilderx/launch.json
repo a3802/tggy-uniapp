@@ -13,9 +13,13 @@
             "h5" : {
                 "launchtype" : "remote"
             },
+            "mp-alipay" : {
+                "launchtype" : "local"
+            },
             "mp-weixin" : {
                 "launchtype" : "remote"
             },
+            "provider" : "aliyun",
             "type" : "uniCloud"
         },
         {

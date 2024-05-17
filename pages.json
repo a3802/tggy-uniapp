@@ -184,6 +184,14 @@
 			"enablePullDownRefresh": false
 		}
 		
+	},
+	{
+		"path" : "pages/common/minitrade",
+		"style" : 
+		{
+			"navigationBarTitleText" : "小程序支付",
+			"enablePullDownRefresh" : false
+		}
 	}
     ],
   "globalStyle": {

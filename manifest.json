@@ -151,7 +151,8 @@
         "permission" : {}
     },
     "mp-alipay" : {
-        "usingComponents" : true
+        "usingComponents" : true,
+        "appid" : "2021004144610181"
     },
     "mp-baidu" : {
         "usingComponents" : true

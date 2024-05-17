@@ -123,7 +123,7 @@
 	}  
 	  
     .goods-list {
-      padding: 4rpx;
+      padding: 4px;
       box-sizing: border-box;
 
       .goods-item {
