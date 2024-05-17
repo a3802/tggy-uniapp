@@ -352,10 +352,15 @@ import { CouponTypeEnum } from '@/common/enum/coupon'
           return false
         }
 		
-		if (!Verify.isOperator(str,this.selectetProductTab)){
-			this.$toast('手机号和充值选项不符,请重新选择或者重新输入手机号');
-			return false
+		if(this.categoryId === 10068){
+			if (!Verify.isOperator(str,this.selectetProductTab)){
+				console.log(this.categoryId);
+				this.$toast('手机号和充值选项不符,请重新选择或者重新输入手机号');
+				return false
+			}			
 		}
+
+
 		
         return true
       },	  

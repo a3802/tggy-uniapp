@@ -33,6 +33,9 @@ export const isOperator = (str,productId) => {
 	var CUCC_ID = [210070,110070]; //中国联通充值项
 	var CTCC_ID = [210071,110071]; //中国电信充值项
 	
+	// console.log(productId);
+	// console.log(str);
+	
 	if (CMCC.test(str) && CMCC_ID.includes(productId)){
 		return true;
 	}else if (CUCC.test(str) && CUCC_ID.includes(productId)){
