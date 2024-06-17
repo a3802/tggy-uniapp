@@ -78,7 +78,13 @@
 
       // 跳转至商品列表页
       onTargetProductList(categoryId) {
-        this.$navTo('pages/product/detail', { categoryId })
+		console.log(categoryId)
+		if(categoryId == 41964 || categoryId == 41965){
+			this.$navTo('pages/common/websub', { categoryId })	
+		}else{
+			this.$navTo('pages/common/websub', { categoryId })	
+		}
+        
       }
 
     }

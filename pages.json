@@ -192,6 +192,13 @@
 			"navigationBarTitleText" : "小程序支付",
 			"enablePullDownRefresh" : false
 		}
+	},
+	{
+	  "path": "pages/common/websub",
+	  "style": {
+	    "navigationBarTitleText": "完成",
+		"navigationStyle": "custom" 
+	  }
 	}
     ],
   "globalStyle": {

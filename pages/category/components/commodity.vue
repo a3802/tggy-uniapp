@@ -177,7 +177,7 @@
 
       // 跳转至权益商品列表页
       onTargetProduct(productIds) {
-        this.$navTo('pages/product/detail', { productIds })
+        // this.$navTo('pages/product/detail', { productIds })
       },
 
       // 切换子分类显示状态
