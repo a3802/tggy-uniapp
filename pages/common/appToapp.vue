@@ -52,7 +52,7 @@
 		},
 		
 		onLoad(item) {
-			console.log(item);
+			// console.log(item);
 			const app = this;
 			const plat = app.platform[item.plat];
 			// console.log(plat);
@@ -65,7 +65,7 @@
 				app.openClient(url,plat)
 				
 			}else{
-				
+				console.log(222);
 				app.title = plat.sub_name
 				app.image_url = plat.image_weixin
 				app.sub_title = plat.sub_name
@@ -80,19 +80,20 @@
 			
 			//打开第三方客户端,有可能时app,或者小程序
 			openClient(url,obj){
-				console.log(url);
+				// console.log(plus);
 				setTimeout(() => {
-					// 判断平台  
-					if (plus.os.name == 'Android') {  
-						plus.runtime.openURL(url, function(e) {  
+					// 判断平台 
+						if (plus.os.name == 'Android') {  
+							plus.runtime.openURL(url, function(e) {  
+									console.log('Open system default browser failed: ' + e.message);  
+								}  
+							);  
+						} else if (plus.os.name == 'iOS') {  
+							plus.runtime.launchApplication({ action: obj.action }, function(e) {  
 								console.log('Open system default browser failed: ' + e.message);  
-							}  
-						);  
-					} else if (plus.os.name == 'iOS') {  
-						plus.runtime.launchApplication({ action: obj.action }, function(e) {  
-							console.log('Open system default browser failed: ' + e.message);  
-						});  
-					}
+							});  
+						}
+				
 				},2000);
 			},
 			
@@ -109,15 +110,23 @@
 			
 		  //判断手机是否安装了对应app
 		   checkApp(obj){
+			   
+			   console.log(obj);
 			   // return true;
-			if(plus.runtime.isApplicationExist({pname:obj.pname,action:obj.action})){
-				console.log("应用已安装");
-				return true;
-			}else{
-				console.log("应用未安装");
-				return false;
-			}
-		  
+				//#ifdef APP-PLUS
+					if(plus.runtime.isApplicationExist({pname:obj.pname,action:obj.action})){
+						console.log("应用已安装");
+						return true;
+					}else{
+						console.log("应用未安装");
+						return false;
+					}
+				// #endif
+				// #ifdef H5
+					return false;
+				// #endif
+				
+				
 		  },			
 		
 
